@@ -2,6 +2,8 @@ import 'package:acounts_control/views/home/home.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/constans.dart';
+
 class ButtonNav extends StatefulWidget {
   const ButtonNav({super.key, required this.indexColor});
 
@@ -25,6 +27,7 @@ class _ButtonNavState extends State<ButtonNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: TColor.backgroundColor,
       body: Screen[indexColor],
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),

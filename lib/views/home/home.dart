@@ -8,7 +8,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TColor.backgroundColor,
+      //backgroundColor: TColor.backgroundColor,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -48,7 +48,7 @@ class Home extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -87,11 +87,63 @@ class Home extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 300,
-            width: 500,
+            height: 200,
+            width: 400,
             decoration: BoxDecoration(
                 color: TColor.orangeColor,
                 borderRadius: BorderRadius.circular(20)),
+            child: Stack(children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cuenta',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'Contraseña',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'Mensualidad',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'Banco',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Image.asset(name)
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ]),
           )
         ],
       ),
