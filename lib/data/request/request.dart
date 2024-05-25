@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-final url =  Uri.parse('https://mariehcarey.000webhostapp.com/api-accounts/consults');
+final url =
+    Uri.parse('https://mariehcarey.000webhostapp.com/api-accounts/consults');
 Future<dynamic> mostrarCuentas() async {
   var data = {'opc': '1'};
 
@@ -13,13 +14,14 @@ Future<dynamic> mostrarCuentas() async {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print('Respuesta Api JSON: ${jsonResponse}');
+      //print('Respuesta Api JSON: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {
     return "err_internet_conex";
   }
 }
+
 Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
   var data = {'opc': '2', 'idAccount': idAccount};
 
@@ -31,7 +33,7 @@ Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print('Respuesta Api JSON: ${jsonResponse}');
+      //print('Respuesta Api JSON: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {
