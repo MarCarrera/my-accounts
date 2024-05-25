@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class TColor {
   static Color get orangeColor => Color.fromARGB(255, 255, 112, 69);
+  static Color get orangeLightColor => Color.fromARGB(172, 255, 112, 69);
+
   static Color get purpleColor => Color.fromARGB(255, 128, 106, 253);
   static Color get lilaColor => Color.fromARGB(255, 199, 109, 244);
   static Color get accentColor => Color.fromARGB(255, 148, 206, 210);

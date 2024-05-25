@@ -67,86 +67,240 @@ class Home extends StatelessWidget {
   Padding CardUser() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      child: Column(
+      child: Stack(
         children: [
+          //Contenedor para mantener la sobra de card
           Container(
-            height: 140,
+            height: 150,
             width: 500,
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                shadow(),
+              ],
+            ),
+          ),
+          //Contenedor para mantener la sobra de card
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              height: 150,
+              width: 500,
+              decoration: BoxDecoration(
                 color: TColor.purpleColor,
-                borderRadius: BorderRadius.circular(20)),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  shadow(),
+                ],
+              ),
+              child: Stack(children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Usuario A',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            'Nombre:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            'Teléfono:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 80),
+                                child: Text(
+                                  'Pin:',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              Text(
+                                'Pago:',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Circles(),
+                Positioned(
+                  bottom: 8,
+                  left: 360,
+                  child: Stack(
+                    alignment: Alignment
+                        .center, // Alinea el contenido en el centro del Stack
+                    children: [
+                      Container(
+                        width: 100,
+                        child: Image.asset('assets/icons/woman.png'),
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
+            ),
           )
         ],
       ),
     );
   }
 
+  Stack Circles() {
+    return Stack(children: [
+      Positioned(
+        top: 60,
+        left: 200,
+        child: Container(
+          width: 300,
+          height:
+              300, // Asegúrate de que el contenedor sea cuadrado para que sea un círculo
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
+      Positioned(
+        bottom: 40,
+        left: 355,
+        child: Container(
+          width: 180,
+          height:
+              180, // Asegúrate de que el contenedor sea cuadrado para que sea un círculo
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
+    ]);
+  }
+
   Padding Card() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-      child: Column(
+      child: Stack(
         children: [
           Container(
             height: 200,
             width: 400,
             decoration: BoxDecoration(
-                color: TColor.orangeColor,
-                borderRadius: BorderRadius.circular(20)),
-            child: Stack(children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Cuenta',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          'Contraseña',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          'Mensualidad',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          'Banco',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset(name)
-                      ],
-                    ),
-                  ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              height: 200,
+              width: 400,
+              decoration: BoxDecoration(
+                color: TColor.orangeLightColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  shadow(),
                 ],
-              )
-            ]),
-          )
+              ),
+              child: Stack(children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'cuentaNetflix00A@gmail.com',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            'Contraseña:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            'Mensualidad:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            'Banco:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Circles(),
+                Positioned(
+                    top: 60,
+                    left: 200,
+                    child: Container(
+                        width: 260,
+                        child: Image.asset(
+                          'assets/icons/icon3.png',
+                          fit: BoxFit.contain,
+                        ))),
+              ]),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  BoxShadow shadow() {
+    return BoxShadow(
+      color: Colors.black.withOpacity(0.255),
+      spreadRadius: 3,
+      blurRadius: 10,
+      offset: Offset(0, 6),
     );
   }
 }
