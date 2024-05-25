@@ -109,7 +109,8 @@ class _HomeState extends State<Home> {
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
-            cardUser(),
+            SingleChildScrollView(
+                scrollDirection: Axis.vertical, child: cardUser()),
           ],
         ),
       ),
@@ -161,7 +162,7 @@ class _HomeState extends State<Home> {
                 } else {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 15),
+                        vertical: 30, horizontal: 20),
                     child: Stack(
                       children: [
                         //Contenedor para mantener la sobra de card
@@ -280,7 +281,7 @@ class _HomeState extends State<Home> {
         return Padding(padding: EdgeInsets.all(8));
       } else {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Stack(
             children: [
               //Contenedor para mantener la sobra de card
@@ -406,6 +407,7 @@ class _HomeState extends State<Home> {
                       );
                     }),
               ),
+
               //Contenedor para mantener la sobra de card
             ],
           ),
@@ -466,14 +468,7 @@ class _HomeState extends State<Home> {
                           width: 400,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
+                            boxShadow: [shadow()],
                           ),
                         ),
                         ClipRRect(
@@ -558,7 +553,7 @@ class _HomeState extends State<Home> {
         return Padding(padding: EdgeInsets.all(8));
       } else {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Stack(
             children: [
               Container(
