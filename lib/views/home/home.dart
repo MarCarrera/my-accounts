@@ -22,6 +22,8 @@ class _HomeState extends State<Home> {
   bool noDataUser = false;
   bool reload = false;
 
+  int index = 0;
+
   Future<void> cargarCuentas() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
@@ -57,7 +59,7 @@ class _HomeState extends State<Home> {
   Future<void> cargarPerfiles() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarUsuariosPorCuenta(idAccount: '1');
+    var respuesta = await mostrarTodosUsuarios();
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -96,7 +98,7 @@ class _HomeState extends State<Home> {
     super.initState();
     cargarCuentas();
     cargarPerfiles();
-    mostrarUsuariosPorCuenta(idAccount: '2');
+    // mostrarUsuariosPorCuenta(idAccount: '2');
   }
 
   @override
@@ -116,7 +118,7 @@ class _HomeState extends State<Home> {
               containerHeight: 50,
               containerWight: 420,
               containerColor: TColor.blueColor,
-              onSelect: (int index) {
+              onSelect: (index) {
                 print('index seleccionado: $index');
               },
               children: [
