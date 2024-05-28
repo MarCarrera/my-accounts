@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
+import '../../utils/prueba.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -101,7 +102,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: TColor.backgroundColor,
+      backgroundColor: TColor.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -109,6 +110,33 @@ class _HomeState extends State<Home> {
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
+            //tab navegador
+            Prueba(
+              initialIndex: 0,
+              containerHeight: 50,
+              containerWight: 420,
+              containerColor: TColor.blueColor,
+              onSelect: (int index) {
+                print('index seleccionado: $index');
+              },
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 13.3),
+                  child: Text('Cuenta A'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 13.3),
+                  child: Text('Cuenta B'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 13.3),
+                  child: Text('Cuenta C'),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
             SingleChildScrollView(
                 scrollDirection: Axis.vertical, child: cardUser()),
           ],
@@ -126,7 +154,7 @@ class _HomeState extends State<Home> {
           Text(
             'Cuentas',
             style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
+                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.white),
           ),
         ],
       ),
@@ -135,14 +163,14 @@ class _HomeState extends State<Home> {
 
   Padding title() {
     return Padding(
-      padding: const EdgeInsets.only(top: 0, left: 15),
+      padding: const EdgeInsets.only(bottom: 10, left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             'Usuarios',
             style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
+                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.white),
           ),
         ],
       ),
@@ -152,7 +180,7 @@ class _HomeState extends State<Home> {
   Padding cardUser() {
     if (noDataUser == false && profiles.isEmpty || reload) {
       return Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(top: 0),
           child: Center(
             child: FutureBuilder<void>(
               future: Future.delayed(Duration(seconds: 4)),
@@ -167,27 +195,31 @@ class _HomeState extends State<Home> {
                       children: [
                         //Contenedor para mantener la sobra de card
                         Container(
-                          height: 150,
+                          height: 170,
                           width: 500,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              shadow(),
-                            ],
+                            // boxShadow: [
+                            //   shadow(
+                            //     TColor.purpleColor,
+                            //   ),
+                            // ],
                           ),
                         ),
                         //Contenedor para mantener la sobra de card
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
-                            height: 150,
+                            height: 170,
                             width: 500,
                             decoration: BoxDecoration(
                               color: TColor.purpleColor,
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                shadow(),
-                              ],
+                              // boxShadow: [
+                              //   shadow(
+                              //     TColor.purpleColor,
+                              //   ),
+                              // ],
                             ),
                             child: Stack(children: [
                               Row(
@@ -286,9 +318,7 @@ class _HomeState extends State<Home> {
             children: [
               //Contenedor para mantener la sobra de card
               Container(
-                height: MediaQuery.of(context)
-                    .size
-                    .height, // Ajusta la altura según tus necesidades
+                height: 600, // Ajusta la altura según tus necesidades
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -298,29 +328,35 @@ class _HomeState extends State<Home> {
                       return Stack(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(vertical: 18),
                             child: Container(
-                              height: 150,
-                              width: 500,
+                              height: 200, //150,
+                              width: 500, //500,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  shadow(),
-                                ],
+                                // boxShadow: [
+                                //   shadow(TColor.purpleColor)
+                                //   // BoxShadow(
+                                //   //   color: Colors.black.withOpacity(0.2),
+                                //   //   spreadRadius: 2,
+                                //   //   blurRadius: 10,
+                                //   //   offset: Offset(0, 5),
+                                //   // ),
+                                // ],
                               ),
                             ),
                           ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                              height: 150,
-                              width: 500,
+                              height: 200, //150,
+                              width: 500, //500,
                               decoration: BoxDecoration(
                                 color: TColor.purpleColor,
                                 borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  shadow(),
-                                ],
+                                // boxShadow: [
+                                //   shadow(TColor.purpleColor),
+                                // ],
                               ),
                               child: Stack(children: [
                                 Row(
@@ -468,7 +504,7 @@ class _HomeState extends State<Home> {
                           width: 400,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [shadow()],
+                            // boxShadow: [shadow(TColor.orangeLightColor)],
                           ),
                         ),
                         ClipRRect(
@@ -479,9 +515,11 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               color: TColor.orangeLightColor,
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                shadow(),
-                              ],
+                              // boxShadow: [
+                              //   shadow(
+                              //     TColor.orangeLightColor,
+                              //   ),
+                              // ],
                             ),
                             child: Stack(children: [
                               Row(
@@ -576,14 +614,14 @@ class _HomeState extends State<Home> {
                           width: 400,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.black.withOpacity(0.2),
+                            //     spreadRadius: 2,
+                            //     blurRadius: 10,
+                            //     offset: Offset(0, 5),
+                            //   ),
+                            // ],
                           ),
                         ),
                       ),
@@ -595,9 +633,11 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             color: TColor.orangeLightColor,
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              shadow(),
-                            ],
+                            // boxShadow: [
+                            //   shadow(
+                            //     TColor.orangeLightColor,
+                            //   ),
+                            // ],
                           ),
                           child: Stack(children: [
                             Row(
@@ -668,12 +708,12 @@ class _HomeState extends State<Home> {
     }
   }
 
-  BoxShadow shadow() {
+  BoxShadow shadow(color) {
     return BoxShadow(
-      color: Colors.black.withOpacity(0.255),
+      color: color,
       spreadRadius: 3,
-      blurRadius: 10,
-      offset: Offset(0, 6),
+      blurRadius: 20,
+      offset: Offset(0, -2),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/constans.dart';
 
+
 class ButtonNav extends StatefulWidget {
   const ButtonNav({super.key, required this.indexColor});
 
@@ -21,15 +22,15 @@ class _ButtonNavState extends State<ButtonNav> {
     const Home(),
     const Home(),
     const Home(),
-    const Home(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TColor.backgroundColor,
+      //backgroundColor: TColor.backgroundColor,
       body: Screen[indexColor],
       bottomNavigationBar: BottomAppBar(
+        color: TColor.backgroundColor,
         shape: CircularNotchedRectangle(),
         child: Padding(
             padding: EdgeInsets.only(bottom: 12),
@@ -38,7 +39,7 @@ class _ButtonNavState extends State<ButtonNav> {
               selectedColor: Color.fromARGB(255, 11, 57, 54),
               strokeColor: Colors.white,
               unSelectedColor: Color.fromARGB(255, 255, 255, 255),
-              backgroundColor: Color(0xff368983),
+              backgroundColor: TColor.greenColor,
               borderRadius: Radius.circular(24),
               blurEffect: true,
               opacity: 0.5,
