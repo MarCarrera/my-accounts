@@ -320,13 +320,21 @@ class _HomeState extends State<Home> {
             children: [
               //Contenedor para mantener la sobra de card
               Container(
-                height: 600, // Ajusta la altura según tus necesidades
+                height: 550, // Ajusta la altura según tus necesidades
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: profiles.length,
+                    //itemCount: profiles.length,
+                    ///itemBuilder: (context, index) {
+                    //final profile = profiles[index];
+                    itemCount: profiles
+                        .where((profile) => profile.idAccount == 1)
+                        .length,
                     itemBuilder: (context, index) {
-                      final profile = profiles[index];
+                      final filteredProfile = profiles
+                          .where((profile) => profile.idAccount == 1)
+                          .toList();
+                      final profile = filteredProfile[index];
                       return Stack(
                         children: [
                           Padding(
@@ -616,14 +624,6 @@ class _HomeState extends State<Home> {
                           width: 400,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: Colors.black.withOpacity(0.2),
-                            //     spreadRadius: 2,
-                            //     blurRadius: 10,
-                            //     offset: Offset(0, 5),
-                            //   ),
-                            // ],
                           ),
                         ),
                       ),
@@ -635,11 +635,6 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             color: TColor.orangeLightColor,
                             borderRadius: BorderRadius.circular(20),
-                            // boxShadow: [
-                            //   shadow(
-                            //     TColor.orangeLightColor,
-                            //   ),
-                            // ],
                           ),
                           child: Stack(children: [
                             Row(

@@ -33,7 +33,7 @@ Future<dynamic> mostrarTodosUsuarios() async {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print('USUARIUOS DE CUENTA: ${jsonResponse}');
+      //print('USUARIUOS DE CUENTA: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {
