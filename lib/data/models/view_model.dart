@@ -5,11 +5,12 @@ class Account {
   final String password;
   final String bank;
 
-  Account({required this.idAccount,
-  required this.name,
-  required this.payment,
-  required this.password,
-  required this.bank});
+  Account(
+      {required this.idAccount,
+      required this.name,
+      required this.payment,
+      required this.password,
+      required this.bank});
 }
 
 class Profile {
@@ -35,4 +36,22 @@ class Profile {
       required this.pin,
       required this.status,
       required this.genre});
+}
+
+class Pagos {
+  final int idPayment;
+  final int idUser;
+  final int idAccount;
+  final String paymentDate;
+  final String status;
+  final String amount;
+
+  Pagos({
+    required this.idPayment,
+    required this.idUser,
+    required this.idAccount,
+    required this.paymentDate,
+    required this.status,
+    required this.amount,
+  });
 }

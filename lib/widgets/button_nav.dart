@@ -1,4 +1,5 @@
 import 'package:acounts_control/views/home/home.dart';
+import 'package:acounts_control/views/pays_account.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _ButtonNavState extends State<ButtonNav> {
 
   List Screen = [
     const Home(),
-    const Home(),
+    const PaysAccount(),
     const Home(),
   ];
 

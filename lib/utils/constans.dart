@@ -10,6 +10,7 @@ class TColor {
   static Color get accentColor => Color.fromARGB(255, 148, 206, 210);
   static Color get blueColor => Color.fromARGB(255, 102, 196, 254);
   static Color get greenColor => Color.fromARGB(255, 158, 224, 143);
+  static Color get green2Color => Color.fromARGB(255, 115, 177, 101);
 
   static Color get backgroundColor => Color.fromARGB(255, 243, 247, 250);
   static Color get backgroundDarkColor => Color.fromARGB(255, 37, 41, 44);
