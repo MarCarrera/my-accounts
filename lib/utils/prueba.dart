@@ -2,7 +2,7 @@ library slide_switcher;
 
 import 'package:flutter/material.dart';
 
-class Prueba extends StatefulWidget {
+class ButtomNav extends StatefulWidget {
   ///Widgets that placed inside sliders
   final List<Widget> children;
 
@@ -49,7 +49,7 @@ class Prueba extends StatefulWidget {
   final int initialIndex;
 
   ///A class for creating sliders
-  const Prueba({
+  const ButtomNav({
     Key? key,
     required this.children,
     required this.containerHeight,
@@ -69,10 +69,11 @@ class Prueba extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PruebaState createState() => _PruebaState();
+  _ButtomNavState createState() => _ButtomNavState();
 }
 
-class _PruebaState extends State<Prueba> with SingleTickerProviderStateMixin {
+class _ButtomNavState extends State<ButtomNav>
+    with SingleTickerProviderStateMixin {
   late final double sliderBorderRadius;
   late final double slidersHeight;
   late final double slidersWight;

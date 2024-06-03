@@ -11,6 +11,7 @@ class TColor {
   static Color get blueColor => Color.fromARGB(255, 102, 196, 254);
   static Color get greenColor => Color.fromARGB(255, 158, 224, 143);
 
-  static Color get backgroundColor => Color.fromARGB(255, 37, 41, 44);
-  static Color get cardColor => Color.fromARGB(255, 45, 49, 52);
+  static Color get backgroundColor => Color.fromARGB(255, 243, 247, 250);
+  static Color get backgroundDarkColor => Color.fromARGB(255, 37, 41, 44);
+  static Color get cardDarkColor => Color.fromARGB(255, 45, 49, 52);
 }

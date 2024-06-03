@@ -1,10 +1,10 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:flutter/material.dart';
-
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
 import '../../utils/prueba.dart';
+import 'dart:async';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
   bool noData = false;
   bool noDataUser = false;
   bool reload = false;
+  int indexAct = 1;
 
   int index = 0;
 
@@ -56,10 +57,10 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<void> cargarPerfiles() async {
+  Future<void> cargarPerfiles(indexA) async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarTodosUsuarios();
+    var respuesta = await mostrarUsuariosPorCuenta(idAccount: indexA);
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -97,7 +98,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     cargarCuentas();
-    cargarPerfiles();
+    cargarPerfiles(indexAct.toString());
     // mostrarUsuariosPorCuenta(idAccount: '2');
   }
 
@@ -113,13 +114,21 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
             //tab navegador
-            Prueba(
+            ButtomNav(
               initialIndex: 0,
               containerHeight: 50,
               containerWight: 420,
               containerColor: TColor.blueColor,
               onSelect: (index) {
-                print('index seleccionado: $index');
+                profiles.clear();
+                indexAct = index + 1;
+                print('index calculado: $indexAct');
+                setState(() {
+                  LoadingDots();
+                });
+                Timer(Duration(seconds: 1), () {
+                  cargarPerfiles(indexAct.toString());
+                });
               },
               children: [
                 Padding(
@@ -156,7 +165,7 @@ class _HomeState extends State<Home> {
           Text(
             'Cuentas',
             style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.white),
+                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
           ),
         ],
       ),
@@ -172,7 +181,7 @@ class _HomeState extends State<Home> {
           Text(
             'Usuarios',
             style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.white),
+                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
           ),
         ],
       ),
@@ -185,7 +194,7 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.only(top: 0),
           child: Center(
             child: FutureBuilder<void>(
-              future: Future.delayed(Duration(seconds: 4)),
+              future: Future.delayed(Duration(seconds: 3)),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadingDots();
@@ -201,11 +210,6 @@ class _HomeState extends State<Home> {
                           width: 500,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            // boxShadow: [
-                            //   shadow(
-                            //     TColor.purpleColor,
-                            //   ),
-                            // ],
                           ),
                         ),
                         //Contenedor para mantener la sobra de card
@@ -217,11 +221,6 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               color: TColor.purpleColor,
                               borderRadius: BorderRadius.circular(20),
-                              // boxShadow: [
-                              //   shadow(
-                              //     TColor.purpleColor,
-                              //   ),
-                              // ],
                             ),
                             child: Stack(children: [
                               Row(
@@ -324,17 +323,16 @@ class _HomeState extends State<Home> {
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    //itemCount: profiles.length,
-                    ///itemBuilder: (context, index) {
-                    //final profile = profiles[index];
-                    itemCount: profiles
+                    itemCount: profiles.length,
+
+                    /*profiles
                         .where((profile) => profile.idAccount == 1)
-                        .length,
+                        .length,*/
                     itemBuilder: (context, index) {
                       final filteredProfile = profiles
                           .where((profile) => profile.idAccount == 1)
                           .toList();
-                      final profile = filteredProfile[index];
+                      final profile = profiles[index];
                       return Stack(
                         children: [
                           Padding(
@@ -344,15 +342,6 @@ class _HomeState extends State<Home> {
                               width: 500, //500,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                // boxShadow: [
-                                //   shadow(TColor.purpleColor)
-                                //   // BoxShadow(
-                                //   //   color: Colors.black.withOpacity(0.2),
-                                //   //   spreadRadius: 2,
-                                //   //   blurRadius: 10,
-                                //   //   offset: Offset(0, 5),
-                                //   // ),
-                                // ],
                               ),
                             ),
                           ),
