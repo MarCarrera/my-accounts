@@ -16,8 +16,10 @@ class PaysAccount extends StatefulWidget {
   State<PaysAccount> createState() => _PaysAccountState();
 }
 
-class _PaysAccountState extends State<PaysAccount> {
+class _PaysAccountState extends State<PaysAccount>
+    with TickerProviderStateMixin {
   //INSTANCIAS DE MODELOS DE CLASES
+
   List<Pagos> pagos = [];
 
   bool noData = false;
@@ -70,13 +72,51 @@ class _PaysAccountState extends State<PaysAccount> {
 
   @override
   Widget build(BuildContext context) {
+    TabController _tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       backgroundColor: TColor.backgroundColor,
       body: Stack(
         children: [
           title1(),
-          statics(),
-          data(),
+          Padding(
+            padding: const EdgeInsets.only(top: 150, left: 0),
+            child: Stack(children: [
+              Container(
+                child: TabBar(
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  controller: _tabController,
+                  tabs: [
+                    Tab(text: 'Tab 1'),
+                    Tab(text: 'Tab 2'),
+                    Tab(text: 'Tab 3'),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.maxFinite,
+                height: double.infinity,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Stack(children: [
+                      statics(),
+                      data(),
+                    ]),
+                    Stack(children: [
+                      statics(),
+                      data(),
+                    ]),
+                    Stack(children: [
+                      statics(),
+                      data(),
+                    ]),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+          //statics(),
         ],
       ),
     );
@@ -142,7 +182,7 @@ class _PaysAccountState extends State<PaysAccount> {
       );
     } else {
       return Padding(
-          padding: const EdgeInsets.only(top: 140, right: 26, left: 26),
+          padding: const EdgeInsets.only(top: 60, right: 26, left: 26),
           child: Stack(
             children: [
               Container(
@@ -319,7 +359,7 @@ class _PaysAccountState extends State<PaysAccount> {
       );
     } else {
       return Padding(
-          padding: const EdgeInsets.only(top: 460, right: 26, left: 26),
+          padding: const EdgeInsets.only(top: 380, right: 26, left: 26),
           child: Stack(
             children: [
               Container(
