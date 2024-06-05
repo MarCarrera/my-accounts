@@ -32,7 +32,7 @@ class _PaysAccountState extends State<PaysAccount>
   Future<void> cargarPagos() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarPagosPorCuenta(idAccount: '1');
+    var respuesta = await mostrarPagos();
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -73,6 +73,27 @@ class _PaysAccountState extends State<PaysAccount>
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
+    //escychar cambio al navegar entab
+    /*_tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        print("Selected Tab: ${_tabController.index}");
+        switch (_tabController.index) {
+          case 0: 
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+        }
+      }
+    });*/
+
+    @override
+    void dispose() {
+      _tabController.dispose();
+      super.dispose();
+    }
+
     return Scaffold(
       backgroundColor: TColor.backgroundColor,
       body: Stack(
@@ -87,9 +108,9 @@ class _PaysAccountState extends State<PaysAccount>
                   unselectedLabelColor: Colors.grey,
                   controller: _tabController,
                   tabs: [
-                    Tab(text: 'Tab 1'),
-                    Tab(text: 'Tab 2'),
-                    Tab(text: 'Tab 3'),
+                    Tab(text: 'Cuenta A'),
+                    Tab(text: 'Cuenta B'),
+                    Tab(text: 'Cuenta C'),
                   ],
                 ),
               ),
@@ -101,15 +122,15 @@ class _PaysAccountState extends State<PaysAccount>
                   children: [
                     Stack(children: [
                       statics(),
-                      data(),
+                      data('1'),
                     ]),
                     Stack(children: [
                       statics(),
-                      data(),
+                      data('2'),
                     ]),
                     Stack(children: [
                       statics(),
-                      data(),
+                      data('3'),
                     ]),
                   ],
                 ),
@@ -299,7 +320,7 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
-  Padding data() {
+  Padding data(String idAccount) {
     if (noData == false && pagos.isEmpty || reload) {
       return Padding(
         padding: const EdgeInsets.only(top: 378),
@@ -393,8 +414,13 @@ class _PaysAccountState extends State<PaysAccount>
                       ),
                     ),
                     ListView.builder(
-                      itemCount: pagos.length,
+                      itemCount: pagos
+                          .where((pago) => pago.idAccount == idAccount)
+                          .length,
                       itemBuilder: (context, index) {
+                        final itemPago = pagos
+                            .where((account) => account.idAccount == 1)
+                            .toList();
                         final pago = pagos[index];
                         var cant = pago.amount;
                         int amount = int.parse(cant);

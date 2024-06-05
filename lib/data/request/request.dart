@@ -59,8 +59,26 @@ Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
     return "err_internet_conex";
   }
 }
+Future<dynamic> mostrarPagos() async {
+  var data = {'opc': '10'};
+
+  try {
+    final response = await http.post(
+      url,
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      //print('USUARIUOS DE CUENTA: ${jsonResponse}');
+      return jsonResponse;
+    }
+  } catch (e) {
+    return "err_internet_conex";
+  }
+}
 Future<dynamic> mostrarPagosPorCuenta({required String idAccount}) async {
-  var data = {'opc': '10', 'idAccount': idAccount};
+  var data = {'opc': '11', 'idAccount': idAccount};
 
   try {
     final response = await http.post(
