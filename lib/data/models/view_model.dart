@@ -55,3 +55,12 @@ class Pagos {
     required this.amount,
   });
 }
+
+class TotalPago {
+  final int totalPagado;
+  final String month1;
+  final String month2;
+
+  TotalPago({required this.totalPagado, required this.month1, required this.month2});
+
+}

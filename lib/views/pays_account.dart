@@ -19,20 +19,37 @@ class PaysAccount extends StatefulWidget {
 class _PaysAccountState extends State<PaysAccount>
     with TickerProviderStateMixin {
   //INSTANCIAS DE MODELOS DE CLASES
-
+  NumberFormat formatoMoneda = NumberFormat.currency(symbol: '\$');
   List<Pagos> pagos = [];
+  List<TotalPago> totalPago = [];
 
   bool noData = false;
-  bool noDataUser = false;
+  bool noDataStatcs = false;
   bool reload = false;
   int indexAct = 1;
 
   int index = 0;
 
+  Map<String, String> monthTranslations = {
+    "January": "Enero",
+    "February": "Febrero",
+    "March": "Marzo",
+    "April": "Abril",
+    "May": "Mayo",
+    "June": "Junio",
+    "July": "Julio",
+    "August": "Agosto",
+    "September": "Septiembre",
+    "October": "Octubre",
+    "November": "Noviembre",
+    "December": "Diciembre",
+  };
+
   Future<void> cargarPagos() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarPagos();
+    var respuesta =
+        await mostrarPagos(date1: '2024-05-01', date2: '2024-06-04');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -41,7 +58,7 @@ class _PaysAccountState extends State<PaysAccount>
           print('no hay datos');
         } else {
           noData = false;
-          print('Respuesta en vista ::::: ${respuesta}');
+          //print('Respuesta en vista ::::: ${respuesta}');
           pagos.clear();
           if (respuesta.isNotEmpty) {
             for (int i = 0; i < respuesta.length; i++) {
@@ -63,31 +80,52 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
+  Future<void> cargarTotalPago() async {
+    //parametros = {"opcion": "1.1"};
+    reload = true;
+    var respuesta = await mostrarTotalPagoPorMesCuenta(
+        idAccount: '1', date1: '2024-05-01', date2: '2024-06-04');
+    reload = false;
+    if (respuesta != "err_internet_conex") {
+      setState(() {
+        if (respuesta == 'empty') {
+          noDataStatcs = true;
+          print('no hay datos');
+        } else {
+          noData = false;
+          print('Respuesta totalPago ::::: ${respuesta}');
+          totalPago.clear();
+          if (respuesta.containsKey('totalPagado') &&
+              respuesta.containsKey('month1') &&
+              respuesta.containsKey('month2')) {
+            // Añadir el objeto TotalPago a la lista
+            totalPago.add(TotalPago(
+              totalPagado: respuesta['totalPagado'],
+              month1: respuesta['month1'],
+              month2: respuesta['month2'],
+            ));
+          } else {
+            print('Respuesta inesperada: ${respuesta}');
+          }
+        }
+      });
+    } else {
+      noDataStatcs = true;
+      print('Verifique su conexion a internet');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     cargarPagos();
+    cargarTotalPago();
     // mostrarUsuariosPorCuenta(idAccount: '2');
   }
 
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
-    //escychar cambio al navegar entab
-    /*_tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
-        print("Selected Tab: ${_tabController.index}");
-        switch (_tabController.index) {
-          case 0: 
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-        }
-      }
-    });*/
-
     @override
     void dispose() {
       _tabController.dispose();
@@ -122,15 +160,15 @@ class _PaysAccountState extends State<PaysAccount>
                   children: [
                     Stack(children: [
                       statics(),
-                      data('1'),
+                      data(1),
                     ]),
                     Stack(children: [
                       statics(),
-                      data('2'),
+                      data(2),
                     ]),
                     Stack(children: [
                       statics(),
-                      data('3'),
+                      data(3),
                     ]),
                   ],
                 ),
@@ -144,7 +182,7 @@ class _PaysAccountState extends State<PaysAccount>
   }
 
   Padding statics() {
-    if (noData == false && pagos.isEmpty || reload) {
+    if (noDataStatcs == false && totalPago.isEmpty || reload) {
       return Padding(
         padding: const EdgeInsets.only(top: 378),
         child: Center(
@@ -183,7 +221,7 @@ class _PaysAccountState extends State<PaysAccount>
       );
     } else
     //SI NO EXISTE DATA
-    if (noData) {
+    if (noDataStatcs) {
       return Padding(
         padding: const EdgeInsets.only(top: 420),
         child: Center(
@@ -228,14 +266,18 @@ class _PaysAccountState extends State<PaysAccount>
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            '680.00',
+                            totalPago.isNotEmpty
+                                ? formatoMoneda.format(totalPago[0].totalPagado)
+                                : formatoMoneda.format(00.0),
                             style: GoogleFonts.fredoka(
                                 fontSize: 76,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400),
                           ),
                           Text(
-                            'Monto total acumulado del mes de Noviembre',
+                            totalPago.isNotEmpty
+                                ? 'Monto total acumulado del mes de ${monthTranslations[totalPago[0].month1]}'
+                                : 'No existe monto acumulado',
                             style: GoogleFonts.fredoka(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -320,10 +362,10 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
-  Padding data(String idAccount) {
+  Padding data(int idAccount) {
     if (noData == false && pagos.isEmpty || reload) {
       return Padding(
-        padding: const EdgeInsets.only(top: 378),
+        padding: const EdgeInsets.only(top: 78),
         child: Center(
           child: FutureBuilder<void>(
             future: Future.delayed(Duration(seconds: 4)),
@@ -358,27 +400,10 @@ class _PaysAccountState extends State<PaysAccount>
           ),
         ),
       );
-    } else
-    //SI NO EXISTE DATA
-    if (noData) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 420),
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 60,
-              ),
-              Text(
-                'Sin datos para mostrar.',
-                style: GoogleFonts.fredoka(fontSize: 25, color: Colors.black),
-              ),
-              Image.asset('assets/gifs/noData.gif'),
-            ],
-          ),
-        ), // Cambia 'assets/error.gif' al path de tu GIF
-      );
     } else {
+      // Filtrar los pagos por idAccount
+      final filteredPagos =
+          pagos.where((pago) => pago.idAccount == idAccount).toList();
       return Padding(
           padding: const EdgeInsets.only(top: 380, right: 26, left: 26),
           child: Stack(
@@ -414,18 +439,12 @@ class _PaysAccountState extends State<PaysAccount>
                       ),
                     ),
                     ListView.builder(
-                      itemCount: pagos
-                          .where((pago) => pago.idAccount == idAccount)
-                          .length,
+                      itemCount: filteredPagos.length,
                       itemBuilder: (context, index) {
-                        final itemPago = pagos
-                            .where((account) => account.idAccount == 1)
-                            .toList();
-                        final pago = pagos[index];
+                        final pago = filteredPagos[index];
                         var cant = pago.amount;
                         int amount = int.parse(cant);
-                        NumberFormat formatoMoneda =
-                            NumberFormat.currency(symbol: '\$');
+
                         return ListTile(
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
@@ -474,7 +493,7 @@ class _PaysAccountState extends State<PaysAccount>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            'Pagos de Cuenta A',
+            'Gestión de Pagos',
             style: TextStyle(
                 fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
           ),
