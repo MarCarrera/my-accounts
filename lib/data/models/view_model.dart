@@ -45,6 +45,7 @@ class Pagos {
   final String paymentDate;
   final String status;
   final String amount;
+  final String userName;
 
   Pagos({
     required this.idPayment,
@@ -53,6 +54,7 @@ class Pagos {
     required this.paymentDate,
     required this.status,
     required this.amount,
+    required this.userName,
   });
 }
 
@@ -63,5 +65,8 @@ class TotalPago {
   final String month2;
 
   TotalPago(
-      {required this.idAccount, required this.totalPagado, required this.month1, required this.month2});
+      {required this.idAccount,
+      required this.totalPagado,
+      required this.month1,
+      required this.month2});
 }

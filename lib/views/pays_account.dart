@@ -69,6 +69,7 @@ class _PaysAccountState extends State<PaysAccount>
                 paymentDate: respuesta[i]['paymentDate'],
                 status: respuesta[i]['status'],
                 amount: respuesta[i]['amount'],
+                userName: respuesta[i]['userName'],
               ));
             }
           }
@@ -83,7 +84,8 @@ class _PaysAccountState extends State<PaysAccount>
   Future<void> cargarTotalPago() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarTotalPagoPorMesCuenta(date1: '2024-05-01', date2: '2024-06-04');
+    var respuesta = await mostrarTotalPagoPorMesCuenta(
+        date1: '2024-05-01', date2: '2024-06-04');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -239,7 +241,7 @@ class _PaysAccountState extends State<PaysAccount>
     } else {
       final filteredTotales =
           totalPago.where((pago) => pago.idAccount == idAccount).toList();
-           final total = filteredTotales[index];
+      final total = filteredTotales[index];
       return Padding(
           padding: const EdgeInsets.only(top: 60, right: 26, left: 26),
           child: Stack(
@@ -448,7 +450,7 @@ class _PaysAccountState extends State<PaysAccount>
                                 height: 40),
                           ),
                           title: Text(
-                            pago.idUser.toString(),
+                            pago.userName.toUpperCase(),
                             style: GoogleFonts.fredoka(
                                 fontSize: 22, color: Colors.white),
                           ),
