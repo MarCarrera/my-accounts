@@ -96,10 +96,9 @@ Future<dynamic> mostrarPagosPorCuenta({required String idAccount}) async {
     return "err_internet_conex";
   }
 }
-Future<dynamic> mostrarTotalPagoPorMesCuenta({required String idAccount, required String date1, required String date2}) async {
+Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required String date2}) async {
   var data = {
   'opc': '12', 
-  'idAccount': idAccount,
   'date1': date1,
   'date2': date2,
   };

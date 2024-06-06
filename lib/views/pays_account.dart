@@ -83,8 +83,7 @@ class _PaysAccountState extends State<PaysAccount>
   Future<void> cargarTotalPago() async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta = await mostrarTotalPagoPorMesCuenta(
-        idAccount: '1', date1: '2024-05-01', date2: '2024-06-04');
+    var respuesta = await mostrarTotalPagoPorMesCuenta(date1: '2024-05-01', date2: '2024-06-04');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -95,17 +94,15 @@ class _PaysAccountState extends State<PaysAccount>
           noData = false;
           print('Respuesta totalPago ::::: ${respuesta}');
           totalPago.clear();
-          if (respuesta.containsKey('totalPagado') &&
-              respuesta.containsKey('month1') &&
-              respuesta.containsKey('month2')) {
-            // Añadir el objeto TotalPago a la lista
-            totalPago.add(TotalPago(
-              totalPagado: respuesta['totalPagado'],
-              month1: respuesta['month1'],
-              month2: respuesta['month2'],
-            ));
-          } else {
-            print('Respuesta inesperada: ${respuesta}');
+          if (respuesta.isNotEmpty) {
+            for (int i = 0; i < respuesta.length; i++) {
+              totalPago.add(TotalPago(
+                idAccount: respuesta[i]['idAccount'],
+                totalPagado: respuesta[i]['totalPagado'],
+                month1: respuesta[i]['month1'],
+                month2: respuesta[i]['month2'],
+              ));
+            }
           }
         }
       });
@@ -159,15 +156,15 @@ class _PaysAccountState extends State<PaysAccount>
                   controller: _tabController,
                   children: [
                     Stack(children: [
-                      statics(),
+                      statics(1),
                       data(1),
                     ]),
                     Stack(children: [
-                      statics(),
+                      statics(2),
                       data(2),
                     ]),
                     Stack(children: [
-                      statics(),
+                      statics(3),
                       data(3),
                     ]),
                   ],
@@ -181,7 +178,7 @@ class _PaysAccountState extends State<PaysAccount>
     );
   }
 
-  Padding statics() {
+  Padding statics(int idAccount) {
     if (noDataStatcs == false && totalPago.isEmpty || reload) {
       return Padding(
         padding: const EdgeInsets.only(top: 378),
@@ -240,6 +237,9 @@ class _PaysAccountState extends State<PaysAccount>
         ), // Cambia 'assets/error.gif' al path de tu GIF
       );
     } else {
+      final filteredTotales =
+          totalPago.where((pago) => pago.idAccount == idAccount).toList();
+           final total = filteredTotales[index];
       return Padding(
           padding: const EdgeInsets.only(top: 60, right: 26, left: 26),
           child: Stack(
@@ -266,18 +266,14 @@ class _PaysAccountState extends State<PaysAccount>
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            totalPago.isNotEmpty
-                                ? formatoMoneda.format(totalPago[0].totalPagado)
-                                : formatoMoneda.format(00.0),
+                            formatoMoneda.format(total.totalPagado),
                             style: GoogleFonts.fredoka(
                                 fontSize: 76,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400),
                           ),
                           Text(
-                            totalPago.isNotEmpty
-                                ? 'Monto total acumulado del mes de ${monthTranslations[totalPago[0].month1]}'
-                                : 'No existe monto acumulado',
+                            'Monto total acumulado del mes de ${monthTranslations[total.month1]}',
                             style: GoogleFonts.fredoka(
                                 fontSize: 20,
                                 color: Colors.white,
