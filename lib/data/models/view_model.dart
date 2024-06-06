@@ -63,10 +63,16 @@ class TotalPago {
   final int totalPagado;
   final String month1;
   final String month2;
+  final int mensualidad;
+  final int ganancia;
 
   TotalPago(
       {required this.idAccount,
       required this.totalPagado,
       required this.month1,
-      required this.month2});
+      required this.month2,
+      required this.mensualidad,
+      required this.ganancia
+      
+      });
 }

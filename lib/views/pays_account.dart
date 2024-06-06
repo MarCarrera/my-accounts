@@ -49,7 +49,7 @@ class _PaysAccountState extends State<PaysAccount>
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta =
-        await mostrarPagos(date1: '2024-05-01', date2: '2024-06-04');
+        await mostrarPagos(date1: '2024-06-01', date2: '2024-06-06');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -85,7 +85,7 @@ class _PaysAccountState extends State<PaysAccount>
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta = await mostrarTotalPagoPorMesCuenta(
-        date1: '2024-05-01', date2: '2024-06-04');
+        date1: '2024-06-01', date2: '2024-06-06');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -99,11 +99,12 @@ class _PaysAccountState extends State<PaysAccount>
           if (respuesta.isNotEmpty) {
             for (int i = 0; i < respuesta.length; i++) {
               totalPago.add(TotalPago(
-                idAccount: respuesta[i]['idAccount'],
-                totalPagado: respuesta[i]['totalPagado'],
-                month1: respuesta[i]['month1'],
-                month2: respuesta[i]['month2'],
-              ));
+                  idAccount: respuesta[i]['idAccount'],
+                  totalPagado: respuesta[i]['totalPagado'],
+                  month1: respuesta[i]['month1'],
+                  month2: respuesta[i]['month2'],
+                  mensualidad: respuesta[i]['mensualidad'],
+                  ganancia: respuesta[i]['ganancia']));
             }
           }
         }
@@ -310,7 +311,7 @@ class _PaysAccountState extends State<PaysAccount>
                                       ],
                                     ),
                                     Text(
-                                      '299.00',
+                                      formatoMoneda.format(total.mensualidad),
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
@@ -338,7 +339,7 @@ class _PaysAccountState extends State<PaysAccount>
                                       ],
                                     ),
                                     Text(
-                                      '299.00',
+                                      formatoMoneda.format(total.ganancia),
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
