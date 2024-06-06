@@ -1,11 +1,13 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
-import '../../utils/prueba.dart';
+import '../utils/buttom_nav.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 
@@ -29,6 +31,7 @@ class _PaysAccountState extends State<PaysAccount>
   int indexAct = 1;
 
   int index = 0;
+  int month = 6, year = 2024;
 
   Map<String, String> monthTranslations = {
     "January": "Enero",
@@ -43,6 +46,20 @@ class _PaysAccountState extends State<PaysAccount>
     "October": "Octubre",
     "November": "Noviembre",
     "December": "Diciembre",
+  };
+  Map<int, String> monthNumber = {
+    1: "Enero",
+    2: "Febrero",
+    3: "Marzo",
+    4: "Abril",
+    5: "Mayo",
+    6: "Junio",
+    7: "Julio",
+    8: "Agosto",
+    9: "Septiembre",
+    10: "Octubre",
+    11: "Noviembre",
+    12: "Diciembre",
   };
 
   Future<void> cargarPagos() async {
@@ -137,8 +154,9 @@ class _PaysAccountState extends State<PaysAccount>
       body: Stack(
         children: [
           title1(),
+          //calendar(context),
           Padding(
-            padding: const EdgeInsets.only(top: 150, left: 0),
+            padding: const EdgeInsets.only(top: 230, left: 0),
             child: Stack(children: [
               Container(
                 child: TabBar(
@@ -176,6 +194,63 @@ class _PaysAccountState extends State<PaysAccount>
             ]),
           ),
           //statics(),
+        ],
+      ),
+    );
+  }
+
+  Padding calendar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            'Pagos del mes de: ${monthNumber[month]}',
+            style: GoogleFonts.fredoka(
+                fontSize: 24, color: Colors.black, fontWeight: FontWeight.w400),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                showMonthPicker(context, onSelected: (month, year) {
+                  if (kDebugMode) {
+                    print('Selected month: $month, year: $year');
+                  }
+                  setState(() {
+                    this.month = month;
+                    this.year = year;
+                  });
+                },
+                    initialSelectedMonth: month,
+                    initialSelectedYear: year,
+                    firstEnabledMonth: 3,
+                    lastEnabledMonth: 10,
+                    firstYear: 2000,
+                    //size: const Size(520, 250),
+                    lastYear: 2035,
+                    selectButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    //highlightColor: Colors.purple,
+                    textColor: Colors.black,
+                    contentBackgroundColor: Colors.white,
+                    dialogBackgroundColor: Colors.grey[200]);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                backgroundColor: TColor.accentColor, // Color del texto
+                //shadowColor: Colors.grey, // Color de la sombra
+                elevation: 5, // Elevación
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // Borde redondeado
+                  side: BorderSide(color: Colors.black), // Borde del botón
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 15), // Padding interno
+              ),
+              child: const Icon(
+                Icons.calendar_month,
+                color: Colors.black,
+              )),
         ],
       ),
     );
@@ -252,6 +327,10 @@ class _PaysAccountState extends State<PaysAccount>
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: TColor.accentColor,
+                    border: Border.all(
+                      color: Colors.black, // Color del borde
+                      //width: 3, // Ancho del borde
+                    ),
                     borderRadius: BorderRadius.circular(20)),
                 child: Stack(
                   children: [
@@ -410,8 +489,13 @@ class _PaysAccountState extends State<PaysAccount>
               Container(
                 height: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: TColor.accentColor,
-                    borderRadius: BorderRadius.circular(20)),
+                  color: TColor.accentColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.black, // Color del borde
+                    //width: 3, // Ancho del borde
+                  ),
+                ),
                 child: Stack(
                   children: [
                     Padding(
@@ -488,14 +572,21 @@ class _PaysAccountState extends State<PaysAccount>
   Padding title1() {
     return Padding(
       padding: const EdgeInsets.only(top: 70, left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
         children: [
-          Text(
-            'Gestión de Pagos',
-            style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Gestión de Pagos',
+                style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+            ],
           ),
+          calendar(context),
         ],
       ),
     );

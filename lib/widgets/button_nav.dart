@@ -1,10 +1,10 @@
+import 'package:acounts_control/utils/prueba.dart';
 import 'package:acounts_control/views/home/home.dart';
 import 'package:acounts_control/views/pays_account.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/constans.dart';
-
 
 class ButtonNav extends StatefulWidget {
   const ButtonNav({super.key, required this.indexColor});
@@ -22,7 +22,7 @@ class _ButtonNavState extends State<ButtonNav> {
   List Screen = [
     const Home(),
     const PaysAccount(),
-    const Home(),
+    const Prueba(),
   ];
 
   @override
@@ -47,6 +47,7 @@ class _ButtonNavState extends State<ButtonNav> {
               items: [
                 CustomNavigationBarItem(icon: Icon(Icons.home)),
                 CustomNavigationBarItem(icon: Icon(Icons.note_alt)),
+                CustomNavigationBarItem(icon: Icon(Icons.terminal_sharp)),
               ],
               currentIndex: indexColor,
               onTap: (index) {

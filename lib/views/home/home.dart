@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
-import '../../utils/prueba.dart';
+import '../../utils/buttom_nav.dart';
 import 'dart:async';
 
 class Home extends StatefulWidget {
@@ -220,6 +220,10 @@ class _HomeState extends State<Home> {
                             width: 500,
                             decoration: BoxDecoration(
                               color: TColor.purpleColor,
+                              border: Border.all(
+                                color: Colors.black, // Color del borde
+                                //width: 3, // Ancho del borde
+                              ),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Stack(children: [
@@ -352,6 +356,10 @@ class _HomeState extends State<Home> {
                               width: 500, //500,
                               decoration: BoxDecoration(
                                 color: TColor.purpleColor,
+                                border: Border.all(
+                                  color: Colors.black, // Color del borde
+                                  //width: 3, // Ancho del borde
+                                ),
                                 borderRadius: BorderRadius.circular(20),
                                 // boxShadow: [
                                 //   shadow(TColor.purpleColor),
@@ -461,6 +469,10 @@ class _HomeState extends State<Home> {
           height:
               300, // Asegúrate de que el contenedor sea cuadrado para que sea un círculo
           decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black, // Color del borde
+              //width: 3, // Ancho del borde
+            ),
             color: Colors.white.withOpacity(0.5),
             shape: BoxShape.circle,
           ),
@@ -474,6 +486,10 @@ class _HomeState extends State<Home> {
           height:
               180, // Asegúrate de que el contenedor sea cuadrado para que sea un círculo
           decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black, // Color del borde
+              //width: 3, // Ancho del borde
+            ),
             color: Colors.white.withOpacity(0.5),
             shape: BoxShape.circle,
           ),
@@ -512,6 +528,10 @@ class _HomeState extends State<Home> {
                             height: 200,
                             width: 400,
                             decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black, // Color del borde
+                                //width: 3, // Ancho del borde
+                              ),
                               color: TColor.orangeLightColor,
                               borderRadius: BorderRadius.circular(20),
                               // boxShadow: [
@@ -612,6 +632,10 @@ class _HomeState extends State<Home> {
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Color del borde
+                              //width: 3, // Ancho del borde
+                            ),
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -622,6 +646,10 @@ class _HomeState extends State<Home> {
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Color del borde
+                              //width: 3, // Ancho del borde
+                            ),
                             color: TColor.orangeLightColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
