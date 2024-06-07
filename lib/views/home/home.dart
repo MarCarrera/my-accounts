@@ -433,12 +433,26 @@ class _HomeState extends State<Home> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            'Usuario ${profile.letter.toUpperCase()}',
-                                            style: GoogleFonts.fredoka(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Usuario ${profile.letter.toUpperCase()}',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
+                                              ),
+                                              SizedBox(
+                                                width: 130,
+                                              ),
+                                              Text(
+                                                '${profile.status.toUpperCase()}',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
                                           ),
                                           Text(
                                             'Nombre: ${profile.user.toUpperCase()}',
@@ -448,10 +462,9 @@ class _HomeState extends State<Home> {
                                                 color: Colors.white),
                                           ),
                                           Text(
-                                             _authorized == 'Autenticado'
-                                                ?  'Teléfono: ${profile.phone}'
+                                            _authorized == 'Autenticado'
+                                                ? 'Teléfono: ${profile.phone}'
                                                 : 'Teléfono: ***-***-****',
-                                           
                                             style: GoogleFonts.fredoka(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w400,
@@ -466,8 +479,6 @@ class _HomeState extends State<Home> {
                                                   _authorized == 'Autenticado'
                                                       ? 'Pin: ${profile.pin}'
                                                       : 'Pin: ****',
-
-                          
                                                   style: GoogleFonts.fredoka(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -479,7 +490,6 @@ class _HomeState extends State<Home> {
                                                 _authorized == 'Autenticado'
                                                     ? 'Pago: ${profile.payment}'
                                                     : 'Pago: ***',
-                                                
                                                 style: GoogleFonts.fredoka(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w400,
@@ -704,7 +714,6 @@ class _HomeState extends State<Home> {
                                         _authorized == 'Autenticado'
                                             ? account.name
                                             : 'Cuenta: **********@gmail.com',
-                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 24,
@@ -714,7 +723,6 @@ class _HomeState extends State<Home> {
                                         _authorized == 'Autenticado'
                                             ? account.password
                                             : 'Contraseña: *******',
-                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -724,7 +732,6 @@ class _HomeState extends State<Home> {
                                         _authorized == 'Autenticado'
                                             ? account.payment
                                             : 'Mensulaidad: ***',
-                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -734,7 +741,6 @@ class _HomeState extends State<Home> {
                                         _authorized == 'Autenticado'
                                             ? account.bank
                                             : 'Banco: *******',
-                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
