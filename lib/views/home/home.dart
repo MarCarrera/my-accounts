@@ -1,6 +1,7 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
@@ -15,6 +16,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _canCheckBiometrics = false;
+  bool _isAuthenticating = false;
+  String _authorized = 'No autenticado';
+  bool showData = false;
   //INSTANCIAS DE MODELOS DE CLASES
   List<Account> accounts = [];
   List<Profile> profiles = [];
@@ -92,6 +98,37 @@ class _HomeState extends State<Home> {
     } else {
       noData = true;
       print('Verifique su conexion a internet');
+    }
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      authenticated = await auth.authenticate(
+        localizedReason:
+            'Escanee su huella dactilar o patrón para autenticarse.',
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isAuthenticating = false;
+        print('Error: ${e.toString()}');
+      });
+      return;
+    }
+    if (!mounted) return;
+    setState(() {
+      _authorized = authenticated ? 'Autenticado' : 'No Autenticado';
+    });
+    if (_authorized == 'Autenticado') {
+      print('Se ha pulsado autenticar');
+      showData = true;
     }
   }
 
@@ -187,21 +224,44 @@ class _HomeState extends State<Home> {
             style: GoogleFonts.fredoka(
                 fontSize: 34, fontWeight: FontWeight.w400, color: Colors.black),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                accounts.clear();
-                profiles.clear();
-                cargarCuentas();
-                cargarPerfiles(indexAct.toString());
-              });
-            },
-            child: const Icon(
-              Icons.change_circle_outlined,
-              color: Colors.black,
-              size: 28,
-            ),
-          ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (_authorized != 'Autenticado') {
+                    _authenticate();
+                  } else {
+                    setState(() {
+                      _authorized = 'No autenticado';
+                    });
+                  }
+                },
+                child: Icon(
+                  Icons.remove_red_eye_outlined,
+                  size: 32,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    accounts.clear();
+                    profiles.clear();
+                    cargarCuentas();
+                    cargarPerfiles(indexAct.toString());
+                  });
+                },
+                child: const Icon(
+                  Icons.change_circle_outlined,
+                  color: Colors.black,
+                  size: 28,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -388,7 +448,10 @@ class _HomeState extends State<Home> {
                                                 color: Colors.white),
                                           ),
                                           Text(
-                                            'Teléfono: ${profile.phone}',
+                                             _authorized == 'Autenticado'
+                                                ?  'Teléfono: ${profile.phone}'
+                                                : 'Teléfono: ***-***-****',
+                                           
                                             style: GoogleFonts.fredoka(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w400,
@@ -400,7 +463,11 @@ class _HomeState extends State<Home> {
                                                 padding: const EdgeInsets.only(
                                                     right: 80),
                                                 child: Text(
-                                                  'Pin: ${profile.pin}',
+                                                  _authorized == 'Autenticado'
+                                                      ? 'Pin: ${profile.pin}'
+                                                      : 'Pin: ****',
+
+                          
                                                   style: GoogleFonts.fredoka(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -409,7 +476,10 @@ class _HomeState extends State<Home> {
                                                 ),
                                               ),
                                               Text(
-                                                'Pago: ${profile.payment}',
+                                                _authorized == 'Autenticado'
+                                                    ? 'Pago: ${profile.payment}'
+                                                    : 'Pago: ***',
+                                                
                                                 style: GoogleFonts.fredoka(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w400,
@@ -517,7 +587,6 @@ class _HomeState extends State<Home> {
                               color: Colors.black, // Color del borde
                             ),
                             borderRadius: BorderRadius.circular(20),
-                            // boxShadow: [shadow(TColor.orangeLightColor)],
                           ),
                         ),
                         ClipRRect(
@@ -528,11 +597,6 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               color: TColor.orangeLightColor,
                               borderRadius: BorderRadius.circular(20),
-                              // boxShadow: [
-                              //   shadow(
-                              //     TColor.orangeLightColor,
-                              //   ),
-                              // ],
                             ),
                             child: Stack(children: [
                               Row(
@@ -637,28 +701,40 @@ class _HomeState extends State<Home> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        account.name,
+                                        _authorized == 'Autenticado'
+                                            ? account.name
+                                            : 'Cuenta: **********@gmail.com',
+                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        account.password,
+                                        _authorized == 'Autenticado'
+                                            ? account.password
+                                            : 'Contraseña: *******',
+                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
                                             fontWeight: FontWeight.w400),
                                       ),
                                       Text(
-                                        account.payment,
+                                        _authorized == 'Autenticado'
+                                            ? account.payment
+                                            : 'Mensulaidad: ***',
+                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
                                             fontWeight: FontWeight.w400),
                                       ),
                                       Text(
-                                        account.bank,
+                                        _authorized == 'Autenticado'
+                                            ? account.bank
+                                            : 'Banco: *******',
+                                        
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,

@@ -140,26 +140,9 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
-  Future<void> _checkBiometrics() async {
-    bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } catch (e) {
-      canCheckBiometrics = false;
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
-
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
-      // setState(() {
-      //   _isAuthenticating = true;
-      // });
       authenticated = await auth.authenticate(
         localizedReason:
             'Escanee su huella dactilar o patrón para autenticarse.',
@@ -174,23 +157,17 @@ class _PaysAccountState extends State<PaysAccount>
     } catch (e) {
       setState(() {
         _isAuthenticating = false;
-        //_authorized = 'Error: ${e.toString()}';
         print('Error: ${e.toString()}');
       });
       return;
     }
     if (!mounted) return;
-
     setState(() {
       _authorized = authenticated ? 'Autenticado' : 'No Autenticado';
     });
     if (_authorized == 'Autenticado') {
       print('Se ha pulsado autenticar');
       showData = true;
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => ButtomNav(index_color: 0)),
-      // );
     }
   }
 
@@ -199,7 +176,7 @@ class _PaysAccountState extends State<PaysAccount>
     super.initState();
     cargarPagos();
     cargarTotalPago();
-    _checkBiometrics();
+    //_checkBiometrics();
   }
 
   @override
@@ -423,8 +400,13 @@ class _PaysAccountState extends State<PaysAccount>
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  _authenticate();
-                                  print('huella dactilar');
+                                  if (_authorized != 'Autenticado') {
+                                    _authenticate();
+                                  } else {
+                                    setState(() {
+                                      _authorized = 'No autenticado';
+                                    });
+                                  }
                                 },
                                 child: Icon(
                                   Icons.remove_red_eye,
@@ -479,7 +461,9 @@ class _PaysAccountState extends State<PaysAccount>
                                       ],
                                     ),
                                     Text(
-                                      formatoMoneda.format(total.mensualidad),
+                                      _authorized == 'Autenticado' ?
+                                      formatoMoneda
+                                      .format(total.mensualidad) : '***',
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
@@ -506,8 +490,8 @@ class _PaysAccountState extends State<PaysAccount>
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                      formatoMoneda.format(total.ganancia),
+                                    Text(_authorized == 'Autenticado' ?
+                                      formatoMoneda.format(total.ganancia): '***',
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
@@ -619,8 +603,8 @@ class _PaysAccountState extends State<PaysAccount>
                           ),
                           trailing: Column(
                             children: [
-                              Text(
-                                formatoMoneda.format(amount),
+                              Text(_authorized == 'Autenticado' ?
+                                formatoMoneda.format(amount) : '***',
                                 style: GoogleFonts.fredoka(
                                     fontSize: 23, color: Colors.white),
                               ),
