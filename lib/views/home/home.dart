@@ -1,5 +1,6 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
@@ -114,37 +115,7 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
             //tab navegador
-            ButtomNav(
-              initialIndex: 0,
-              containerHeight: 50,
-              containerWight: 420,
-              containerColor: TColor.blueColor,
-              onSelect: (index) {
-                profiles.clear();
-                indexAct = index + 1;
-                print('index calculado: $indexAct');
-                setState(() {
-                  LoadingDots();
-                });
-                Timer(Duration(seconds: 1), () {
-                  cargarPerfiles(indexAct.toString());
-                });
-              },
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 13.3),
-                  child: Text('Cuenta A'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 13.3),
-                  child: Text('Cuenta B'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 13.3),
-                  child: Text('Cuenta C'),
-                ),
-              ],
-            ),
+            buttomNav(),
             SizedBox(
               height: 15,
             ),
@@ -156,6 +127,56 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget buttomNav() {
+    if (noData == false && accounts.isEmpty) {
+      return Stack(
+        children: [],
+      );
+    } else {
+      return ButtomNav(
+      initialIndex: 0,
+      containerHeight: 50,
+      containerWight: 420,
+      containerColor: TColor.blueColor,
+      onSelect: (index) {
+        profiles.clear();
+        indexAct = index + 1;
+        //print('index calculado: $indexAct');
+        setState(() {
+          LoadingDots();
+        });
+        Timer(Duration(seconds: 1), () {
+          cargarPerfiles(indexAct.toString());
+        });
+      },
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta A',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta B',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta C',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+          ),
+        ),
+      ],
+    );
+    }
+    
+  }
+
   Padding title1() {
     return Padding(
       padding: const EdgeInsets.only(top: 70, left: 15),
@@ -164,8 +185,8 @@ class _HomeState extends State<Home> {
         children: [
           Text(
             'Cuentas',
-            style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
+            style: GoogleFonts.fredoka(
+                fontSize: 34, fontWeight: FontWeight.w400, color: Colors.black),
           ),
         ],
       ),
@@ -180,8 +201,8 @@ class _HomeState extends State<Home> {
         children: [
           Text(
             'Usuarios',
-            style: TextStyle(
-                fontSize: 34, fontWeight: FontWeight.w600, color: Colors.black),
+            style: GoogleFonts.fredoka(
+                fontSize: 34, fontWeight: FontWeight.w400, color: Colors.black),
           ),
         ],
       ),
@@ -222,7 +243,6 @@ class _HomeState extends State<Home> {
                               color: TColor.purpleColor,
                               border: Border.all(
                                 color: Colors.black, // Color del borde
-                                //width: 3, // Ancho del borde
                               ),
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -239,48 +259,10 @@ class _HomeState extends State<Home> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Usuario #',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(
-                                          'Nombre: ------',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          'Teléfono: -----',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 80),
-                                              child: Text(
-                                                'Pin: ----',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                            Text(
-                                              'Pago: ----',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ],
+                                          'No hay datos \npara mostrar',
+                                          style: GoogleFonts.fredoka(
+                                              fontSize: 26,
+                                              color: Colors.white),
                                         ),
                                       ],
                                     ),
@@ -289,16 +271,16 @@ class _HomeState extends State<Home> {
                               ),
                               Circles(),
                               Positioned(
-                                bottom: 8,
-                                left: 360,
+                                bottom: 24,
+                                left: 300,
                                 child: Stack(
                                   alignment: Alignment
                                       .center, // Alinea el contenido en el centro del Stack
                                   children: [
                                     Container(
-                                      width: 100,
+                                      width: 140,
                                       child:
-                                          Image.asset('assets/icons/woman.png'),
+                                          Image.asset('assets/icons/info.png'),
                                     ),
                                   ],
                                 ),
@@ -379,24 +361,24 @@ class _HomeState extends State<Home> {
                                         children: [
                                           Text(
                                             'Usuario ${profile.letter.toUpperCase()}',
-                                            style: TextStyle(
-                                                color: Colors.white,
+                                            style: GoogleFonts.fredoka(
                                                 fontSize: 24,
-                                                fontWeight: FontWeight.w600),
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white),
                                           ),
                                           Text(
                                             'Nombre: ${profile.user.toUpperCase()}',
-                                            style: TextStyle(
-                                                color: Colors.white,
+                                            style: GoogleFonts.fredoka(
                                                 fontSize: 18,
-                                                fontWeight: FontWeight.w400),
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white),
                                           ),
                                           Text(
-                                            profile.phone,
-                                            style: TextStyle(
-                                                color: Colors.white,
+                                            'Teléfono: ${profile.phone}',
+                                            style: GoogleFonts.fredoka(
                                                 fontSize: 18,
-                                                fontWeight: FontWeight.w400),
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white),
                                           ),
                                           Row(
                                             children: [
@@ -405,20 +387,19 @@ class _HomeState extends State<Home> {
                                                     right: 80),
                                                 child: Text(
                                                   'Pin: ${profile.pin}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
+                                                  style: GoogleFonts.fredoka(
                                                       fontSize: 18,
                                                       fontWeight:
-                                                          FontWeight.w400),
+                                                          FontWeight.w400,
+                                                      color: Colors.white),
                                                 ),
                                               ),
                                               Text(
                                                 'Pago: ${profile.payment}',
-                                                style: TextStyle(
-                                                    color: Colors.white,
+                                                style: GoogleFonts.fredoka(
                                                     fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w400),
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
                                               ),
                                             ],
                                           ),
@@ -518,6 +499,9 @@ class _HomeState extends State<Home> {
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Color del borde
+                            ),
                             borderRadius: BorderRadius.circular(20),
                             // boxShadow: [shadow(TColor.orangeLightColor)],
                           ),
@@ -528,10 +512,6 @@ class _HomeState extends State<Home> {
                             height: 200,
                             width: 400,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black, // Color del borde
-                                //width: 3, // Ancho del borde
-                              ),
                               color: TColor.orangeLightColor,
                               borderRadius: BorderRadius.circular(20),
                               // boxShadow: [
@@ -553,32 +533,10 @@ class _HomeState extends State<Home> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Cuenta',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(
-                                          'Contraseña:',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          'Mensualidad:',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          'Banco:',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400),
+                                          'No hay datos \npara mostrar',
+                                          style: GoogleFonts.fredoka(
+                                              fontSize: 26,
+                                              color: Colors.white),
                                         ),
                                       ],
                                     ),
@@ -587,14 +545,13 @@ class _HomeState extends State<Home> {
                               ),
                               Circles(),
                               Positioned(
-                                  top: 60,
-                                  left: 200,
-                                  child: Container(
-                                      width: 260,
-                                      child: Image.asset(
-                                        'assets/icons/icon3.png',
-                                        fit: BoxFit.contain,
-                                      ))),
+                                top: 30,
+                                left: 200,
+                                child: Container(
+                                  width: 160,
+                                  child: Image.asset('assets/icons/info.png'),
+                                ),
+                              ),
                             ]),
                           ),
                         ),
@@ -632,10 +589,10 @@ class _HomeState extends State<Home> {
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black, // Color del borde
-                              //width: 3, // Ancho del borde
-                            ),
+                            // border: Border.all(
+                            //   color: Colors.black, // Color del borde
+                            //   //width: 3, // Ancho del borde
+                            // ),
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),

@@ -71,7 +71,7 @@ Future<dynamic> mostrarPagos({required String date1, required String date2}) asy
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print('USUARIUOS DE CUENTA: ${jsonResponse}');
+      //print('USUARIUOS DE CUENTA: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {
@@ -111,7 +111,7 @@ Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required St
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print('total pago cuenta: ${jsonResponse}');
+      //print('total pago cuenta: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {

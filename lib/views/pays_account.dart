@@ -259,7 +259,7 @@ class _PaysAccountState extends State<PaysAccount>
   Padding statics(int idAccount) {
     if (noDataStatcs == false && totalPago.isEmpty || reload) {
       return Padding(
-        padding: const EdgeInsets.only(top: 378),
+        padding: const EdgeInsets.only(top: 28),
         child: Center(
           child: FutureBuilder<void>(
             future: Future.delayed(Duration(seconds: 4)),
@@ -269,7 +269,7 @@ class _PaysAccountState extends State<PaysAccount>
                 return CircularProgressIndicator();
               } else {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 46),
+                  padding: const EdgeInsets.only(top: 36),
                   child: Center(
                     child: FadeInUp(
                       duration: Duration(milliseconds: 2100),
@@ -293,26 +293,6 @@ class _PaysAccountState extends State<PaysAccount>
             },
           ),
         ),
-      );
-    } else
-    //SI NO EXISTE DATA
-    if (noDataStatcs) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 420),
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 60,
-              ),
-              Text(
-                'Sin datos para mostrar.',
-                style: GoogleFonts.fredoka(fontSize: 25, color: Colors.black),
-              ),
-              Image.asset('assets/gifs/noData.gif'),
-            ],
-          ),
-        ), // Cambia 'assets/error.gif' al path de tu GIF
       );
     } else {
       final filteredTotales =
@@ -453,25 +433,9 @@ class _PaysAccountState extends State<PaysAccount>
                 return CircularProgressIndicator();
               } else {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 46),
-                  child: Center(
-                    child: FadeInUp(
-                      duration: Duration(milliseconds: 2100),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 60,
-                          ),
-                          Text(
-                            'Sin datos o problemas de red. \nVerifica tu conexión a internet.',
-                            style: GoogleFonts.fredoka(
-                                fontSize: 25, color: Colors.black),
-                          ),
-                          Image.asset('assets/gifs/noData.gif'),
-                        ],
-                      ),
-                    ),
-                  ), // Cambia 'assets/error.gif' al path de tu GIF
+                  padding: const EdgeInsets.only(top: 0),
+                  child:
+                      Text(''), // Cambia 'assets/error.gif' al path de tu GIF
                 ); // Aquí debes reemplazar YourRegularContentWidget con tu widget habitual
               }
             },
