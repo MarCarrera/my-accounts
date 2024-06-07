@@ -19,6 +19,9 @@ dependencies:
   flutter_custom_month_picker: #https://pub.dev/packages/flutter_custom_month_picker
   google_fonts: #https://pub.dev/packages/google_fonts
   local_auth: #https://pub.dev/packages/local_auth
+  hive: #https://pub.dev/packages/hive
+  hive_flutter: #https://pub.dev/packages/hive_flutter
+  quickalert: #https://pub.dev/packages/quickalert
 
 dev_dependencies:
   flutter_test:
