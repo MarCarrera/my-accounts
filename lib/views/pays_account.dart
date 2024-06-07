@@ -110,7 +110,7 @@ class _PaysAccountState extends State<PaysAccount>
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta = await mostrarTotalPagoPorMesCuenta(
-        date1: '2024-06-01', date2: '2024-06-06');
+        date1: '2024-06-01', date2: '2024-06-07');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
