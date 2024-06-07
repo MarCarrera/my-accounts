@@ -140,6 +140,20 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
+  Future<void> _checkBiometrics() async {
+    bool canCheckBiometrics;
+    try {
+      canCheckBiometrics = await auth.canCheckBiometrics;
+    } catch (e) {
+      canCheckBiometrics = false;
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _canCheckBiometrics = canCheckBiometrics;
+    });
+  }
+
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
@@ -185,7 +199,7 @@ class _PaysAccountState extends State<PaysAccount>
     super.initState();
     cargarPagos();
     cargarTotalPago();
-    // mostrarUsuariosPorCuenta(idAccount: '2');
+    _checkBiometrics();
   }
 
   @override

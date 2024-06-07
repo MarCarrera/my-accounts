@@ -19,6 +19,8 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
+	<key>NSFaceIDUsageDescription</key> <!-- permiso para autenticacion biometrica -->
+ 	<string>We need to use your Face ID to authenticate you</string>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
