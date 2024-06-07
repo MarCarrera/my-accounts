@@ -134,59 +134,73 @@ class _HomeState extends State<Home> {
       );
     } else {
       return ButtomNav(
-      initialIndex: 0,
-      containerHeight: 50,
-      containerWight: 420,
-      containerColor: TColor.blueColor,
-      onSelect: (index) {
-        profiles.clear();
-        indexAct = index + 1;
-        //print('index calculado: $indexAct');
-        setState(() {
-          LoadingDots();
-        });
-        Timer(Duration(seconds: 1), () {
-          cargarPerfiles(indexAct.toString());
-        });
-      },
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 13.3),
-          child: Text(
-            'Cuenta A',
-            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+        initialIndex: 0,
+        containerHeight: 50,
+        containerWight: 420,
+        containerColor: TColor.blueColor,
+        onSelect: (index) {
+          profiles.clear();
+          indexAct = index + 1;
+          //print('index calculado: $indexAct');
+          setState(() {
+            LoadingDots();
+          });
+          Timer(Duration(seconds: 1), () {
+            cargarPerfiles(indexAct.toString());
+          });
+        },
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13.3),
+            child: Text(
+              'Cuenta A',
+              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 13.3),
-          child: Text(
-            'Cuenta B',
-            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13.3),
+            child: Text(
+              'Cuenta B',
+              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 13.3),
-          child: Text(
-            'Cuenta C',
-            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13.3),
+            child: Text(
+              'Cuenta C',
+              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
     }
-    
   }
 
   Padding title1() {
     return Padding(
-      padding: const EdgeInsets.only(top: 70, left: 15),
+      padding: const EdgeInsets.only(top: 70, left: 15, right: 25),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Cuentas',
             style: GoogleFonts.fredoka(
                 fontSize: 34, fontWeight: FontWeight.w400, color: Colors.black),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                accounts.clear();
+                profiles.clear();
+                cargarCuentas();
+                cargarPerfiles(indexAct.toString());
+              });
+            },
+            child: const Icon(
+              Icons.change_circle_outlined,
+              color: Colors.black,
+              size: 28,
+            ),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
@@ -20,6 +21,11 @@ class PaysAccount extends StatefulWidget {
 
 class _PaysAccountState extends State<PaysAccount>
     with TickerProviderStateMixin {
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _canCheckBiometrics = false;
+  bool _isAuthenticating = false;
+  String _authorized = 'No autenticado';
+
   //INSTANCIAS DE MODELOS DE CLASES
   NumberFormat formatoMoneda = NumberFormat.currency(symbol: '\$');
   List<Pagos> pagos = [];
@@ -30,7 +36,7 @@ class _PaysAccountState extends State<PaysAccount>
   bool reload = false;
   bool isButtonEnabled = true;
   int indexAct = 1;
-
+  bool showData = false;
   int index = 0;
   int month = 6, year = 2024;
 
@@ -131,6 +137,46 @@ class _PaysAccountState extends State<PaysAccount>
     } else {
       noDataStatcs = true;
       print('Verifique su conexion a internet');
+    }
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      // setState(() {
+      //   _isAuthenticating = true;
+      // });
+      authenticated = await auth.authenticate(
+        localizedReason:
+            'Escanee su huella dactilar o patrón para autenticarse.',
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isAuthenticating = false;
+        //_authorized = 'Error: ${e.toString()}';
+        print('Error: ${e.toString()}');
+      });
+      return;
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _authorized = authenticated ? 'Autenticado' : 'No Autenticado';
+    });
+    if (_authorized == 'Autenticado') {
+      print('Se ha pulsado autenticar');
+      showData = true;
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => ButtomNav(index_color: 0)),
+      // );
     }
   }
 
@@ -255,6 +301,33 @@ class _PaysAccountState extends State<PaysAccount>
                 Icons.calendar_month,
                 color: Colors.black,
               )),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                totalPago.clear();
+                pagos.clear();
+                cargarPagos();
+                cargarTotalPago();
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+              backgroundColor: TColor.accentColor, // Color del texto
+              //shadowColor: Colors.grey, // Color de la sombra
+              elevation: 5, // Elevación
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10), // Borde redondeado
+                side: BorderSide(color: Colors.black), // Borde del botón
+              ),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 30, vertical: 15), // Padding interno
+            ),
+            child: const Icon(
+              Icons.change_circle_outlined,
+              color: Colors.black,
+              size: 28,
+            ),
+          ),
         ],
       ),
     );
@@ -324,15 +397,33 @@ class _PaysAccountState extends State<PaysAccount>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Balance',
-                            style: GoogleFonts.fredoka(
-                                fontSize: 40,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Balance',
+                                style: GoogleFonts.fredoka(
+                                    fontSize: 40,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _authenticate();
+                                  print('huella dactilar');
+                                },
+                                child: Icon(
+                                  Icons.remove_red_eye,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
                           ),
                           Text(
-                            formatoMoneda.format(total.totalPagado),
+                            _authorized == 'Autenticado'
+                                ? formatoMoneda.format(total.totalPagado)
+                                : '***',
                             style: GoogleFonts.fredoka(
                                 fontSize: 76,
                                 color: Colors.white,
