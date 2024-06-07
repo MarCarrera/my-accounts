@@ -73,7 +73,7 @@ class _PaysAccountState extends State<PaysAccount>
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta =
-        await mostrarPagos(date1: '2024-06-01', date2: '2024-06-06');
+        await mostrarPagos(date1: '2024-06-01', date2: '2024-06-07');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -91,8 +91,8 @@ class _PaysAccountState extends State<PaysAccount>
                 idUser: respuesta[i]['idUser'],
                 idAccount: respuesta[i]['idAccount'],
                 paymentDate: respuesta[i]['paymentDate'],
-                status: respuesta[i]['status'],
-                amount: respuesta[i]['amount'],
+                status: respuesta[i]['statusPay'],
+                amount: respuesta[i]['amountPay'],
                 userName: respuesta[i]['userName'],
               ));
             }
@@ -461,9 +461,10 @@ class _PaysAccountState extends State<PaysAccount>
                                       ],
                                     ),
                                     Text(
-                                      _authorized == 'Autenticado' ?
-                                      formatoMoneda
-                                      .format(total.mensualidad) : '***',
+                                      _authorized == 'Autenticado'
+                                          ? formatoMoneda
+                                              .format(total.mensualidad)
+                                          : '***',
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
@@ -490,8 +491,10 @@ class _PaysAccountState extends State<PaysAccount>
                                         ),
                                       ],
                                     ),
-                                    Text(_authorized == 'Autenticado' ?
-                                      formatoMoneda.format(total.ganancia): '***',
+                                    Text(
+                                      _authorized == 'Autenticado'
+                                          ? formatoMoneda.format(total.ganancia)
+                                          : '***',
                                       style: GoogleFonts.fredoka(
                                           fontSize: 30,
                                           color: Colors.white,
@@ -583,7 +586,14 @@ class _PaysAccountState extends State<PaysAccount>
                       itemBuilder: (context, index) {
                         final pago = filteredPagos[index];
                         var cant = pago.amount;
-                        int amount = int.parse(cant);
+                        double amountPay = 0.0;
+
+                        try {
+                          amountPay = double.parse(cant);
+                          //amount = int.parse(cant.trim());
+                        } catch (e) {
+                          print('Error al convertir amount a entero: $cant');
+                        }
 
                         return ListTile(
                           leading: ClipRRect(
@@ -603,8 +613,10 @@ class _PaysAccountState extends State<PaysAccount>
                           ),
                           trailing: Column(
                             children: [
-                              Text(_authorized == 'Autenticado' ?
-                                formatoMoneda.format(amount) : '***',
+                              Text(
+                                _authorized == 'Autenticado'
+                                    ? formatoMoneda.format(amountPay)
+                                    : '***',
                                 style: GoogleFonts.fredoka(
                                     fontSize: 23, color: Colors.white),
                               ),
