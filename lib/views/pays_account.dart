@@ -28,6 +28,7 @@ class _PaysAccountState extends State<PaysAccount>
   bool noData = false;
   bool noDataStatcs = false;
   bool reload = false;
+  bool isButtonEnabled = true;
   int indexAct = 1;
 
   int index = 0;
@@ -94,6 +95,7 @@ class _PaysAccountState extends State<PaysAccount>
       });
     } else {
       noData = true;
+      isButtonEnabled = false;
       print('Verifique su conexion a internet');
     }
   }
@@ -211,30 +213,32 @@ class _PaysAccountState extends State<PaysAccount>
                 fontSize: 24, color: Colors.black, fontWeight: FontWeight.w400),
           ),
           ElevatedButton(
-              onPressed: () {
-                showMonthPicker(context, onSelected: (month, year) {
-                  if (kDebugMode) {
-                    print('Selected month: $month, year: $year');
-                  }
-                  setState(() {
-                    this.month = month;
-                    this.year = year;
-                  });
-                },
-                    initialSelectedMonth: month,
-                    initialSelectedYear: year,
-                    firstEnabledMonth: 3,
-                    lastEnabledMonth: 10,
-                    firstYear: 2000,
-                    //size: const Size(520, 250),
-                    lastYear: 2035,
-                    selectButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    //highlightColor: Colors.purple,
-                    textColor: Colors.black,
-                    contentBackgroundColor: Colors.white,
-                    dialogBackgroundColor: Colors.grey[200]);
-              },
+              onPressed: isButtonEnabled
+                  ? () {
+                      showMonthPicker(context, onSelected: (month, year) {
+                        if (kDebugMode) {
+                          print('Selected month: $month, year: $year');
+                        }
+                        setState(() {
+                          this.month = month;
+                          this.year = year;
+                        });
+                      },
+                          initialSelectedMonth: month,
+                          initialSelectedYear: year,
+                          firstEnabledMonth: 3,
+                          lastEnabledMonth: 10,
+                          firstYear: 2000,
+                          //size: const Size(520, 250),
+                          lastYear: 2035,
+                          selectButtonText: 'OK',
+                          cancelButtonText: 'Cancel',
+                          //highlightColor: Colors.purple,
+                          textColor: Colors.black,
+                          contentBackgroundColor: Colors.white,
+                          dialogBackgroundColor: Colors.grey[200]);
+                    }
+                  : null,
               style: ElevatedButton.styleFrom(
                 foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                 backgroundColor: TColor.accentColor, // Color del texto
