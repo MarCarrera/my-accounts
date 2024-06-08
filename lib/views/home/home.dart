@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
+import '../../data/request/service.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
 import 'dart:async';
@@ -23,7 +24,9 @@ class _HomeState extends State<Home> {
   bool showData = false;
   //INSTANCIAS DE MODELOS DE CLASES
   List<Account> accounts = [];
-  List<Profile> profiles = [];
+  //importacion de perfiles cargados
+  late Future<List<Profile>> futureProfiles;
+  final ProfileService profileService = ProfileService();
 
   bool noData = false;
   bool noDataUser = false;
@@ -31,6 +34,13 @@ class _HomeState extends State<Home> {
   int indexAct = 1;
 
   int index = 0;
+
+  Future<void> _reloadProfiles() async {
+    setState(() {
+      futureProfiles = profileService.cargarPerfiles(
+          indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
+    });
+  }
 
   Future<void> cargarCuentas() async {
     //parametros = {"opcion": "1.1"};
@@ -54,43 +64,6 @@ class _HomeState extends State<Home> {
                   payment: respuesta[i]['payment'],
                   password: respuesta[i]['password'],
                   bank: respuesta[i]['bank']));
-            }
-          }
-        }
-      });
-    } else {
-      noData = true;
-      print('Verifique su conexion a internet');
-    }
-  }
-
-  Future<void> cargarPerfiles(indexA) async {
-    //parametros = {"opcion": "1.1"};
-    reload = true;
-    var respuesta = await mostrarUsuariosPorCuenta(idAccount: indexA);
-    reload = false;
-    if (respuesta != "err_internet_conex") {
-      setState(() {
-        if (respuesta == 'empty') {
-          noData = true;
-          print('no hay datos');
-        } else {
-          noData = false;
-          //print('Respuesta en vista ::::: ${respuesta}');
-          profiles.clear();
-          if (respuesta.isNotEmpty) {
-            for (int i = 0; i < respuesta.length; i++) {
-              profiles.add(Profile(
-                  idUser: respuesta[i]['idUser'],
-                  idAccount: respuesta[i]['idAccount'],
-                  letter: respuesta[i]['letter'],
-                  user: respuesta[i]['user'],
-                  payment: respuesta[i]['payment'],
-                  amount: respuesta[i]['amount'],
-                  phone: respuesta[i]['phone'],
-                  pin: respuesta[i]['pin'],
-                  status: respuesta[i]['status'],
-                  genre: respuesta[i]['genre']));
             }
           }
         }
@@ -136,7 +109,9 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     cargarCuentas();
-    cargarPerfiles(indexAct.toString());
+    futureProfiles = profileService.cargarPerfiles(
+        indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
+    //ProfileService().cargarPerfiles(indexAct.toString());
     // mostrarUsuariosPorCuenta(idAccount: '2');
   }
 
@@ -176,14 +151,15 @@ class _HomeState extends State<Home> {
         containerWight: 420,
         containerColor: TColor.blueColor,
         onSelect: (index) {
-          profiles.clear();
+          
           indexAct = index + 1;
+          _reloadProfiles();
           //print('index calculado: $indexAct');
           setState(() {
             LoadingDots();
           });
           Timer(Duration(seconds: 1), () {
-            cargarPerfiles(indexAct.toString());
+            ProfileService().cargarPerfiles(indexAct.toString());
           });
         },
         children: [
@@ -249,9 +225,9 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   setState(() {
                     accounts.clear();
-                    profiles.clear();
+                    _reloadProfiles();
                     cargarCuentas();
-                    cargarPerfiles(indexAct.toString());
+                    ProfileService().cargarPerfiles(indexAct.toString());
                   });
                 },
                 child: const Icon(
@@ -283,7 +259,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Padding cardUser() {
+  /*Padding cardUser() {
     if (noDataUser == false && profiles.isEmpty || reload) {
       return Padding(
           padding: EdgeInsets.only(top: 0),
@@ -532,6 +508,318 @@ class _HomeState extends State<Home> {
         );
       }
     }
+  }*/
+
+  Padding cardUser() {
+    return Padding(
+      padding: EdgeInsets.only(top: 0),
+      child: Center(
+        child: FutureBuilder<List<Profile>>(
+          future: futureProfiles,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Profile>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return LoadingDots();
+            } else if (snapshot.hasError) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                child: Stack(
+                  children: [
+                    //Contenedor para mantener la sobra de card
+                    Container(
+                      height: 170,
+                      width: 500,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    //Contenedor para mantener la sobra de card
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 170,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Stack(children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Error al cargar datos',
+                                      style: GoogleFonts.fredoka(
+                                          fontSize: 26, color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Circles(),
+                          Positioned(
+                            bottom: 24,
+                            left: 300,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 140,
+                                  child: Image.asset('assets/icons/info.png'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                child: Stack(
+                  children: [
+                    //Contenedor para mantener la sobra de card
+                    Container(
+                      height: 170,
+                      width: 500,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    //Contenedor para mantener la sobra de card
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 170,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          color: TColor.purpleColor,
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Stack(children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'No hay datos \npara mostrar',
+                                      style: GoogleFonts.fredoka(
+                                          fontSize: 26, color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Circles(),
+                          Positioned(
+                            bottom: 24,
+                            left: 300,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 140,
+                                  child: Image.asset('assets/icons/info.png'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              //final profiles = snapshot.data!;
+
+              final profiles = snapshot.data!
+                  .where((profile) => profile.idAccount == indexAct)
+                  .toList();
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Stack(
+                  children: [
+                    //Contenedor para mantener la sobra de card
+                    Container(
+                      height: 550, // Ajusta la altura según tus necesidades
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: profiles.length,
+                        itemBuilder: (context, index) {
+                          final profile = profiles[index];
+                          return Stack(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 18),
+                                child: Container(
+                                  height: 200, //150,
+                                  width: 500, //500,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  height: 200, //150,
+                                  width: 500, //500,
+                                  decoration: BoxDecoration(
+                                    color: TColor.purpleColor,
+                                    border: Border.all(
+                                      color: Colors.black, // Color del borde
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Stack(children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'Usuario ${profile.letter.toUpperCase()}',
+                                                    style: GoogleFonts.fredoka(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.white),
+                                                  ),
+                                                  SizedBox(width: 130),
+                                                  Text(
+                                                    '${profile.status.toUpperCase()}',
+                                                    style: GoogleFonts.fredoka(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(
+                                                'Nombre: ${profile.user.toUpperCase()}',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
+                                              ),
+                                              Text(
+                                                _authorized == 'Autenticado'
+                                                    ? 'Teléfono: ${profile.phone}'
+                                                    : 'Teléfono: ***-***-****',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 80),
+                                                    child: Text(
+                                                      _authorized ==
+                                                              'Autenticado'
+                                                          ? 'Pin: ${profile.pin}'
+                                                          : 'Pin: ****',
+                                                      style:
+                                                          GoogleFonts.fredoka(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _authorized == 'Autenticado'
+                                                        ? 'Pago: ${profile.payment}'
+                                                        : 'Pago: ***',
+                                                    style: GoogleFonts.fredoka(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Circles(),
+                                    Positioned(
+                                      bottom: 8,
+                                      left: 360,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: 100,
+                                            child: Image.asset(
+                                                'assets/icons/woman.png'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    //Contenedor para mantener la sobra de card
+                  ],
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   Stack Circles() {
