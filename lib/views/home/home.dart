@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   List<Account> accounts = [];
   //importacion de perfiles cargados
   late Future<List<Profile>> futureProfiles;
-  final ProfileService profileService = ProfileService();
+  final HomeService homeService = HomeService();
 
   bool noData = false;
   bool noDataUser = false;
@@ -37,42 +37,12 @@ class _HomeState extends State<Home> {
 
   Future<void> _reloadProfiles() async {
     setState(() {
-      futureProfiles = profileService.cargarPerfiles(
+      futureProfiles = homeService.cargarPerfiles(
           indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
     });
   }
 
-  Future<void> cargarCuentas() async {
-    //parametros = {"opcion": "1.1"};
-    reload = true;
-    var respuesta = await mostrarCuentas();
-    reload = false;
-    if (respuesta != "err_internet_conex") {
-      setState(() {
-        if (respuesta == 'empty') {
-          noData = true;
-          print('no hay datos');
-        } else {
-          noData = false;
-          //print('Respuesta en vista ::::: ${respuesta}');
-          accounts.clear();
-          if (respuesta.isNotEmpty) {
-            for (int i = 0; i < respuesta.length; i++) {
-              accounts.add(Account(
-                  idAccount: respuesta[i]['idAccount'],
-                  name: respuesta[i]['name'],
-                  payment: respuesta[i]['payment'],
-                  password: respuesta[i]['password'],
-                  bank: respuesta[i]['bank']));
-            }
-          }
-        }
-      });
-    } else {
-      noData = true;
-      print('Verifique su conexion a internet');
-    }
-  }
+  
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -109,7 +79,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     cargarCuentas();
-    futureProfiles = profileService.cargarPerfiles(
+    futureProfiles = homeService.cargarPerfiles(
         indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
     //ProfileService().cargarPerfiles(indexAct.toString());
     // mostrarUsuariosPorCuenta(idAccount: '2');
@@ -159,7 +129,7 @@ class _HomeState extends State<Home> {
             LoadingDots();
           });
           Timer(Duration(seconds: 1), () {
-            ProfileService().cargarPerfiles(indexAct.toString());
+            homeService.cargarPerfiles(indexAct.toString());
           });
         },
         children: [
@@ -227,7 +197,7 @@ class _HomeState extends State<Home> {
                     accounts.clear();
                     _reloadProfiles();
                     cargarCuentas();
-                    ProfileService().cargarPerfiles(indexAct.toString());
+                    homeService.cargarPerfiles(indexAct.toString());
                   });
                 },
                 child: const Icon(
