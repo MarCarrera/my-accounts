@@ -23,10 +23,12 @@ class _HomeState extends State<Home> {
   String _authorized = 'No autenticado';
   bool showData = false;
   //INSTANCIAS DE MODELOS DE CLASES
-  List<Account> accounts = [];
+
   //importacion de perfiles cargados
-  late Future<List<Profile>> futureProfiles;
+
   final HomeService homeService = HomeService();
+  late Future<List<Profile>> futureProfiles;
+  late Future<List<Account>> futureAccounts;
 
   bool noData = false;
   bool noDataUser = false;
@@ -35,14 +37,13 @@ class _HomeState extends State<Home> {
 
   int index = 0;
 
-  Future<void> _reloadProfiles() async {
+  Future<void> _reloadData() async {
     setState(() {
+      futureAccounts = homeService.cargarCuentas();
       futureProfiles = homeService.cargarPerfiles(
           indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
     });
   }
-
-  
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -78,7 +79,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    cargarCuentas();
+    futureAccounts = homeService.cargarCuentas();
     futureProfiles = homeService.cargarPerfiles(
         indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
     //ProfileService().cargarPerfiles(indexAct.toString());
@@ -110,53 +111,46 @@ class _HomeState extends State<Home> {
   }
 
   Widget buttomNav() {
-    if (noData == false && accounts.isEmpty) {
-      return Stack(
-        children: [],
-      );
-    } else {
-      return ButtomNav(
-        initialIndex: 0,
-        containerHeight: 50,
-        containerWight: 420,
-        containerColor: TColor.blueColor,
-        onSelect: (index) {
-          
-          indexAct = index + 1;
-          _reloadProfiles();
-          //print('index calculado: $indexAct');
-          setState(() {
-            LoadingDots();
-          });
-          Timer(Duration(seconds: 1), () {
-            homeService.cargarPerfiles(indexAct.toString());
-          });
-        },
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 13.3),
-            child: Text(
-              'Cuenta A',
-              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
-            ),
+    return ButtomNav(
+      initialIndex: 0,
+      containerHeight: 50,
+      containerWight: 420,
+      containerColor: TColor.blueColor,
+      onSelect: (index) {
+        indexAct = index + 1;
+        homeService.cargarPerfiles(indexAct.toString());
+        //print('index calculado: $indexAct');
+        setState(() {
+          LoadingDots();
+        });
+        Timer(Duration(seconds: 1), () {
+          homeService.cargarPerfiles(indexAct.toString());
+        });
+      },
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta A',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 13.3),
-            child: Text(
-              'Cuenta B',
-              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta B',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 13.3),
-            child: Text(
-              'Cuenta C',
-              style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 13.3),
+          child: Text(
+            'Cuenta C',
+            style: GoogleFonts.fredoka(fontSize: 19, color: Colors.black),
           ),
-        ],
-      );
-    }
+        ),
+      ],
+    );
   }
 
   Padding title1() {
@@ -194,9 +188,8 @@ class _HomeState extends State<Home> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    accounts.clear();
-                    _reloadProfiles();
-                    cargarCuentas();
+                    _reloadData();
+                    homeService.cargarCuentas();
                     homeService.cargarPerfiles(indexAct.toString());
                   });
                 },
@@ -832,16 +825,79 @@ class _HomeState extends State<Home> {
   }
 
   Padding card() {
-    if (noData == false && accounts.isEmpty || reload) {
-      return Padding(
+    return Padding(
         padding: const EdgeInsets.only(top: 15),
         child: Center(
-          child: FutureBuilder<void>(
-              future: Future.delayed(Duration(seconds: 4)),
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          child: FutureBuilder<List<Account>>(
+              future: futureAccounts,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Account>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadingDots();
-                } else {
+                } else if (snapshot.hasError) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 20),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 200,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Color del borde
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: 200,
+                            width: 400,
+                            decoration: BoxDecoration(
+                              color: TColor.orangeLightColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Stack(children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Error al cargar datos',
+                                          style: GoogleFonts.fredoka(
+                                              fontSize: 26,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Circles(),
+                              Positioned(
+                                top: 30,
+                                left: 200,
+                                child: Container(
+                                  width: 160,
+                                  child: Image.asset('assets/icons/info.png'),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 30, horizontal: 20),
@@ -904,15 +960,10 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   );
-                }
-              }),
-        ),
-      );
-    } else {
-      if (noData) {
-        return Padding(padding: EdgeInsets.all(8));
-      } else {
-        return Padding(
+                } else {
+                   final accounts = snapshot.data!
+                  .toList();
+return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Stack(
             children: [
@@ -935,10 +986,6 @@ class _HomeState extends State<Home> {
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
-                            // border: Border.all(
-                            //   color: Colors.black, // Color del borde
-                            //   //width: 3, // Ancho del borde
-                            // ),
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -1029,8 +1076,10 @@ class _HomeState extends State<Home> {
             ],
           ),
         );
-      }
-    }
+                }
+              }),
+        ),
+      );
   }
 
   BoxShadow shadow(color) {
