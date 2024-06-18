@@ -21,7 +21,6 @@ Future<dynamic> mostrarCuentas() async {
     return "err_internet_conex";
   }
 }
-
 Future<dynamic> mostrarTodosUsuarios() async {
   var data = {'opc': '2'};
 
@@ -40,7 +39,6 @@ Future<dynamic> mostrarTodosUsuarios() async {
     return "err_internet_conex";
   }
 }
-
 Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
   var data = {'opc': '3', 'idAccount': idAccount};
 
@@ -112,6 +110,24 @@ Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required St
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       //print('total pago cuenta: ${jsonResponse}');
+      return jsonResponse;
+    }
+  } catch (e) {
+    return "err_internet_conex";
+  }
+}
+Future<dynamic> agregarPago() async {
+  var data = {'opc': '1'};
+
+  try {
+    final response = await http.post(
+      url,
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      //print('Respuesta Api JSON: ${jsonResponse}');
       return jsonResponse;
     }
   } catch (e) {

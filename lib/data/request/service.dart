@@ -51,7 +51,7 @@ class HomeService {
         print('no hay datos');
       } else {
         noData = false;
-        print('Perfiles en vista ::::: ${respuesta}');
+        //print('Perfiles en vista ::::: ${respuesta}');
         profiles.clear();
         if (respuesta.isNotEmpty) {
           for (int i = 0; i < respuesta.length; i++) {

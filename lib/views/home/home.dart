@@ -1,4 +1,5 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
+import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
@@ -40,7 +41,8 @@ class _HomeState extends State<Home> {
   Future<void> _reloadData() async {
     setState(() {
       futureAccounts = homeService.cargarCuentas();
-      futureProfiles = homeService.cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
+      futureProfiles = homeService
+          .cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
     });
   }
 
@@ -79,7 +81,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     futureAccounts = homeService.cargarCuentas();
-    futureProfiles = homeService.cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
+    futureProfiles = homeService
+        .cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
     //ProfileService().cargarPerfiles(indexAct.toString());
     // mostrarUsuariosPorCuenta(idAccount: '2');
   }
@@ -92,6 +95,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             title1(),
+
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
@@ -751,6 +755,30 @@ class _HomeState extends State<Home> {
                                     ),
                                     Circles(),
                                     Positioned(
+                                        top: 0.0,
+                                        left: 0.0,
+                                        right: 0.0,
+                                        child: ExpandableMenu(
+                                          width: 40.0,
+                                          height: 40.0,
+                                          backgroundColor: Colors.black,
+                                          iconColor: Colors.amber,
+                                          itemContainerColor: Colors.amber,
+                                          items: [
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                            Container(),
+                                          ],
+                                        )),
+                                    Positioned(
                                       bottom: 8,
                                       left: 360,
                                       child: Stack(
@@ -824,168 +852,28 @@ class _HomeState extends State<Home> {
 
   Padding card() {
     return Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: Center(
-          child: FutureBuilder<List<Account>>(
-              future: futureAccounts,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Account>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return LoadingDots();
-                } else if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 20),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 200,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black, // Color del borde
-                            ),
-                            borderRadius: BorderRadius.circular(20),
+      padding: const EdgeInsets.only(top: 15),
+      child: Center(
+        child: FutureBuilder<List<Account>>(
+            future: futureAccounts,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Account>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return LoadingDots();
+              } else if (snapshot.hasError) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
                           ),
-                        ),
-                        ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: 200,
-                            width: 400,
-                            decoration: BoxDecoration(
-                              color: TColor.orangeLightColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Stack(children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Error al cargar datos',
-                                          style: GoogleFonts.fredoka(
-                                              fontSize: 26,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Circles(),
-                              Positioned(
-                                top: 30,
-                                left: 200,
-                                child: Container(
-                                  width: 160,
-                                  child: Image.asset('assets/icons/info.png'),
-                                ),
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 20),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 200,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black, // Color del borde
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: 200,
-                            width: 400,
-                            decoration: BoxDecoration(
-                              color: TColor.orangeLightColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Stack(children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'No hay datos \npara mostrar',
-                                          style: GoogleFonts.fredoka(
-                                              fontSize: 26,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Circles(),
-                              Positioned(
-                                top: 30,
-                                left: 200,
-                                child: Container(
-                                  width: 160,
-                                  child: Image.asset('assets/icons/info.png'),
-                                ),
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                   final accounts = snapshot.data!
-                  .toList();
-return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Stack(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height *
-                    0.2, // Ajusta la altura según tus necesidades
-                width: MediaQuery.of(context)
-                    .size
-                    .width, // Asegura que el ancho esté bien definido
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: accounts.length,
-                  itemBuilder: (context, index) {
-                    final account = accounts[index];
-                    return Stack(children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 25),
-                        child: Container(
-                          height: 200,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
                         ),
                       ),
                       ClipRRect(
@@ -994,10 +882,6 @@ return Padding(
                           height: 200,
                           width: 400,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black, // Color del borde
-                              //width: 3, // Ancho del borde
-                            ),
                             color: TColor.orangeLightColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -1014,40 +898,9 @@ return Padding(
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _authorized == 'Autenticado'
-                                            ? account.name
-                                            : 'Cuenta: **********@gmail.com',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        _authorized == 'Autenticado'
-                                            ? account.password
-                                            : 'Contraseña: *******',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Text(
-                                        _authorized == 'Autenticado'
-                                            ? account.payment
-                                            : 'Mensulaidad: ***',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Text(
-                                        _authorized == 'Autenticado'
-                                            ? account.bank
-                                            : 'Banco: *******',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
+                                        'Error al cargar datos',
+                                        style: GoogleFonts.fredoka(
+                                            fontSize: 26, color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -1056,28 +909,205 @@ return Padding(
                             ),
                             Circles(),
                             Positioned(
-                                top: 60,
-                                left: 200,
-                                child: Container(
-                                    width: 260,
-                                    child: Image.asset(
-                                      'assets/icons/icon3.png',
-                                      fit: BoxFit.contain,
-                                    ))),
+                              top: 30,
+                              left: 200,
+                              child: Container(
+                                width: 160,
+                                child: Image.asset('assets/icons/info.png'),
+                              ),
+                            ),
                           ]),
                         ),
                       ),
-                    ]);
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-                }
-              }),
-        ),
-      );
+                    ],
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 200,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: TColor.orangeLightColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Stack(children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'No hay datos \npara mostrar',
+                                        style: GoogleFonts.fredoka(
+                                            fontSize: 26, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Circles(),
+                            Positioned(
+                              top: 30,
+                              left: 200,
+                              child: Container(
+                                width: 160,
+                                child: Image.asset('assets/icons/info.png'),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                final accounts = snapshot.data!.toList();
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.2, // Ajusta la altura según tus necesidades
+                        width: MediaQuery.of(context)
+                            .size
+                            .width, // Asegura que el ancho esté bien definido
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: accounts.length,
+                          itemBuilder: (context, index) {
+                            final account = accounts[index];
+                            return Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 25),
+                                child: Container(
+                                  height: 200,
+                                  width: 400,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  height: 200,
+                                  width: 400,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black, // Color del borde
+                                      //width: 3, // Ancho del borde
+                                    ),
+                                    color: TColor.orangeLightColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Stack(children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                _authorized == 'Autenticado'
+                                                    ? account.name
+                                                    : 'Cuenta: **********@gmail.com',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(
+                                                _authorized == 'Autenticado'
+                                                    ? account.password
+                                                    : 'Contraseña: *******',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                _authorized == 'Autenticado'
+                                                    ? account.payment
+                                                    : 'Mensulaidad: ***',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                _authorized == 'Autenticado'
+                                                    ? account.bank
+                                                    : 'Banco: *******',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Circles(),
+                                    Positioned(
+                                        top: 60,
+                                        left: 200,
+                                        child: Container(
+                                            width: 260,
+                                            child: Image.asset(
+                                              'assets/icons/icon3.png',
+                                              fit: BoxFit.contain,
+                                            ))),
+                                  ]),
+                                ),
+                              ),
+                            ]);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }),
+      ),
+    );
   }
 
   BoxShadow shadow(color) {

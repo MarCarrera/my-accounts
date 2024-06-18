@@ -22,6 +22,7 @@ dependencies:
   hive: #https://pub.dev/packages/hive
   hive_flutter: #https://pub.dev/packages/hive_flutter
   quickalert: #https://pub.dev/packages/quickalert
+  expandable_menu: #https://pub.dev/packages/expandable_menu/example
 
 dev_dependencies:
   flutter_test:
