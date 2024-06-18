@@ -40,8 +40,7 @@ class _HomeState extends State<Home> {
   Future<void> _reloadData() async {
     setState(() {
       futureAccounts = homeService.cargarCuentas();
-      futureProfiles = homeService.cargarPerfiles(
-          indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
+      futureProfiles = homeService.cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
     });
   }
 
@@ -80,8 +79,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     futureAccounts = homeService.cargarCuentas();
-    futureProfiles = homeService.cargarPerfiles(
-        indexAct.toString()); // Reemplaza 'indexA' con el valor adecuado
+    futureProfiles = homeService.cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
     //ProfileService().cargarPerfiles(indexAct.toString());
     // mostrarUsuariosPorCuenta(idAccount: '2');
   }
@@ -118,13 +116,13 @@ class _HomeState extends State<Home> {
       containerColor: TColor.blueColor,
       onSelect: (index) {
         indexAct = index + 1;
-        homeService.cargarPerfiles(indexAct.toString());
+        homeService.cargarPerfiles();
         //print('index calculado: $indexAct');
         setState(() {
           LoadingDots();
         });
         Timer(Duration(seconds: 1), () {
-          homeService.cargarPerfiles(indexAct.toString());
+          homeService.cargarPerfiles();
         });
       },
       children: [
@@ -190,7 +188,7 @@ class _HomeState extends State<Home> {
                   setState(() {
                     _reloadData();
                     homeService.cargarCuentas();
-                    homeService.cargarPerfiles(indexAct.toString());
+                    homeService.cargarPerfiles();
                   });
                 },
                 child: const Icon(
@@ -632,7 +630,7 @@ class _HomeState extends State<Home> {
                   children: [
                     //Contenedor para mantener la sobra de card
                     Container(
-                      height: 550, // Ajusta la altura según tus necesidades
+                      height: 500, // Ajusta la altura según tus necesidades
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,

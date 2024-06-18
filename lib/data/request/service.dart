@@ -18,7 +18,7 @@ class HomeService {
         print('no hay datos');
       } else {
         noData = false;
-        //print('Respuesta en vista ::::: ${respuesta}');
+        //print('Cuentass en vista ::::: ${respuesta}');
         accounts.clear();
         if (respuesta.isNotEmpty) {
           for (int i = 0; i < respuesta.length; i++) {
@@ -30,7 +30,7 @@ class HomeService {
                 bank: respuesta[i]['bank']));
           }
         }
-        print('Datos cuentas: ${accounts}');
+        //print('Datos cuentas: ${accounts}');
       }
     } else {
       noData = true;
@@ -39,11 +39,11 @@ class HomeService {
     return accounts;
   }
 
-  Future<List<Profile>> cargarPerfiles(String indexA) async {
+  Future<List<Profile>> cargarPerfiles() async {
     List<Profile> profiles = [];
     bool noData = false;
 
-    var respuesta = await mostrarUsuariosPorCuenta(idAccount: indexA);
+    var respuesta = await mostrarTodosUsuarios();
 
     if (respuesta != "err_internet_conex") {
       if (respuesta == 'empty') {
@@ -51,6 +51,8 @@ class HomeService {
         print('no hay datos');
       } else {
         noData = false;
+        print('Perfiles en vista ::::: ${respuesta}');
+        profiles.clear();
         if (respuesta.isNotEmpty) {
           for (int i = 0; i < respuesta.length; i++) {
             profiles.add(Profile(
@@ -67,7 +69,7 @@ class HomeService {
             ));
           }
         }
-         print('Datos perfiles: ${profiles}');
+        //print('Datos perfiles: ${profiles}');
       }
     } else {
       noData = true;
