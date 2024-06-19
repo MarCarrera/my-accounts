@@ -1,5 +1,6 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:expandable_menu/expandable_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
@@ -9,6 +10,8 @@ import '../../data/request/service.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
 import 'dart:async';
+
+import '../../utils/showConfirm.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,7 +29,7 @@ class _HomeState extends State<Home> {
   //INSTANCIAS DE MODELOS DE CLASES
 
   //importacion de perfiles cargados
-
+  TextEditingController pagoC = TextEditingController();
   final HomeService homeService = HomeService();
   late Future<List<Profile>> futureProfiles;
   late Future<List<Account>> futureAccounts;
@@ -759,23 +762,35 @@ class _HomeState extends State<Home> {
                                         left: 0.0,
                                         right: 0.0,
                                         child: ExpandableMenu(
-                                          width: 40.0,
-                                          height: 40.0,
-                                          backgroundColor: Colors.black,
-                                          iconColor: Colors.amber,
-                                          itemContainerColor: Colors.amber,
+                                          width: 45.0,
+                                          height: 45.0,
+                                          backgroundColor: Colors
+                                              .yellow.shade800
+                                              .withOpacity(0.5),
+                                          iconColor: Colors.white,
+                                          itemContainerColor: Colors.white,
                                           items: [
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
-                                            Container(),
+                                            Icon(
+                                              Icons.person_add_alt_1_rounded,
+                                              color: Colors.amber.shade700,
+                                            ),
+                                            Icon(
+                                              Icons.cleaning_services_rounded,
+                                              color: Colors.amber.shade700,
+                                            ),
+                                            Icon(
+                                              Icons.share_outlined,
+                                              color: Colors.amber.shade700,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                _showModalSheetBono();
+                                              },
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Colors.amber.shade700,
+                                              ),
+                                            ),
                                           ],
                                         )),
                                     Positioned(
@@ -1116,6 +1131,102 @@ class _HomeState extends State<Home> {
       spreadRadius: 3,
       blurRadius: 20,
       offset: Offset(0, -2),
+    );
+  }
+
+  void _showModalSheetBono() async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text(
+            'Agregar Pago',
+            style: GoogleFonts.fredoka(
+                fontSize: 26, color: const Color(0xff368983)),
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Text('Cerrar', style: GoogleFonts.fredoka(fontSize: 16)),
+              onPressed: () {
+                setState(() {});
+                Navigator.pop(context);
+              },
+            )
+          ],
+          message: Container(
+            height: MediaQuery.of(context).size.height * 0.26,
+            child: Material(
+              child: Container(
+                child: Column(
+                  children: [
+                    Text('Fecha: 05 de Julio, 2024',
+                        style: GoogleFonts.fredoka(
+                            fontSize: 24,
+                            color: Color.fromRGBO(47, 125, 121, 0.9))),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    /*Text('0.00',
+                        style: GoogleFonts.fredoka(
+                            fontSize: 80,
+                            color: Color.fromRGBO(47, 125, 121, 0.9))),*/
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40, right: 40),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: pagoC,
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 11, 57, 54),
+                                ),
+                                borderRadius: BorderRadius.circular(30)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(47, 125, 121, 0.9),
+                                ),
+                                borderRadius: BorderRadius.circular(30)),
+                            prefixIcon: Icon(
+                              Icons.monetization_on_rounded,
+                              color: Color.fromRGBO(47, 125, 121, 0.9),
+                            ),
+                            hintText: '00.0',
+                            filled: true,
+                            fillColor: Colors.transparent),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        //await abonarGasto( bono: abonoC.text,idFinance: idFinance.toString());
+                        await ShowConfirm().showConfirmDialog2(context);
+                        // Llamar a setState para reconstruir la vista y mostrar los nuevos datos
+                        setState(() {});
+                        // Navegar de regreso a la vista de inicio y reemplazar la vista actual
+                        // Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color(0xff368983),
+                        ),
+                        width: 120,
+                        height: 50,
+                        child: Text('Guardar',
+                            style: GoogleFonts.fredoka(
+                                fontSize: 17, color: Colors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
