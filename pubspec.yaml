@@ -28,7 +28,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   intl: #https://pub.dev/packages/intl
-
   flutter_lints: ^3.0.0
 
 flutter:
