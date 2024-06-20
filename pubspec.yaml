@@ -23,6 +23,7 @@ dependencies:
   hive_flutter: #https://pub.dev/packages/hive_flutter
   quickalert: #https://pub.dev/packages/quickalert
   expandable_menu: #https://pub.dev/packages/expandable_menu/example
+  board_datetime_picker: #https://pub.dev/packages/board_datetime_picker
 
 dev_dependencies:
   flutter_test:

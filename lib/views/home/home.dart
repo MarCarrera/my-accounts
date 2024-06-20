@@ -1,4 +1,5 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
+import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final LocalAuthentication auth = LocalAuthentication();
-  DateTime date = DateTime.now();
+  final controller = BoardDateTimeController();
+
+  DateTimePickerType? opened;
+
+  final List<GlobalKey<_ItemWidgetState>> keys = [
+    GlobalKey(),
+    GlobalKey(),
+    GlobalKey()
+  ];
+
+  final textController = BoardDateTimeTextController();
   bool _canCheckBiometrics = false;
   bool _isAuthenticating = false;
   String _authorized = 'No autenticado';
@@ -89,7 +100,7 @@ class _HomeState extends State<Home> {
     super.initState();
     futureAccounts = homeService.cargarCuentas();
     futureProfiles = homeService.cargarPerfiles();
-    formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    //formattedDate = DateFormat('yyyy-MM-dd').format(date);
   }
 
   @override
@@ -1136,7 +1147,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget date_time() {
+  /*Widget date_time() {
     return Container(
       alignment: Alignment.bottomLeft,
       decoration: BoxDecoration(
@@ -1164,7 +1175,7 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
+  }*/
 
   void _showModalSheetBono() async {
     showCupertinoModalPopup(
@@ -1191,10 +1202,14 @@ class _HomeState extends State<Home> {
               child: Container(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    date_time(),
+                    const SizedBox(height: 24),
+                  ItemWidget(
+                    key: keys[1],
+                    type: DateTimePickerType.date,
+                    controller: controller,
+                    onOpen: (type) => opened = type,
+                  ),
+                  const SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.only(left: 40, right: 40),
                       child: TextFormField(
@@ -1252,6 +1267,192 @@ class _HomeState extends State<Home> {
           ),
         );
       },
+    );
+  }
+}
+class ItemWidget extends StatefulWidget {
+  const ItemWidget({
+    super.key,
+    required this.type,
+    required this.controller,
+    required this.onOpen,
+  });
+
+  final DateTimePickerType type;
+  final BoardDateTimeController controller;
+  final void Function(DateTimePickerType type) onOpen;
+
+  @override
+  State<ItemWidget> createState() => _ItemWidgetState();
+}
+class _ItemWidgetState extends State<ItemWidget> {
+  DateTime d = DateTime.now();
+
+  void update(DateTime date) {
+    setState(() {
+      d = date;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(8),
+      color: Theme.of(context).cardColor,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          // Open without date specification
+          // widget.controller.openPicker();
+          widget.onOpen(widget.type);
+          widget.controller.open(widget.type, d);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: Row(
+            children: [
+              Material(
+                color: color,
+                borderRadius: BorderRadius.circular(4),
+                child: SizedBox(
+                  height: 36,
+                  width: 36,
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  BoardDateFormat(format).format(d),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String get title {
+    switch (widget.type) {
+      case DateTimePickerType.date:
+        return 'Date';
+      case DateTimePickerType.datetime:
+        return 'DateTime';
+      case DateTimePickerType.time:
+        return 'Time';
+    }
+  }
+
+  IconData get icon {
+    switch (widget.type) {
+      case DateTimePickerType.date:
+        return Icons.date_range_rounded;
+      case DateTimePickerType.datetime:
+        return Icons.date_range_rounded;
+      case DateTimePickerType.time:
+        return Icons.schedule_rounded;
+    }
+  }
+
+  Color get color {
+    switch (widget.type) {
+      case DateTimePickerType.date:
+        return Colors.blue;
+      case DateTimePickerType.datetime:
+        return Colors.orange;
+      case DateTimePickerType.time:
+        return Colors.pink;
+    }
+  }
+
+  String get format {
+    switch (widget.type) {
+      case DateTimePickerType.date:
+        return 'yyyy/MM/dd';
+      case DateTimePickerType.datetime:
+        return 'yyyy/MM/dd HH:mm';
+      case DateTimePickerType.time:
+        return 'HH:mm';
+    }
+  }
+}
+class ModalItem extends StatefulWidget {
+  const ModalItem({super.key});
+
+  @override
+  State<ModalItem> createState() => _ModalItemState();
+}
+
+class _ModalItemState extends State<ModalItem> {
+  DateTime d = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(8),
+      color: Theme.of(context).cardColor,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () async {
+          final result = await showBoardDateTimePicker(
+            context: context,
+            pickerType: DateTimePickerType.datetime,
+            options: const BoardDateTimeOptions(
+              languages: BoardPickerLanguages.en(),
+              startDayOfWeek: DateTime.sunday,
+              pickerFormat: PickerFormat.ymd,
+              boardTitle: 'Board Picker',
+              pickerSubTitles: BoardDateTimeItemTitles(year: 'year'),
+            ),
+            onResult: (val) {},
+          );
+          if (result != null) {
+            setState(() => d = result);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: Row(
+            children: [
+              Material(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(4),
+                child: const SizedBox(
+                  height: 36,
+                  width: 36,
+                  child: Center(
+                    child: Icon(
+                      Icons.open_in_browser_rounded,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  BoardDateFormat('yyyy/MM/dd HH:mm').format(d),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+              Text(
+                'Show Dialog',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

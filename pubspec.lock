@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  board_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: board_datetime_picker
+      sha256: f85d26d0fb40656fab0855d8f6dc3b8c8adc293bf62f95d68feacd8c30fda044
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.8"
   boolean_selector:
     dependency: transitive
     description:
