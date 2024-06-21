@@ -27,9 +27,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final LocalAuthentication auth = LocalAuthentication();
-  final controller = BoardDateTimeController();
-  TextEditingController pagoC = TextEditingController();
-  DateTimePickerType? opened;
 
   final textController = BoardDateTimeTextController();
   bool _canCheckBiometrics = false;
@@ -1032,86 +1029,6 @@ class _HomeState extends State<Home> {
             ),
           ),
         );
-      },
-    );
-  }
-  BoardDateTimeBuilder<BoardDateTimeCommonResult> inputPago() {
-    return BoardDateTimeBuilder<BoardDateTimeCommonResult>(
-      controller: controller,
-      resizeBottom: true,
-      options: const BoardDateTimeOptions(
-        boardTitle: 'Fecha de Pago',
-        languages: BoardPickerLanguages.en(),
-      ),
-      builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
-          backgroundColor: const Color.fromARGB(255, 245, 245, 250),
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 370,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 4, 104, 98),
-                    ),
-                    child: ItemWidget(
-                      key: keys[1],
-                      type: DateTimePickerType.date,
-                      controller: controller,
-                      onOpen: (type) => opened = type,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    width: 370,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: pagoC,
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                              borderRadius: BorderRadius.circular(8)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                              ),
-                              borderRadius: BorderRadius.circular(8)),
-                          prefixIcon: Icon(
-                            Icons.monetization_on_rounded,
-                            color: Color.fromRGBO(47, 125, 121, 0.9),
-                          ),
-                          hintText: '00.0',
-                          filled: true,
-                          fillColor: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      onResult: (val) {},
-      onChange: (val) {
-        int index = -1;
-        if (opened == DateTimePickerType.datetime) {
-          index = 0;
-        } else if (opened == DateTimePickerType.date) {
-          index = 1;
-        } else if (opened == DateTimePickerType.time) {
-          index = 2;
-        }
-        if (index >= 0) keys[index].currentState?.update(val);
       },
     );
   }
