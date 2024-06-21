@@ -25,6 +25,8 @@ dependencies:
   expandable_menu: #https://pub.dev/packages/expandable_menu/example
   board_datetime_picker: #https://pub.dev/packages/board_datetime_picker
 
+  material_dialogs: ^1.1.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,6 +40,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/gifs/
+    - assets/js/
 
   # fonts:
   #   - family: Schyler

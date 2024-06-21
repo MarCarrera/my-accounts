@@ -5,10 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import '../../data/models/view_model.dart';
 import '../../data/request/service.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
+import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ffi';
@@ -25,14 +28,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final LocalAuthentication auth = LocalAuthentication();
   final controller = BoardDateTimeController();
-
+  TextEditingController pagoC = TextEditingController();
   DateTimePickerType? opened;
-
-  final List<GlobalKey<_ItemWidgetState>> keys = [
-    GlobalKey(),
-    GlobalKey(),
-    GlobalKey()
-  ];
 
   final textController = BoardDateTimeTextController();
   bool _canCheckBiometrics = false;
@@ -239,257 +236,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  /*Padding cardUser() {
-    if (noDataUser == false && profiles.isEmpty || reload) {
-      return Padding(
-          padding: EdgeInsets.only(top: 0),
-          child: Center(
-            child: FutureBuilder<void>(
-              future: Future.delayed(Duration(seconds: 3)),
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return LoadingDots();
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 20),
-                    child: Stack(
-                      children: [
-                        //Contenedor para mantener la sobra de card
-                        Container(
-                          height: 170,
-                          width: 500,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        //Contenedor para mantener la sobra de card
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: 170,
-                            width: 500,
-                            decoration: BoxDecoration(
-                              color: TColor.purpleColor,
-                              border: Border.all(
-                                color: Colors.black, // Color del borde
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Stack(children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'No hay datos \npara mostrar',
-                                          style: GoogleFonts.fredoka(
-                                              fontSize: 26,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Circles(),
-                              Positioned(
-                                bottom: 24,
-                                left: 300,
-                                child: Stack(
-                                  alignment: Alignment
-                                      .center, // Alinea el contenido en el centro del Stack
-                                  children: [
-                                    Container(
-                                      width: 140,
-                                      child:
-                                          Image.asset('assets/icons/info.png'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ]),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ));
-    } else {
-      if (noDataUser) {
-        return Padding(padding: EdgeInsets.all(8));
-      } else {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Stack(
-            children: [
-              //Contenedor para mantener la sobra de card
-              Container(
-                height: 550, // Ajusta la altura según tus necesidades
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: profiles.length,
-
-                    /*profiles
-                        .where((profile) => profile.idAccount == 1)
-                        .length,*/
-                    itemBuilder: (context, index) {
-                      final filteredProfile = profiles
-                          .where((profile) => profile.idAccount == 1)
-                          .toList();
-                      final profile = profiles[index];
-                      return Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            child: Container(
-                              height: 200, //150,
-                              width: 500, //500,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              height: 200, //150,
-                              width: 500, //500,
-                              decoration: BoxDecoration(
-                                color: TColor.purpleColor,
-                                border: Border.all(
-                                  color: Colors.black, // Color del borde
-                                  //width: 3, // Ancho del borde
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                                // boxShadow: [
-                                //   shadow(TColor.purpleColor),
-                                // ],
-                              ),
-                              child: Stack(children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Usuario ${profile.letter.toUpperCase()}',
-                                                style: GoogleFonts.fredoka(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white),
-                                              ),
-                                              SizedBox(
-                                                width: 130,
-                                              ),
-                                              Text(
-                                                '${profile.status.toUpperCase()}',
-                                                style: GoogleFonts.fredoka(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            'Nombre: ${profile.user.toUpperCase()}',
-                                            style: GoogleFonts.fredoka(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white),
-                                          ),
-                                          Text(
-                                            _authorized == 'Autenticado'
-                                                ? 'Teléfono: ${profile.phone}'
-                                                : 'Teléfono: ***-***-****',
-                                            style: GoogleFonts.fredoka(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 80),
-                                                child: Text(
-                                                  _authorized == 'Autenticado'
-                                                      ? 'Pin: ${profile.pin}'
-                                                      : 'Pin: ****',
-                                                  style: GoogleFonts.fredoka(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                              Text(
-                                                _authorized == 'Autenticado'
-                                                    ? 'Pago: ${profile.payment}'
-                                                    : 'Pago: ***',
-                                                style: GoogleFonts.fredoka(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Circles(),
-                                Positioned(
-                                  bottom: 8,
-                                  left: 360,
-                                  child: Stack(
-                                    alignment: Alignment
-                                        .center, // Alinea el contenido en el centro del Stack
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        child: Image.asset(
-                                            'assets/icons/woman.png'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                            ),
-                          )
-                        ],
-                      );
-                    }),
-              ),
-
-              //Contenedor para mantener la sobra de card
-            ],
-          ),
-        );
-      }
-    }
-  }*/
 
   Padding cardUser() {
     return Padding(
@@ -797,7 +543,60 @@ class _HomeState extends State<Home> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                _showModalSheetBono();
+                                                //_showModalSheetBono();
+                                                //print('mostrar modal');
+                                                Dialogs.materialDialog(
+                                                  msg: 'Usuario A',
+                                                  title: 'Nuevo Pago',
+                                                  color: Colors.white,
+                                                  /*lottieBuilder: Lottie.asset(
+                                                    'assets/js/cong_example.json',
+                                                    fit: BoxFit.contain,
+                                                  ),*/
+                                                  context: context,
+                                                  customView: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            16.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        TextFormField(
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: 'Monto',
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 16),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            // Lógica para abrir el DateTimePicker aquí
+                                                          },
+                                                          child: const Text(
+                                                              'Seleccionar Fecha'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    IconsButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      text: 'Guardar',
+                                                      iconData: Icons.done,
+                                                      color: Colors.blue,
+                                                      textStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      iconColor: Colors.white,
+                                                    ),
+                                                  ],
+                                                );
                                               },
                                               child: Icon(
                                                 Icons.add,
@@ -1147,36 +946,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /*Widget date_time() {
-    return Container(
-      alignment: Alignment.bottomLeft,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2, color: const Color(0xffC5C5C5))),
-      width: 300,
-      child: TextButton(
-        onPressed: () async {
-          DateTime? newDate = await showDatePicker(
-              context: context,
-              initialDate: date,
-              firstDate: DateTime(2020),
-              lastDate: DateTime(2100));
-          // ignore: unrelated_type_equality_checks
-          if (newDate == Null) return;
-          setState(() {
-            date = newDate!;
-            formattedDate2 = DateFormat('yyyy/MM/dd').format(date);
-            print(formattedDate2);
-          });
-        },
-        child: Text(
-          'Fecha : ${date.year} / ${date.month} / ${date.day}',
-          style: GoogleFonts.fredoka(fontSize: 15, color: Colors.black),
-        ),
-      ),
-    );
-  }*/
-
   void _showModalSheetBono() async {
     showCupertinoModalPopup(
       context: context,
@@ -1203,13 +972,10 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: [
                     const SizedBox(height: 24),
-                  ItemWidget(
-                    key: keys[1],
-                    type: DateTimePickerType.date,
-                    controller: controller,
-                    onOpen: (type) => opened = type,
-                  ),
-                  const SizedBox(height: 24),
+                    //SELECCIONAR FECHA ------------------------------------------------------
+
+                    //------------------------------------------------------------------------
+                    const SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.only(left: 40, right: 40),
                       child: TextFormField(
@@ -1269,190 +1035,84 @@ class _HomeState extends State<Home> {
       },
     );
   }
-}
-class ItemWidget extends StatefulWidget {
-  const ItemWidget({
-    super.key,
-    required this.type,
-    required this.controller,
-    required this.onOpen,
-  });
-
-  final DateTimePickerType type;
-  final BoardDateTimeController controller;
-  final void Function(DateTimePickerType type) onOpen;
-
-  @override
-  State<ItemWidget> createState() => _ItemWidgetState();
-}
-class _ItemWidgetState extends State<ItemWidget> {
-  DateTime d = DateTime.now();
-
-  void update(DateTime date) {
-    setState(() {
-      d = date;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      color: Theme.of(context).cardColor,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          // Open without date specification
-          // widget.controller.openPicker();
-          widget.onOpen(widget.type);
-          widget.controller.open(widget.type, d);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Row(
-            children: [
-              Material(
-                color: color,
-                borderRadius: BorderRadius.circular(4),
-                child: SizedBox(
-                  height: 36,
-                  width: 36,
-                  child: Center(
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
+  BoardDateTimeBuilder<BoardDateTimeCommonResult> inputPago() {
+    return BoardDateTimeBuilder<BoardDateTimeCommonResult>(
+      controller: controller,
+      resizeBottom: true,
+      options: const BoardDateTimeOptions(
+        boardTitle: 'Fecha de Pago',
+        languages: BoardPickerLanguages.en(),
+      ),
+      builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          backgroundColor: const Color.fromARGB(255, 245, 245, 250),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 370,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Color.fromARGB(255, 4, 104, 98),
+                    ),
+                    child: ItemWidget(
+                      key: keys[1],
+                      type: DateTimePickerType.date,
+                      controller: controller,
+                      onOpen: (type) => opened = type,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 24),
+                  Container(
+                    width: 370,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: pagoC,
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(8)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(8)),
+                          prefixIcon: Icon(
+                            Icons.monetization_on_rounded,
+                            color: Color.fromRGBO(47, 125, 121, 0.9),
+                          ),
+                          hintText: '00.0',
+                          filled: true,
+                          fillColor: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Text(
-                  BoardDateFormat(format).format(d),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String get title {
-    switch (widget.type) {
-      case DateTimePickerType.date:
-        return 'Date';
-      case DateTimePickerType.datetime:
-        return 'DateTime';
-      case DateTimePickerType.time:
-        return 'Time';
-    }
-  }
-
-  IconData get icon {
-    switch (widget.type) {
-      case DateTimePickerType.date:
-        return Icons.date_range_rounded;
-      case DateTimePickerType.datetime:
-        return Icons.date_range_rounded;
-      case DateTimePickerType.time:
-        return Icons.schedule_rounded;
-    }
-  }
-
-  Color get color {
-    switch (widget.type) {
-      case DateTimePickerType.date:
-        return Colors.blue;
-      case DateTimePickerType.datetime:
-        return Colors.orange;
-      case DateTimePickerType.time:
-        return Colors.pink;
-    }
-  }
-
-  String get format {
-    switch (widget.type) {
-      case DateTimePickerType.date:
-        return 'yyyy/MM/dd';
-      case DateTimePickerType.datetime:
-        return 'yyyy/MM/dd HH:mm';
-      case DateTimePickerType.time:
-        return 'HH:mm';
-    }
-  }
-}
-class ModalItem extends StatefulWidget {
-  const ModalItem({super.key});
-
-  @override
-  State<ModalItem> createState() => _ModalItemState();
-}
-
-class _ModalItemState extends State<ModalItem> {
-  DateTime d = DateTime.now();
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      color: Theme.of(context).cardColor,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () async {
-          final result = await showBoardDateTimePicker(
-            context: context,
-            pickerType: DateTimePickerType.datetime,
-            options: const BoardDateTimeOptions(
-              languages: BoardPickerLanguages.en(),
-              startDayOfWeek: DateTime.sunday,
-              pickerFormat: PickerFormat.ymd,
-              boardTitle: 'Board Picker',
-              pickerSubTitles: BoardDateTimeItemTitles(year: 'year'),
             ),
-            onResult: (val) {},
-          );
-          if (result != null) {
-            setState(() => d = result);
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Row(
-            children: [
-              Material(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(4),
-                child: const SizedBox(
-                  height: 36,
-                  width: 36,
-                  child: Center(
-                    child: Icon(
-                      Icons.open_in_browser_rounded,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Text(
-                  BoardDateFormat('yyyy/MM/dd HH:mm').format(d),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-              Text(
-                'Show Dialog',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
           ),
-        ),
-      ),
+        );
+      },
+      onResult: (val) {},
+      onChange: (val) {
+        int index = -1;
+        if (opened == DateTimePickerType.datetime) {
+          index = 0;
+        } else if (opened == DateTimePickerType.date) {
+          index = 1;
+        } else if (opened == DateTimePickerType.time) {
+          index = 2;
+        }
+        if (index >= 0) keys[index].currentState?.update(val);
+      },
     );
   }
 }

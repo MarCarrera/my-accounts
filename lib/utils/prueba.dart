@@ -1,20 +1,26 @@
+import 'dart:ffi';
+
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
-class Prueba extends StatelessWidget {
+class Prueba extends StatefulWidget {
   const Prueba({super.key});
 
   @override
+  State<Prueba> createState() => _PruebaState();
+}
+
+class _PruebaState extends State<Prueba> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Board DateTime Picker Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: const Color.fromARGB(255, 235, 235, 241),
         useMaterial3: false,
       ),
       // home: const Home(),
-      home: const MyHomePage(title: 'Board DateTime Picker Example'),
+      home: const MyHomePage(title: 'Pago de Mensualidad - Usuario A'),
     );
   }
 }
@@ -28,7 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final controller = BoardDateTimeController();
-
+  TextEditingController pagoC = TextEditingController();
   DateTimePickerType? opened;
 
   final List<GlobalKey<_ItemWidgetState>> keys = [
@@ -41,126 +47,91 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return 
+    
+    
+    inputPago();
+  }
+
+  BoardDateTimeBuilder<BoardDateTimeCommonResult> inputPago() {
     return BoardDateTimeBuilder<BoardDateTimeCommonResult>(
-      controller: controller,
-      resizeBottom: true,
-      options: const BoardDateTimeOptions(
-        boardTitle: 'Board Picker',
-        languages: BoardPickerLanguages.en(),
-        // backgroundColor: Colors.black,
-        // textColor: Colors.white,
-        // foregroundColor: const Color(0xff303030),
-        // activeColor: Colors.blueGrey,
-        // backgroundDecoration: const BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: <Color>[
-        //       Color(0xff1A2980),
-        //       Color(0xff26D0CE),
-        //     ],
-        //   ),
-        // ),
-        // pickerSubTitles: BoardDateTimeItemTitles(year: 'year'),
-        // customOptions: BoardPickerCustomOptions.every15minutes(),
-        // customOptions: BoardPickerCustomOptions(
-        //   hours: [0, 6, 12, 18],
-        //   minutes: [0, 15, 30, 45],
-        // ),
-        // weekend: BoardPickerWeekendOptions(
-        //   sundayColor: Colors.yellow,
-        //   saturdayColor: Colors.red,
-        // ),
-      ),
-      // minimumDate: DateTime(2023, 12, 15, 0, 15),
-      // maximumDate: DateTime(2024, 12, 31),
-      builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
-          backgroundColor: const Color.fromARGB(255, 245, 245, 250),
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'BoardDateTimeInputField: ',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(width: 16),
-                      SizedBox(
-                        width: 160,
-                        child: BoardDateTimeInputField(
-                          controller: textController,
-                          pickerType: DateTimePickerType.datetime,
-                          options: const BoardDateTimeOptions(
-                            languages: BoardPickerLanguages.en(),
-                          ),
-                          initialDate: DateTime.now(),
-                          maximumDate: DateTime(2040),
-                          minimumDate: DateTime(1900, 1, 1),
-                          // showPickerType: BoardDateTimeFieldPickerType.mini,
-                          textStyle: Theme.of(context).textTheme.bodyMedium,
-                          onChanged: (date) {
-                            print('onchanged: $date');
-                          },
-                          onFocusChange: (val, date, text) {
-                            print('on focus changed date: $val, $date, $text');
-                          },
-                          onResult: (p0) {
-                            // print('on result: ${p0.hour}, ${p0.minute}');
-                          },
-                        ),
-                      ),
-                    ],
+    controller: controller,
+    resizeBottom: true,
+    options: const BoardDateTimeOptions(
+      boardTitle: 'Fecha de Pago',
+      languages: BoardPickerLanguages.en(),
+    ),
+    builder: (context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        backgroundColor: const Color.fromARGB(255, 245, 245, 250),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 370,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Color.fromARGB(255, 4, 104, 98),
                   ),
-                  const SizedBox(height: 60),
-                  ItemWidget(
-                    key: keys[0],
-                    type: DateTimePickerType.datetime,
-                    controller: controller,
-                    onOpen: (type) => opened = type,
-                  ),
-                  const SizedBox(height: 24),
-                  ItemWidget(
+                  child: ItemWidget(
                     key: keys[1],
                     type: DateTimePickerType.date,
                     controller: controller,
                     onOpen: (type) => opened = type,
                   ),
-                  const SizedBox(height: 24),
-                  ItemWidget(
-                    key: keys[2],
-                    type: DateTimePickerType.time,
-                    controller: controller,
-                    onOpen: (type) => opened = type,
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  width: 370,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: pagoC,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                            borderRadius: BorderRadius.circular(8)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                            ),
+                            borderRadius: BorderRadius.circular(8)),
+                        prefixIcon: Icon(
+                          Icons.monetization_on_rounded,
+                          color: Color.fromRGBO(47, 125, 121, 0.9),
+                        ),
+                        hintText: '00.0',
+                        filled: true,
+                        fillColor: Colors.white),
                   ),
-                  const SizedBox(height: 24),
-                  const ModalItem(),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-        );
-      },
-      onResult: (val) {},
-      onChange: (val) {
-        int index = -1;
-        if (opened == DateTimePickerType.datetime) {
-          index = 0;
-        } else if (opened == DateTimePickerType.date) {
-          index = 1;
-        } else if (opened == DateTimePickerType.time) {
-          index = 2;
-        }
-        if (index >= 0) keys[index].currentState?.update(val);
-      },
-    );
+        ),
+      );
+    },
+    onResult: (val) {},
+    onChange: (val) {
+      int index = -1;
+      if (opened == DateTimePickerType.datetime) {
+        index = 0;
+      } else if (opened == DateTimePickerType.date) {
+        index = 1;
+      } else if (opened == DateTimePickerType.time) {
+        index = 2;
+      }
+      if (index >= 0) keys[index].currentState?.update(val);
+    },
+  );
   }
 }
 
@@ -263,7 +234,7 @@ class _ItemWidgetState extends State<ItemWidget> {
   Color get color {
     switch (widget.type) {
       case DateTimePickerType.date:
-        return Colors.blue;
+        return Color.fromRGBO(47, 125, 121, 0.9);
       case DateTimePickerType.datetime:
         return Colors.orange;
       case DateTimePickerType.time:
