@@ -1,3 +1,6 @@
+import 'package:acounts_control/utils/dialogs.dart';
+import 'package:acounts_control/utils/prueba.dart';
+import 'package:acounts_control/widgets/add_payment.dart';
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:expandable_menu/expandable_menu.dart';
@@ -540,60 +543,14 @@ class _HomeState extends State<Home> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                //_showModalSheetBono();
-                                                //print('mostrar modal');
-                                                Dialogs.materialDialog(
-                                                  msg: 'Usuario A',
-                                                  title: 'Nuevo Pago',
-                                                  color: Colors.white,
-                                                  /*lottieBuilder: Lottie.asset(
-                                                    'assets/js/cong_example.json',
-                                                    fit: BoxFit.contain,
-                                                  ),*/
-                                                  context: context,
-                                                  customView: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            16.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        TextFormField(
-                                                          decoration:
-                                                              const InputDecoration(
-                                                            labelText: 'Monto',
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 16),
-                                                        ElevatedButton(
-                                                          onPressed: () {
-                                                            // Lógica para abrir el DateTimePicker aquí
-                                                          },
-                                                          child: const Text(
-                                                              'Seleccionar Fecha'),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  actions: [
-                                                    IconsButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      text: 'Guardar',
-                                                      iconData: Icons.done,
-                                                      color: Colors.blue,
-                                                      textStyle: TextStyle(
-                                                          color: Colors.white),
-                                                      iconColor: Colors.white,
-                                                    ),
-                                                  ],
-                                                );
+                                                showModalBottomSheet(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AddPayment();
+                                                              },
+                                                            );
                                               },
                                               child: Icon(
                                                 Icons.add,

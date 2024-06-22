@@ -6,12 +6,12 @@ import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-class Prueba extends StatefulWidget {
+class DialogsScreen extends StatefulWidget {
   @override
-  State<Prueba> createState() => _PruebaState();
+  State<DialogsScreen> createState() => _DialogsScreenState();
 }
 
-class _PruebaState extends State<Prueba> {
+class _DialogsScreenState extends State<DialogsScreen> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -127,10 +127,7 @@ class TestState extends State<TestPage> {
     return MaterialButton(
       minWidth: 300,
       color: Colors.grey[300],
-      onPressed: () => 
-      
-      
-      Dialogs.materialDialog(
+      onPressed: () => Dialogs.materialDialog(
         color: Colors.white,
         msg: 'Congratulations, you won 500 points',
         title: 'Congratulations',
