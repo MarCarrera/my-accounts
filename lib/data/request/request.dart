@@ -116,21 +116,26 @@ Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required St
     return "err_internet_conex";
   }
 }
-Future<dynamic> agregarPago() async {
-  var data = {'opc': '1'};
 
-  try {
+
+Future<void> agregarPago({required String idUser, required String idAccount,
+required String paymentDate, required String amount,
+}) async {
+  var data = {
+    'opc': '13',
+    'idUser': idUser,
+    'idAccount': idAccount, 
+    'paymentDate': paymentDate,
+    'amount': amount
+  };
     final response = await http.post(
       url,
       body: data,
     );
-
     if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      //print('Respuesta Api JSON: ${jsonResponse}');
-      return jsonResponse;
-    }
-  } catch (e) {
-    return "err_internet_conex";
+    print('Pago enviado exitosamente');
+  } else {
+    print('Error al enviar el pago: ${response.reasonPhrase}');
   }
+
 }

@@ -548,7 +548,7 @@ class _HomeState extends State<Home> {
                                                               builder:
                                                                   (BuildContext
                                                                       context) {
-                                                                return AddPayment();
+                                                                return AddPayment(idUser: '', idAccount: '',);
                                                               },
                                                             );
                                               },

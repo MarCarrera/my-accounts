@@ -23,7 +23,7 @@ class _ButtonNavState extends State<ButtonNav> {
   List Screen = [
     const Home(),
     const PaysAccount(),
-    AddPayment(),
+    AddPayment(idUser: '', idAccount: '',),
   ];
 
   @override

@@ -1,30 +1,45 @@
 import 'dart:ffi';
 
+import 'package:acounts_control/data/request/request.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
 class AddPayment extends StatefulWidget {
-  const AddPayment({super.key});
+  const AddPayment({super.key, required this.idUser, required this.idAccount});
+  final String idUser;
+  final String idAccount;
 
   @override
-  State<AddPayment> createState() => _PruebaState();
+  State<AddPayment> createState() => _PruebaState(idUser, idAccount);
 }
 
 class _PruebaState extends State<AddPayment> {
+  _PruebaState(this.idUser, this.idAccount);
+  final String idUser;
+  final String idAccount;
+
   @override
   Widget build(BuildContext context) {
-    return MyHomePage(title: 'Pago de Mensualidad');
+    return MyHomePage(
+      idUser: idUser,
+      idAccount: idAccount,
+    );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key, required this.idUser, required this.idAccount});
+  final String idUser;
+  final String idAccount;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState(idUser, idAccount);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  _MyHomePageState(this.idUser, this.idAccount);
+  final String idUser;
+  final String idAccount;
+
   final controller = BoardDateTimeController();
   TextEditingController pagoC = TextEditingController();
   DateTimePickerType? opened;
@@ -49,9 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
           backgroundColor: const Color.fromARGB(255, 245, 245, 250),
           body: Center(
             child: SingleChildScrollView(
@@ -106,19 +118,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      if (selectedDate != null) {
-                        var fechaPagoApi =
-                            BoardDateFormat('yyyy-MM-dd').format(selectedDate!);
-                        var fechaPago =
-                            BoardDateFormat('yyyy/MM/dd').format(selectedDate!);
+                      var fechaPagoApi;
 
-                        print('Fecha guardada: ${fechaPago}');
+                      if (selectedDate != null) {
+                        fechaPagoApi =
+                            BoardDateFormat('yyyy-MM-dd').format(selectedDate!);
                       } else {
                         var currentDate = DateTime.now();
-                        var currentDateFormat =
-                            BoardDateFormat('yyyy/MM/dd').format(currentDate);
-                        print('Fecha guardada: ${currentDateFormat}');
+                        fechaPagoApi =
+                            BoardDateFormat('yyyy-MM-dd').format(currentDate!);
                       }
+                      print('Fecha de pago: ${fechaPagoApi}');
+                      print('Monto de pago: ${pagoC.text}');
+                      agregarPago(
+                          idUser: '1',
+                          idAccount: '1',
+                          paymentDate: fechaPagoApi,
+                          amount: pagoC.text);
                     },
                     child: const Text('Guardar'),
                   ),
