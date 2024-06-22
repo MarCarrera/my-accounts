@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final controller = BoardDateTimeController();
   TextEditingController pagoC = TextEditingController();
   DateTimePickerType? opened;
-
+  DateTime? selectedDate;
   final List<GlobalKey<_ItemWidgetState>> keys = [
     GlobalKey(),
     GlobalKey(),
@@ -100,9 +100,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      print('Guardar Pago');
+                      if (selectedDate != null) {
+                        print('Pago guardado: ${selectedDate.toString()}');
+                      } else {
+                        print('No se ha seleccionado ninguna fecha');
+                      }
                     },
-                    child: const Text('Seleccionar Fecha'),
+                    child: const Text('Guardar'),
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -204,7 +208,7 @@ class _ItemWidgetState extends State<ItemWidget> {
   String get title {
     switch (widget.type) {
       case DateTimePickerType.date:
-        return 'Date';
+        return 'Fecha';
       case DateTimePickerType.datetime:
         return 'DateTime';
       case DateTimePickerType.time:
@@ -277,7 +281,11 @@ class _ModalItemState extends State<ModalItem> {
             onResult: (val) {},
           );
           if (result != null) {
-            setState(() => d = result);
+            setState(() {
+              d = result;
+              
+            });
+            
           }
         },
         child: Padding(
