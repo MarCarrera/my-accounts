@@ -1,4 +1,3 @@
-
 import 'package:acounts_control/utils/prueba.dart';
 import 'package:acounts_control/views/home/home.dart';
 import 'package:acounts_control/views/pays_account.dart';

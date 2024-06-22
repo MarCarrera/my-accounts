@@ -7,10 +7,10 @@ class AddPayment extends StatefulWidget {
   const AddPayment({super.key});
 
   @override
-  State<AddPayment> createState() => _AddPaymentState();
+  State<AddPayment> createState() => _PruebaState();
 }
 
-class _AddPaymentState extends State<AddPayment> {
+class _PruebaState extends State<AddPayment> {
   @override
   Widget build(BuildContext context) {
     return MyHomePage(title: 'Pago de Mensualidad');
@@ -28,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final controller = BoardDateTimeController();
   TextEditingController pagoC = TextEditingController();
   DateTimePickerType? opened;
-  DateTime? selectedDate;
   final List<GlobalKey<_ItemWidgetState>> keys = [
     GlobalKey(),
     GlobalKey(),
@@ -36,6 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   final textController = BoardDateTimeTextController();
+
+  DateTime? selectedDate; // Variable para almacenar la fecha seleccionada
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       type: DateTimePickerType.date,
                       controller: controller,
                       onOpen: (type) => opened = type,
+                      onDateSelected: (date) {
+                        setState(() {
+                          selectedDate = date;
+                        });
+                      },
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -101,9 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       if (selectedDate != null) {
-                        print('Pago guardado: ${selectedDate.toString()}');
+                        var fechaPagoApi =
+                            BoardDateFormat('yyyy-MM-dd').format(selectedDate!);
+                        var fechaPago =
+                            BoardDateFormat('yyyy/MM/dd').format(selectedDate!);
+
+                        print('Fecha guardada: ${fechaPago}');
                       } else {
-                        print('No se ha seleccionado ninguna fecha');
+                        var currentDate = DateTime.now();
+                        var currentDateFormat =
+                            BoardDateFormat('yyyy/MM/dd').format(currentDate);
+                        print('Fecha guardada: ${currentDateFormat}');
                       }
                     },
                     child: const Text('Guardar'),
@@ -137,11 +151,13 @@ class ItemWidget extends StatefulWidget {
     required this.type,
     required this.controller,
     required this.onOpen,
+    required this.onDateSelected, // Nuevo parámetro
   });
 
   final DateTimePickerType type;
   final BoardDateTimeController controller;
   final void Function(DateTimePickerType type) onOpen;
+  final void Function(DateTime date) onDateSelected; // Nuevo parámetro
 
   @override
   State<ItemWidget> createState() => _ItemWidgetState();
@@ -151,9 +167,11 @@ class _ItemWidgetState extends State<ItemWidget> {
   DateTime d = DateTime.now();
 
   void update(DateTime date) {
+    //print('Fecha Seleccionada: $date');
     setState(() {
       d = date;
     });
+    widget.onDateSelected(date); // Llamada al nuevo callback
   }
 
   @override
@@ -164,8 +182,6 @@ class _ItemWidgetState extends State<ItemWidget> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          // Open without date specification
-          // widget.controller.openPicker();
           widget.onOpen(widget.type);
           widget.controller.open(widget.type, d);
         },
@@ -283,9 +299,7 @@ class _ModalItemState extends State<ModalItem> {
           if (result != null) {
             setState(() {
               d = result;
-              
             });
-            
           }
         },
         child: Padding(
