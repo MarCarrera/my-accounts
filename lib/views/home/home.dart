@@ -548,7 +548,7 @@ class _HomeState extends State<Home> {
                                                               builder:
                                                                   (BuildContext
                                                                       context) {
-                                                                return AddPayment(idUser: '', idAccount: '',);
+                                                                return AddPayment(idUser: profile.idUser.toString(), idAccount: profile.idAccount.toString(),);
                                                               },
                                                             );
                                               },

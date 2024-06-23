@@ -621,7 +621,7 @@ class _PaysAccountState extends State<PaysAccount>
                                     onPressed: () async {
                                       await eliminarPago(
                                           idPayment: pago.idPayment.toString());
-                                          Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                       Dialogs.bottomMaterialDialog(
                                         msg:
                                             'El pago ha sido eliminado exitosamente.',
@@ -652,7 +652,6 @@ class _PaysAccountState extends State<PaysAccount>
                                           ),
                                         ],
                                       );
-                                      
                                     },
                                     text: 'Eliminar',
                                     iconData: Icons.delete,

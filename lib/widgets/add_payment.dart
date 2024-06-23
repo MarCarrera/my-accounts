@@ -3,6 +3,9 @@ import 'dart:ffi';
 import 'package:acounts_control/data/request/request.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 
 class AddPayment extends StatefulWidget {
   const AddPayment({super.key, required this.idUser, required this.idAccount});
@@ -117,9 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       var fechaPagoApi;
-
                       if (selectedDate != null) {
                         fechaPagoApi =
                             BoardDateFormat('yyyy-MM-dd').format(selectedDate!);
@@ -128,13 +130,36 @@ class _MyHomePageState extends State<MyHomePage> {
                         fechaPagoApi =
                             BoardDateFormat('yyyy-MM-dd').format(currentDate!);
                       }
-                      print('Fecha de pago: ${fechaPagoApi}');
-                      print('Monto de pago: ${pagoC.text}');
-                      agregarPago(
-                          idUser: '1',
-                          idAccount: '1',
+                      await agregarPago(
+                          idUser: idUser,
+                          idAccount: idAccount,
                           paymentDate: fechaPagoApi,
                           amount: pagoC.text);
+                      Navigator.of(context).pop();
+                      Dialogs.bottomMaterialDialog(
+                                        msg:
+                                            'Pago agregado exitosamente.',
+                                        title: '¡Agregado!',
+                                        color: Colors.white,
+                                        lottieBuilder: Lottie.asset(
+                                          'assets/js/cong_example.json',
+                                          fit: BoxFit.contain,
+                                        ),
+                                        context: context,
+                                        actions: [
+                                          IconsButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            text: 'Cerrar',
+                                            iconData: Icons.done,
+                                            color: Colors.blue,
+                                            textStyle:
+                                                TextStyle(color: Colors.white),
+                                            iconColor: Colors.white,
+                                          ),
+                                        ],
+                                      );
                     },
                     child: const Text('Guardar'),
                   ),
