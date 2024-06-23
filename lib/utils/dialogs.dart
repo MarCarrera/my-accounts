@@ -96,7 +96,10 @@ class TestState extends State<TestPage> {
     return MaterialButton(
       minWidth: 300,
       color: Colors.grey[300],
-      onPressed: () => Dialogs.bottomMaterialDialog(
+      onPressed: () => 
+      
+      
+      Dialogs.bottomMaterialDialog(
           msg: 'Are you sure? you can\'t undo this action',
           title: 'Delete',
           context: context,

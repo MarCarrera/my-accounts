@@ -139,3 +139,21 @@ required String paymentDate, required String amount,
   }
 
 }
+
+Future<void> eliminarPago({required String idPayment
+}) async {
+  var data = {
+    'opc': '14',
+    'idPayment': idPayment
+  };
+    final response = await http.post(
+      url,
+      body: data,
+    );
+    if (response.statusCode == 200) {
+    print('Pago eliminado exitosamente');
+  } else {
+    print('Error al eliminar el pago: ${response.reasonPhrase}');
+  }
+
+}

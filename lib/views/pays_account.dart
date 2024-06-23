@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
 import '../utils/buttom_nav.dart';
+import 'package:lottie/lottie.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 
@@ -110,7 +114,7 @@ class _PaysAccountState extends State<PaysAccount>
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta = await mostrarTotalPagoPorMesCuenta(
-        date1: '2024-06-01', date2: '2024-06-07');
+        date1: '2024-06-01', date2: '2024-06-29');
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -595,37 +599,101 @@ class _PaysAccountState extends State<PaysAccount>
                           print('Error al convertir amount a entero: $cant');
                         }
 
-                        return ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.asset('assets/icons/efectivo.png',
-                                height: 40),
-                          ),
-                          title: Text(
-                            pago.userName.toUpperCase(),
-                            style: GoogleFonts.fredoka(
-                                fontSize: 22, color: Colors.white),
-                          ),
-                          subtitle: Text(
-                            pago.status,
-                            style: GoogleFonts.fredoka(
-                                fontSize: 20, color: Colors.white),
-                          ),
-                          trailing: Column(
-                            children: [
-                              Text(
-                                _authorized == 'Autenticado'
-                                    ? formatoMoneda.format(amountPay)
-                                    : '***',
-                                style: GoogleFonts.fredoka(
-                                    fontSize: 23, color: Colors.white),
-                              ),
-                              Text(
-                                pago.paymentDate,
-                                style: GoogleFonts.fredoka(
-                                    fontSize: 19, color: Colors.white),
-                              ),
-                            ],
+                        return GestureDetector(
+                          onLongPress: () {
+                            //print(pago.idPayment);
+                            Dialogs.bottomMaterialDialog(
+                                msg:
+                                    '¿Eliminar pago? ya no podrás revertir esta acción.',
+                                title: 'Eliminar',
+                                context: context,
+                                actions: [
+                                  IconsOutlineButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    text: 'Cancelar',
+                                    iconData: Icons.cancel_outlined,
+                                    textStyle: TextStyle(color: Colors.grey),
+                                    iconColor: Colors.grey,
+                                  ),
+                                  IconsButton(
+                                    onPressed: () async {
+                                      await eliminarPago(
+                                          idPayment: pago.idPayment.toString());
+                                          Navigator.of(context).pop();
+                                      Dialogs.bottomMaterialDialog(
+                                        msg:
+                                            'El pago ha sido eliminado exitosamente.',
+                                        title: '¡Eliminado!',
+                                        color: Colors.white,
+                                        lottieBuilder: Lottie.asset(
+                                          'assets/js/cong_example.json',
+                                          fit: BoxFit.contain,
+                                        ),
+                                        context: context,
+                                        actions: [
+                                          IconsButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              setState(() {
+                                                totalPago.clear();
+                                                pagos.clear();
+                                                cargarPagos();
+                                                cargarTotalPago();
+                                              });
+                                            },
+                                            text: 'Cerrar',
+                                            iconData: Icons.done,
+                                            color: Colors.blue,
+                                            textStyle:
+                                                TextStyle(color: Colors.white),
+                                            iconColor: Colors.white,
+                                          ),
+                                        ],
+                                      );
+                                      
+                                    },
+                                    text: 'Eliminar',
+                                    iconData: Icons.delete,
+                                    color: Colors.red,
+                                    textStyle: TextStyle(color: Colors.white),
+                                    iconColor: Colors.white,
+                                  ),
+                                ]);
+                          },
+                          child: ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.asset('assets/icons/efectivo.png',
+                                  height: 40),
+                            ),
+                            title: Text(
+                              pago.userName.toUpperCase(),
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 22, color: Colors.white),
+                            ),
+                            subtitle: Text(
+                              pago.status,
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 20, color: Colors.white),
+                            ),
+                            trailing: Column(
+                              children: [
+                                Text(
+                                  _authorized == 'Autenticado'
+                                      ? formatoMoneda.format(amountPay)
+                                      : '***',
+                                  style: GoogleFonts.fredoka(
+                                      fontSize: 23, color: Colors.white),
+                                ),
+                                Text(
+                                  pago.paymentDate,
+                                  style: GoogleFonts.fredoka(
+                                      fontSize: 19, color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
