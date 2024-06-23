@@ -1,4 +1,4 @@
-import 'package:acounts_control/utils/dialogs.dart';
+import 'package:acounts_control/utils/dialogs_pack.dart';
 import 'package:acounts_control/utils/prueba.dart';
 import 'package:acounts_control/widgets/add_payment.dart';
 import 'package:acounts_control/widgets/loading_dots.dart';
@@ -10,7 +10,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import '../../data/models/view_model.dart';
+import '../../data/request/request.dart';
 import '../../data/request/service.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
@@ -19,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ffi';
 
+import '../../utils/edit_pin.dart';
 import '../../utils/showConfirm.dart';
 
 class Home extends StatefulWidget {
@@ -40,6 +43,7 @@ class _HomeState extends State<Home> {
 
   //importacion de perfiles cargados
   TextEditingController pagoC = TextEditingController();
+  TextEditingController pinC = TextEditingController();
   final HomeService homeService = HomeService();
   late Future<List<Profile>> futureProfiles;
   late Future<List<Account>> futureAccounts;
@@ -60,6 +64,19 @@ class _HomeState extends State<Home> {
           .cargarPerfiles(); // Reemplaza 'indexA' con el valor adecuado
     });
   }
+
+  //------DIALOGOS------------------------------------------------------
+  Future<void> _editPin(String idUser) async {
+    showEditDialog(
+      context: context,
+      title: 'Editar Pin',
+      controller: pinC,
+      keyboardType: TextInputType.number,
+      idUser: idUser,
+    );
+  }
+
+  //--------------------------------------------------------------------
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -534,23 +551,118 @@ class _HomeState extends State<Home> {
                                               color: Colors.amber.shade700,
                                             ),
                                             Icon(
-                                              Icons.cleaning_services_rounded,
-                                              color: Colors.amber.shade700,
-                                            ),
-                                            Icon(
                                               Icons.share_outlined,
                                               color: Colors.amber.shade700,
                                             ),
                                             GestureDetector(
+                                              onTap: () async {
+                                                Dialogs.bottomMaterialDialog(
+                                                    msg:
+                                                        'Liberar perfil? ya no podrás revertir esta acción.',
+                                                    title: 'Liberar',
+                                                    context: context,
+                                                    actions: [
+                                                      IconsOutlineButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        text: 'Cancelar',
+                                                        iconData: Icons
+                                                            .cancel_outlined,
+                                                        textStyle: TextStyle(
+                                                            color: Colors.grey),
+                                                        iconColor: Colors.grey,
+                                                      ),
+                                                      IconsButton(
+                                                        onPressed: () async {
+                                                          await liberarPerfil(
+                                                              idUser: profile
+                                                                  .idUser
+                                                                  .toString());
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Dialogs
+                                                              .bottomMaterialDialog(
+                                                            msg:
+                                                                'El perfil ha sido liberado exitosamente.',
+                                                            title: '¡Liberado!',
+                                                            color: Colors.white,
+                                                            lottieBuilder:
+                                                                Lottie.asset(
+                                                              'assets/js/cong_example.json',
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ),
+                                                            context: context,
+                                                            actions: [
+                                                              IconsButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  setState(() {
+                                                                    _reloadData();
+                                                                  });
+                                                                },
+                                                                text: 'Cerrar',
+                                                                iconData:
+                                                                    Icons.done,
+                                                                color:
+                                                                    Colors.blue,
+                                                                textStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                                iconColor:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                        text: 'Eliminar',
+                                                        iconData: Icons.delete,
+                                                        color: Colors.red,
+                                                        textStyle: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        iconColor: Colors.white,
+                                                      ),
+                                                    ]);
+                                              },
+                                              child: Icon(
+                                                Icons.cleaning_services_rounded,
+                                                color: Colors.amber.shade700,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: ()async  {
+                                                await _editPin(
+                                                    profile.idUser.toString());
+                                                //recargar datos
+                                                //_reloadData();
+                                              },
+                                              child: Icon(
+                                                Icons.edit,
+                                                color: Colors.amber.shade700,
+                                              ),
+                                            ),
+                                            GestureDetector(
                                               onTap: () {
                                                 showModalBottomSheet(
-                                                              context: context,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return AddPayment(idUser: profile.idUser.toString(), idAccount: profile.idAccount.toString(),);
-                                                              },
-                                                            );
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AddPayment(
+                                                      idUser: profile.idUser
+                                                          .toString(),
+                                                      idAccount: profile
+                                                          .idAccount
+                                                          .toString(),
+                                                    );
+                                                  },
+                                                );
+                                                
                                               },
                                               child: Icon(
                                                 Icons.add,

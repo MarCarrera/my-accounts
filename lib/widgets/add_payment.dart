@@ -146,19 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           fit: BoxFit.contain,
                                         ),
                                         context: context,
-                                        actions: [
-                                          IconsButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            text: 'Cerrar',
-                                            iconData: Icons.done,
-                                            color: Colors.blue,
-                                            textStyle:
-                                                TextStyle(color: Colors.white),
-                                            iconColor: Colors.white,
-                                          ),
-                                        ],
+                                        
                                       );
                     },
                     child: const Text('Guardar'),

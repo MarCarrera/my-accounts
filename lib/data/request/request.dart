@@ -157,3 +157,38 @@ Future<void> eliminarPago({required String idPayment
   }
 
 }
+Future<void> actualizarPin({required String idUser, required String pin
+}) async {
+  var data = {
+    'opc': '15',
+    'idUser': idUser,
+    'pin':pin
+  };
+    final response = await http.post(
+      url,
+      body: data,
+    );
+    if (response.statusCode == 200) {
+    print('Pin actualizado exitosamente');
+  } else {
+    print('Error al actualizar el pin: ${response.reasonPhrase}');
+  }
+
+}
+Future<void> liberarPerfil({required String idUser
+}) async {
+  var data = {
+    'opc': '16',
+    'idUser': idUser,
+  };
+    final response = await http.post(
+      url,
+      body: data,
+    );
+    if (response.statusCode == 200) {
+    print('Perfil liberado exitosamente');
+  } else {
+    print('Error al liberar el perfil: ${response.reasonPhrase}');
+  }
+
+}
