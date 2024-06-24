@@ -14,6 +14,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import '../../data/models/view_model.dart';
 import '../../data/request/request.dart';
 import '../../data/request/service.dart';
+import '../../utils/add_user.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
 import 'package:lottie/lottie.dart';
@@ -44,6 +45,12 @@ class _HomeState extends State<Home> {
   //importacion de perfiles cargados
   TextEditingController pagoC = TextEditingController();
   TextEditingController pinC = TextEditingController();
+  TextEditingController userC = TextEditingController();
+  TextEditingController amoutnC = TextEditingController();
+  TextEditingController paymentC = TextEditingController();
+  TextEditingController genreC = TextEditingController();
+  TextEditingController phoneC = TextEditingController();
+
   final HomeService homeService = HomeService();
   late Future<List<Profile>> futureProfiles;
   late Future<List<Account>> futureAccounts;
@@ -73,6 +80,19 @@ class _HomeState extends State<Home> {
       controller: pinC,
       keyboardType: TextInputType.number,
       idUser: idUser,
+    );
+  }
+
+  Future<void> _addUser(String idUser) async {
+    showAddDialog(
+      context: context,
+      title: 'Agregar usuario',
+      idUser: idUser,
+      userC: userC,
+      amountC: amoutnC,
+      phoneC: phoneC,
+      paymentC: paymentC,
+      genreC: genreC,
     );
   }
 
@@ -546,9 +566,15 @@ class _HomeState extends State<Home> {
                                           iconColor: Colors.white,
                                           itemContainerColor: Colors.white,
                                           items: [
-                                            Icon(
-                                              Icons.person_add_alt_1_rounded,
-                                              color: Colors.amber.shade700,
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await _addUser(
+                                                    profile.idUser.toString());
+                                              },
+                                              child: Icon(
+                                                Icons.person_add_alt_1_rounded,
+                                                color: Colors.amber.shade700,
+                                              ),
                                             ),
                                             Icon(
                                               Icons.share_outlined,
@@ -636,7 +662,7 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: ()async  {
+                                              onTap: () async {
                                                 await _editPin(
                                                     profile.idUser.toString());
                                                 //recargar datos
@@ -662,7 +688,6 @@ class _HomeState extends State<Home> {
                                                     );
                                                   },
                                                 );
-                                                
                                               },
                                               child: Icon(
                                                 Icons.add,

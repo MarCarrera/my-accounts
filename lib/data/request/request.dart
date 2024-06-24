@@ -21,6 +21,7 @@ Future<dynamic> mostrarCuentas() async {
     return "err_internet_conex";
   }
 }
+
 Future<dynamic> mostrarTodosUsuarios() async {
   var data = {'opc': '2'};
 
@@ -39,6 +40,7 @@ Future<dynamic> mostrarTodosUsuarios() async {
     return "err_internet_conex";
   }
 }
+
 Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
   var data = {'opc': '3', 'idAccount': idAccount};
 
@@ -57,8 +59,13 @@ Future<dynamic> mostrarUsuariosPorCuenta({required String idAccount}) async {
     return "err_internet_conex";
   }
 }
-Future<dynamic> mostrarPagos({required String date1, required String date2}) async {
-  var data = {'opc': '10', 'date1': date1, 'date2': date2,
+
+Future<dynamic> mostrarPagos(
+    {required String date1, required String date2}) async {
+  var data = {
+    'opc': '10',
+    'date1': date1,
+    'date2': date2,
   };
 
   try {
@@ -76,6 +83,7 @@ Future<dynamic> mostrarPagos({required String date1, required String date2}) asy
     return "err_internet_conex";
   }
 }
+
 Future<dynamic> mostrarPagosPorCuenta({required String idAccount}) async {
   var data = {'opc': '11', 'idAccount': idAccount};
 
@@ -94,11 +102,13 @@ Future<dynamic> mostrarPagosPorCuenta({required String idAccount}) async {
     return "err_internet_conex";
   }
 }
-Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required String date2}) async {
+
+Future<dynamic> mostrarTotalPagoPorMesCuenta(
+    {required String date1, required String date2}) async {
   var data = {
-  'opc': '12', 
-  'date1': date1,
-  'date2': date2,
+    'opc': '12',
+    'date1': date1,
+    'date2': date2,
   };
 
   try {
@@ -117,78 +127,96 @@ Future<dynamic> mostrarTotalPagoPorMesCuenta({required String date1, required St
   }
 }
 
-
-Future<void> agregarPago({required String idUser, required String idAccount,
-required String paymentDate, required String amount,
+Future<void> agregarPago({
+  required String idUser,
+  required String idAccount,
+  required String paymentDate,
+  required String amount,
 }) async {
   var data = {
     'opc': '13',
     'idUser': idUser,
-    'idAccount': idAccount, 
+    'idAccount': idAccount,
     'paymentDate': paymentDate,
     'amount': amount
   };
-    final response = await http.post(
-      url,
-      body: data,
-    );
-    if (response.statusCode == 200) {
+  final response = await http.post(
+    url,
+    body: data,
+  );
+  if (response.statusCode == 200) {
     print('Pago enviado exitosamente');
   } else {
     print('Error al enviar el pago: ${response.reasonPhrase}');
   }
-
 }
 
-Future<void> eliminarPago({required String idPayment
-}) async {
-  var data = {
-    'opc': '14',
-    'idPayment': idPayment
-  };
-    final response = await http.post(
-      url,
-      body: data,
-    );
-    if (response.statusCode == 200) {
+Future<void> eliminarPago({required String idPayment}) async {
+  var data = {'opc': '14', 'idPayment': idPayment};
+  final response = await http.post(
+    url,
+    body: data,
+  );
+  if (response.statusCode == 200) {
     print('Pago eliminado exitosamente');
   } else {
     print('Error al eliminar el pago: ${response.reasonPhrase}');
   }
-
 }
-Future<void> actualizarPin({required String idUser, required String pin
-}) async {
-  var data = {
-    'opc': '15',
-    'idUser': idUser,
-    'pin':pin
-  };
-    final response = await http.post(
-      url,
-      body: data,
-    );
-    if (response.statusCode == 200) {
+
+Future<void> actualizarPin(
+    {required String idUser, required String pin}) async {
+  var data = {'opc': '15', 'idUser': idUser, 'pin': pin};
+  final response = await http.post(
+    url,
+    body: data,
+  );
+  if (response.statusCode == 200) {
     print('Pin actualizado exitosamente');
   } else {
     print('Error al actualizar el pin: ${response.reasonPhrase}');
   }
-
 }
-Future<void> liberarPerfil({required String idUser
-}) async {
+
+Future<void> liberarPerfil({required String idUser}) async {
   var data = {
     'opc': '16',
     'idUser': idUser,
   };
-    final response = await http.post(
-      url,
-      body: data,
-    );
-    if (response.statusCode == 200) {
+  final response = await http.post(
+    url,
+    body: data,
+  );
+  if (response.statusCode == 200) {
     print('Perfil liberado exitosamente');
   } else {
     print('Error al liberar el perfil: ${response.reasonPhrase}');
   }
+}
 
+Future<void> agregarUsuario(
+    {required String idUser,
+    required String user,
+    required String payment,
+    required String amount,
+    required String phone,
+    required String genre}) async {
+  var data = {
+    'opc': '17',
+    'idUser': idUser,
+    'user': user,
+    'payment': payment,
+    'amount': amount,
+    'phone': phone,
+    'genre': genre
+  };
+  final response = await http.post(
+    url,
+    body: data,
+  );
+  if (response.statusCode == 200) {
+    print('Usuario agregado exitosamente');
+  } else {
+    print('Error al agregar el usuario: ${response.reasonPhrase}');
+  }
 }
