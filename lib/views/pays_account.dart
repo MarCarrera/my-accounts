@@ -1,5 +1,6 @@
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
@@ -25,6 +26,25 @@ class PaysAccount extends StatefulWidget {
 
 class _PaysAccountState extends State<PaysAccount>
     with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+
+    DateTime currentDate = DateTime.now();
+    formatedDate = BoardDateFormat('yyyy-MM-dd').format(currentDate!);
+    print('Fecha actual: $formatedDate');
+
+    // Obtener el primer día del mes actual
+    DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+
+    // Formatear el primer día del mes actual
+    formattedFirstDay = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
+    print('Fecha inicial: $formattedFirstDay');
+
+    cargarPagos(formattedFirstDay.toString(), formatedDate.toString());
+    cargarTotalPago();
+  }
+
   final LocalAuthentication auth = LocalAuthentication();
   bool _canCheckBiometrics = false;
   bool _isAuthenticating = false;
@@ -34,6 +54,9 @@ class _PaysAccountState extends State<PaysAccount>
   NumberFormat formatoMoneda = NumberFormat.currency(symbol: '\$');
   List<Pagos> pagos = [];
   List<TotalPago> totalPago = [];
+
+  String? formatedDate;
+  String? formattedFirstDay;
 
   bool noData = false;
   bool noDataStatcs = false;
@@ -73,11 +96,10 @@ class _PaysAccountState extends State<PaysAccount>
     12: "Diciembre",
   };
 
-  Future<void> cargarPagos() async {
+  Future<void> cargarPagos(String date1, String date2) async {
     //parametros = {"opcion": "1.1"};
     reload = true;
-    var respuesta =
-        await mostrarPagos(date1: '2024-06-01', date2: '2024-06-29');
+    var respuesta = await mostrarPagos(date1: date1, date2: date2);
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -173,14 +195,6 @@ class _PaysAccountState extends State<PaysAccount>
       print('Se ha pulsado autenticar');
       showData = true;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    cargarPagos();
-    cargarTotalPago();
-    //_checkBiometrics();
   }
 
   @override
@@ -301,7 +315,7 @@ class _PaysAccountState extends State<PaysAccount>
               setState(() {
                 totalPago.clear();
                 pagos.clear();
-                cargarPagos();
+                cargarPagos(formattedFirstDay!, formatedDate!);
                 cargarTotalPago();
               });
             },
@@ -639,7 +653,8 @@ class _PaysAccountState extends State<PaysAccount>
                                               setState(() {
                                                 totalPago.clear();
                                                 pagos.clear();
-                                                cargarPagos();
+                                                cargarPagos(formattedFirstDay!,
+                                                    formatedDate!);
                                                 cargarTotalPago();
                                               });
                                             },

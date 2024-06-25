@@ -145,7 +145,6 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             title1(),
-
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal, child: card()),
             title(),
