@@ -32,17 +32,15 @@ class _PaysAccountState extends State<PaysAccount>
 
     DateTime currentDate = DateTime.now();
     formatedDate = BoardDateFormat('yyyy-MM-dd').format(currentDate!);
-    print('Fecha actual: $formatedDate');
 
     // Obtener el primer día del mes actual
     DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
 
     // Formatear el primer día del mes actual
     formattedFirstDay = DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
-    print('Fecha inicial: $formattedFirstDay');
 
     cargarPagos(formattedFirstDay.toString(), formatedDate.toString());
-    cargarTotalPago();
+    cargarTotalPago(formattedFirstDay.toString(), formatedDate.toString());
   }
 
   final LocalAuthentication auth = LocalAuthentication();
@@ -57,6 +55,8 @@ class _PaysAccountState extends State<PaysAccount>
 
   String? formatedDate;
   String? formattedFirstDay;
+  String? fechaInicial;
+  String? fechaFinal;
 
   bool noData = false;
   bool noDataStatcs = false;
@@ -132,11 +132,11 @@ class _PaysAccountState extends State<PaysAccount>
     }
   }
 
-  Future<void> cargarTotalPago() async {
+  Future<void> cargarTotalPago(String date1, String date2) async {
     //parametros = {"opcion": "1.1"};
     reload = true;
     var respuesta = await mostrarTotalPagoPorMesCuenta(
-        date1: '2024-06-01', date2: '2024-06-29');
+        date1: date1, date2: date2);
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -271,9 +271,35 @@ class _PaysAccountState extends State<PaysAccount>
               onPressed: isButtonEnabled
                   ? () {
                       showMonthPicker(context, onSelected: (month, year) {
+                        DateTime firstDayOfMonth = DateTime(year, month, 1);
+                        DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
+
+                        // Formatear el primer día del mes actual
+                        fechaInicial =
+                            DateFormat('yyyy-MM-dd').format(firstDayOfMonth);
+                        print('Fecha inicial 2: $fechaInicial');
+                        // Formatear el primer día del mes actual
+                        fechaFinal =
+                            DateFormat('yyyy-MM-dd').format(lastDayOfMonth);
+                        print('Fecha inicial 2: $fechaFinal');
+
                         if (kDebugMode) {
-                          print('Selected month: $month, year: $year');
+                          //print('fechaInicial: $fechaInicial');
+                          //print('fechaFinal: $fechaFinal');
+
+                          pagos.clear();
+                          totalPago.clear();
+
+                          cargarPagos(
+                            fechaInicial.toString(),
+                            fechaFinal.toString());
+                            cargarTotalPago(
+                              fechaInicial.toString(), fechaFinal.toString());
+
                         }
+                        
+                        
+
                         setState(() {
                           this.month = month;
                           this.year = year;
@@ -316,7 +342,7 @@ class _PaysAccountState extends State<PaysAccount>
                 totalPago.clear();
                 pagos.clear();
                 cargarPagos(formattedFirstDay!, formatedDate!);
-                cargarTotalPago();
+                cargarTotalPago(formattedFirstDay!, formatedDate!);
               });
             },
             style: ElevatedButton.styleFrom(
@@ -655,7 +681,9 @@ class _PaysAccountState extends State<PaysAccount>
                                                 pagos.clear();
                                                 cargarPagos(formattedFirstDay!,
                                                     formatedDate!);
-                                                cargarTotalPago();
+                                                cargarTotalPago(
+                                                    formattedFirstDay!,
+                                                    formatedDate!);
                                               });
                                             },
                                             text: 'Cerrar',
