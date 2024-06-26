@@ -21,7 +21,6 @@ import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ffi';
-
 import '../../utils/edit_pin.dart';
 import '../../utils/showConfirm.dart';
 
@@ -678,13 +677,7 @@ class _HomeState extends State<Home> {
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return AddPayment(
-                                                      idUser: profile.idUser
-                                                          .toString(),
-                                                      idAccount: profile
-                                                          .idAccount
-                                                          .toString(),
-                                                    );
+                                                    return AddPayment();
                                                   },
                                                 );
                                               },
