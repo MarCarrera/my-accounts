@@ -72,7 +72,14 @@ class TotalPago {
       required this.month1,
       required this.month2,
       required this.mensualidad,
-      required this.ganancia
-      
-      });
+      required this.ganancia});
+}
+
+class InfoUser {
+  final String account;
+  final String password;
+  final String user;
+  final String pin;
+
+  InfoUser({required this.account, required this.password, required this.user, required this.pin});
 }

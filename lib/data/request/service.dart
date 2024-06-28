@@ -77,4 +77,38 @@ class HomeService {
 
     return profiles;
   }
+
+  Future<List<InfoUser>> obtenerInfoUser(String idUser) async {
+    List<InfoUser> info = [];
+    bool noData = false;
+
+    var respuesta = await mostrarInfoUsuario(idUser: idUser);
+
+    if (respuesta != "err_internet_conex") {
+      if (respuesta == 'empty') {
+        noData = true;
+        print('no hay datos');
+      } else {
+        noData = false;
+        //print('Perfiles en vista ::::: ${respuesta}');
+        info.clear();
+        if (respuesta.isNotEmpty) {
+          for (int i = 0; i < respuesta.length; i++) {
+            info.add(InfoUser(
+              account: respuesta[i]['account'],
+              password: respuesta[i]['pass'],
+              user: respuesta[i]['user'],
+              pin: respuesta[i]['pin'],
+            ));
+          }
+        }
+        //print('Datos perfiles: ${profiles}');
+      }
+    } else {
+      noData = true;
+      print('Verifique su conexion a internet');
+    }
+
+    return info;
+  }
 }

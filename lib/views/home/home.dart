@@ -23,6 +23,7 @@ import 'dart:async';
 import 'dart:ffi';
 import '../../utils/edit_pin.dart';
 import '../../utils/showConfirm.dart';
+import '../../widgets/info_card.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -569,14 +570,29 @@ class _HomeState extends State<Home> {
                                                 await _addUser(
                                                     profile.idUser.toString());
                                               },
+                        
+                                                child: Icon(
+                                                  Icons
+                                                      .person_add_alt_1_rounded,
+                                                  color: Colors.amber.shade700,
+                                                ),
+                                              
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return InfoCardUser(
+                                                          idUser: profile.idUser.toString(),
+                                                        );
+                                                      });
+                                              },
                                               child: Icon(
-                                                Icons.person_add_alt_1_rounded,
+                                                Icons.share_outlined,
                                                 color: Colors.amber.shade700,
                                               ),
-                                            ),
-                                            Icon(
-                                              Icons.share_outlined,
-                                              color: Colors.amber.shade700,
                                             ),
                                             GestureDetector(
                                               onTap: () async {
@@ -677,7 +693,13 @@ class _HomeState extends State<Home> {
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return AddPayment();
+                                                    return AddPayment(
+                                                      idUser: profile.idUser
+                                                          .toString(),
+                                                      idAccount: profile
+                                                          .idAccount
+                                                          .toString(),
+                                                    );
                                                   },
                                                 );
                                               },

@@ -220,3 +220,25 @@ Future<void> agregarUsuario(
     print('Error al agregar el usuario: ${response.reasonPhrase}');
   }
 }
+Future<dynamic> mostrarInfoUsuario(
+    {required String idUser}) async {
+  var data = {
+    'opc': '18',
+    'idUser': idUser,
+  };
+
+  try {
+    final response = await http.post(
+      url,
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      //print('total pago cuenta: ${jsonResponse}');
+      return jsonResponse;
+    }
+  } catch (e) {
+    return "err_internet_conex";
+  }
+}
