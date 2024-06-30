@@ -11,6 +11,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:screenshot/screenshot.dart';
 import '../../data/models/view_model.dart';
 import '../../data/request/request.dart';
 import '../../data/request/service.dart';
@@ -22,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ffi';
 import '../../utils/edit_pin.dart';
+import '../../utils/shared_data_profile.dart';
 import '../../utils/showConfirm.dart';
 import '../../widgets/info_card.dart';
 
@@ -50,6 +52,8 @@ class _HomeState extends State<Home> {
   TextEditingController paymentC = TextEditingController();
   TextEditingController genreC = TextEditingController();
   TextEditingController phoneC = TextEditingController();
+
+  final ctlScreen = ScreenshotController();
 
   final HomeService homeService = HomeService();
   late Future<List<Profile>> futureProfiles;
@@ -570,24 +574,29 @@ class _HomeState extends State<Home> {
                                                 await _addUser(
                                                     profile.idUser.toString());
                                               },
-                        
-                                                child: Icon(
-                                                  Icons
-                                                      .person_add_alt_1_rounded,
-                                                  color: Colors.amber.shade700,
-                                                ),
-                                              
+                                              child: Icon(
+                                                Icons.person_add_alt_1_rounded,
+                                                color: Colors.amber.shade700,
+                                              ),
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                showModalBottomSheet(
+                                                /*showModalBottomSheet(
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
                                                         return InfoCardUser(
                                                           idUser: profile.idUser.toString(),
                                                         );
-                                                      });
+                                                      });*/
+                                                print(
+                                                    'Id usuario de imagen: ${profile.idUser}');
+                                                SharedDataProfile()
+                                                    .sharedDataProfile(
+                                                        context,
+                                                        ctlScreen,
+                                                        profile.idUser
+                                                            .toString());
                                               },
                                               child: Icon(
                                                 Icons.share_outlined,
