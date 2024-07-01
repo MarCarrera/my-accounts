@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-Future<void> shareMessageUser(String phone) async {
+  Future<void> shareMessageUser(String phone) async {
     //final directory = await getApplicationDocumentsDirectory();
     //final image = File('${directory.path}/acceso.png');
     //final phoneNumber = '+52$phone';
@@ -129,8 +129,7 @@ Future<void> shareMessageUser(String phone) async {
     // Combinar el mensaje y la imagen
     //String combinedMessage = '$message ${image.path}';
     // URL de WhatsApp con el número de teléfono y mensaje
-    String whatsappUrl =
-        'https://wa.me/$phone?text=${Uri.encodeFull(message)}';
+    String whatsappUrl = 'https://wa.me/$phone?text=${Uri.encodeFull(message)}';
 
     // Abrir el enlace en WhatsApp
     await launch(whatsappUrl);
@@ -594,6 +593,35 @@ Future<void> shareMessageUser(String phone) async {
                                     ),
                                     Circles(),
                                     Positioned(
+                                      bottom: 8,
+                                      left: 340,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: 100,
+                                            child: profile.genre == 'f' && (profile.letter == 'a' || profile.letter == 'c' || profile.letter == 'e')
+                                                ? Image.asset(
+                                                    'assets/icons/woman.png')
+                                                : profile.genre == 'f' && (profile.letter == 'b' || profile.letter == 'd') ?
+                                                Image.asset(
+                                                    'assets/icons/woman2.png') 
+                                                    :
+                                                
+                                                profile.genre == 'm' && (profile.letter == 'a' || profile.letter == 'c')
+                                                    ? Image.asset(
+                                                        'assets/icons/man1.png')
+                                                    : profile.genre == 'm' && (profile.letter == 'b' || profile.letter == 'd') ?
+                                                    Image.asset(
+                                                        'assets/icons/man2.png') : profile.genre == 'm' && (profile.letter == 'e' )?
+                                                        Image.asset(
+                                                        'assets/icons/man3.png') : Image.asset(
+                                                        'assets/icons/icon6.png'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
                                         top: 0.0,
                                         left: 0.0,
                                         right: 0.0,
@@ -608,7 +636,8 @@ Future<void> shareMessageUser(String phone) async {
                                           items: [
                                             GestureDetector(
                                               onTap: () async {
-                                                await shareMessageUser(profile.phone);
+                                                await shareMessageUser(
+                                                    profile.phone);
                                               },
                                               child: Icon(
                                                 Icons.email,
@@ -765,20 +794,7 @@ Future<void> shareMessageUser(String phone) async {
                                             ),
                                           ],
                                         )),
-                                    Positioned(
-                                      bottom: 8,
-                                      left: 360,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Container(
-                                            width: 100,
-                                            child: Image.asset(
-                                                'assets/icons/woman.png'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    
                                   ]),
                                 ),
                               ),
@@ -1078,7 +1094,7 @@ Future<void> shareMessageUser(String phone) async {
                                         child: Container(
                                             width: 260,
                                             child: Image.asset(
-                                              'assets/icons/icon3.png',
+                                              'assets/icons/icon${account.idAccount.toString()}.png',
                                               fit: BoxFit.contain,
                                             ))),
                                   ]),
