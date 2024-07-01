@@ -6,7 +6,6 @@ import '../data/models/view_model.dart';
 import '../utils/shared_data_profile.dart';
 import 'loading_dots.dart';
 
-
 class InfoCardUser extends StatefulWidget {
   const InfoCardUser({super.key, required this.idUser});
   final String idUser;

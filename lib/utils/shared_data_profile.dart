@@ -27,20 +27,11 @@ class SharedDataProfile {
     String idUser,
   ) async {
     final imageDataCard = await ctlScreen.captureFromWidget(
-      MediaQuery(
-        data: MediaQueryData.fromWindow(WidgetsBinding.instance.window),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Scaffold(
-              body: Center(
-                child: ScaffoldMessenger(
-                  child: InfoCardUser(idUser: idUser),
-                ),
-              ),
-            ),
-          ),
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: MediaQuery(
+          data: MediaQueryData.fromWindow(WidgetsBinding.instance.window),
+          child: InfoCardUser(idUser: idUser),
         ),
       ),
       delay: Duration(milliseconds: 100), // Opcional: puede ayudar a esperar que el widget se renderice completamente
@@ -50,6 +41,7 @@ class SharedDataProfile {
     return await Events().saveAndShare(imageDataCard);
   }
 }
+
 
 
 

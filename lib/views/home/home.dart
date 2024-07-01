@@ -22,7 +22,9 @@ import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ffi';
+import 'package:url_launcher/url_launcher.dart';
 import '../../utils/edit_pin.dart';
+import '../../utils/events.dart';
 import '../../utils/shared_data_profile.dart';
 import '../../utils/showConfirm.dart';
 import '../../widgets/info_card.dart';
@@ -68,6 +70,19 @@ class _HomeState extends State<Home> {
   String formattedDate = '';
   String formattedDate2 = '';
 
+  String obtenerSaludo() {
+    DateTime ahora = DateTime.now();
+    int hora = ahora.hour;
+
+    if (hora >= 5 && hora < 12) {
+      return 'Buenos días';
+    } else if (hora >= 12 && hora < 18) {
+      return 'Buenas tardes';
+    } else {
+      return 'Buenas noches';
+    }
+  }
+
   Future<void> _reloadData() async {
     setState(() {
       futureAccounts = homeService.cargarCuentas();
@@ -100,6 +115,28 @@ class _HomeState extends State<Home> {
     );
   }
 
+Future<void> shareMessageUser(String phone) async {
+    //final directory = await getApplicationDocumentsDirectory();
+    //final image = File('${directory.path}/acceso.png');
+    //final phoneNumber = '+52$phone';
+    //const phoneNumber = '+522361082838';
+    //image.writeAsBytesSync(bytes);
+
+    // Mensaje que contiene la imagen
+    String message =
+        '${obtenerSaludo()}, sólo para recordarle del pago de la mensualidad de Netflix, porfavor :) ...';
+
+    // Combinar el mensaje y la imagen
+    //String combinedMessage = '$message ${image.path}';
+    // URL de WhatsApp con el número de teléfono y mensaje
+    String whatsappUrl =
+        'https://wa.me/$phone?text=${Uri.encodeFull(message)}';
+
+    // Abrir el enlace en WhatsApp
+    await launch(whatsappUrl);
+
+    //await Share.shareFiles([image.path]);
+  }
   //--------------------------------------------------------------------
 
   Future<void> _authenticate() async {
@@ -571,11 +608,10 @@ class _HomeState extends State<Home> {
                                           items: [
                                             GestureDetector(
                                               onTap: () async {
-                                                await _addUser(
-                                                    profile.idUser.toString());
+                                                await shareMessageUser(profile.phone);
                                               },
                                               child: Icon(
-                                                Icons.person_add_alt_1_rounded,
+                                                Icons.email,
                                                 color: Colors.amber.shade700,
                                               ),
                                             ),
@@ -600,6 +636,16 @@ class _HomeState extends State<Home> {
                                               },
                                               child: Icon(
                                                 Icons.share_outlined,
+                                                color: Colors.amber.shade700,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await _addUser(
+                                                    profile.idUser.toString());
+                                              },
+                                              child: Icon(
+                                                Icons.person_add_alt_1_rounded,
                                                 color: Colors.amber.shade700,
                                               ),
                                             ),
