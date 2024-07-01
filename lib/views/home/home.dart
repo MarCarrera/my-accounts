@@ -600,23 +600,38 @@ class _HomeState extends State<Home> {
                                         children: [
                                           Container(
                                             width: 100,
-                                            child: profile.genre == 'f' && (profile.letter == 'a' || profile.letter == 'c' || profile.letter == 'e')
+                                            child: profile.genre == 'f' &&
+                                                    (profile.letter == 'a' ||
+                                                        profile.letter == 'c' ||
+                                                        profile.letter == 'e')
                                                 ? Image.asset(
                                                     'assets/icons/woman.png')
-                                                : profile.genre == 'f' && (profile.letter == 'b' || profile.letter == 'd') ?
-                                                Image.asset(
-                                                    'assets/icons/woman2.png') 
-                                                    :
-                                                
-                                                profile.genre == 'm' && (profile.letter == 'a' || profile.letter == 'c')
+                                                : profile.genre == 'f' &&
+                                                        (profile.letter == 'b' ||
+                                                            profile.letter ==
+                                                                'd')
                                                     ? Image.asset(
-                                                        'assets/icons/man1.png')
-                                                    : profile.genre == 'm' && (profile.letter == 'b' || profile.letter == 'd') ?
-                                                    Image.asset(
-                                                        'assets/icons/man2.png') : profile.genre == 'm' && (profile.letter == 'e' )?
-                                                        Image.asset(
-                                                        'assets/icons/man3.png') : Image.asset(
-                                                        'assets/icons/icon6.png'),
+                                                        'assets/icons/woman2.png')
+                                                    : profile.genre == 'm' &&
+                                                            (profile.letter == 'a' ||
+                                                                profile.letter ==
+                                                                    'c')
+                                                        ? Image.asset(
+                                                            'assets/icons/man1.png')
+                                                        : profile.genre == 'm' &&
+                                                                (profile.letter ==
+                                                                        'b' ||
+                                                                    profile.letter ==
+                                                                        'd')
+                                                            ? Image.asset(
+                                                                'assets/icons/man2.png')
+                                                            : profile.genre ==
+                                                                        'm' &&
+                                                                    (profile.letter ==
+                                                                        'e')
+                                                                ? Image.asset(
+                                                                    'assets/icons/man3.png')
+                                                                : Image.asset('assets/icons/icon6.png'),
                                           ),
                                         ],
                                       ),
@@ -794,7 +809,6 @@ class _HomeState extends State<Home> {
                                             ),
                                           ],
                                         )),
-                                    
                                   ]),
                                 ),
                               ),
