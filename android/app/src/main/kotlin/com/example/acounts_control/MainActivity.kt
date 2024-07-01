@@ -1,4 +1,4 @@
-package com.example.acounts_control
+package com.mardev.acounts
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
