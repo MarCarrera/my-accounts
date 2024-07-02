@@ -661,14 +661,6 @@ class _HomeState extends State<Home> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                /*showModalBottomSheet(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return InfoCardUser(
-                                                          idUser: profile.idUser.toString(),
-                                                        );
-                                                      });*/
                                                 print(
                                                     'Id usuario de imagen: ${profile.idUser}');
                                                 SharedDataProfile()

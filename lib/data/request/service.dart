@@ -90,14 +90,14 @@ class HomeService {
         print('no hay datos');
       } else {
         noData = false;
-        //print('Perfiles en vista ::::: ${respuesta}');
+        print('Info en vista ::::: ${respuesta}');
         info.clear();
         if (respuesta.isNotEmpty) {
           for (int i = 0; i < respuesta.length; i++) {
             info.add(InfoUser(
               account: respuesta[i]['account'],
               password: respuesta[i]['pass'],
-              letter: respuesta[i]['user'],
+              letter: respuesta[i]['letter'],
               pin: respuesta[i]['pin'],
             ));
           }
