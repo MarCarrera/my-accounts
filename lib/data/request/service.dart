@@ -97,7 +97,7 @@ class HomeService {
             info.add(InfoUser(
               account: respuesta[i]['account'],
               password: respuesta[i]['pass'],
-              user: respuesta[i]['user'],
+              letter: respuesta[i]['user'],
               pin: respuesta[i]['pin'],
             ));
           }

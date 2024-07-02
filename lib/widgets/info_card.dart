@@ -101,7 +101,7 @@ class _InfoCardUserState extends State<InfoCardUser> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text('Usuario: ${infoCardUser.user}',
+                                Text('Usuario: ${infoCardUser.letter.toUpperCase()}',
                                     style: GoogleFonts.fredoka(
                                         fontSize: 22, color: Colors.black87)),
                                 SizedBox(

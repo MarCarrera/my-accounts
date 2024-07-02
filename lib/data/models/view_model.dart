@@ -78,8 +78,8 @@ class TotalPago {
 class InfoUser {
   final String account;
   final String password;
-  final String user;
+  final String letter;
   final String pin;
 
-  InfoUser({required this.account, required this.password, required this.user, required this.pin});
+  InfoUser({required this.account, required this.password, required this.letter, required this.pin});
 }
