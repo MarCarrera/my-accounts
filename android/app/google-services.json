@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "777263163733",
-    "project_id": "acountscontrol",
-    "storage_bucket": "acountscontrol.appspot.com"
+    "project_number": "770109023597",
+    "project_id": "acounts-99835",
+    "storage_bucket": "acounts-99835.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:777263163733:android:be9dd8bab941338001a7dc",
+        "mobilesdk_app_id": "1:770109023597:android:6199940d11c437af3e6664",
         "android_client_info": {
           "package_name": "com.mardev.acounts"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDLoIh7zMA1EvbY13zU3lWteAL4pEglRQI"
+          "current_key": "AIzaSyDI256KyR9VtNSIpWwSjKuUiRgVIdZZ_Kw"
         }
       ],
       "services": {

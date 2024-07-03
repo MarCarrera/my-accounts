@@ -1,7 +1,16 @@
+import 'package:acounts_control/firebase_options.dart';
 import 'package:acounts_control/widgets/button_nav.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'src/push_providers/push_notifications.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotifications.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp(
     indexColor: 0,
   ));
