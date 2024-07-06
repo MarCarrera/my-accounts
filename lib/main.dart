@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'src/push_providers/push_notifications.dart';
 
-//Backfround message
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.messageId}');
@@ -28,7 +28,19 @@ void main() async {
       print('Mensaje contiene notificacion: ${message.notification?.body}');
     }
   });
+  //Notificaciones en segundo plano / background
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  //Notificaciones en primer plano / foreground
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Nuevo mensaje recibido');
+    print('Contenido: ${message.data}');
+
+    if (message.notification != null) {
+      print('Mensaje contiene notificación: ${message.notification?.title}');
+      print('Mensaje contiene notificación: ${message.notification?.body}');
+    }
+  });
   runApp(const MyApp(
     indexColor: 0,
   ));
