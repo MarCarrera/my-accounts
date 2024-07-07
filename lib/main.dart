@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'src/push_providers/push_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+/*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print('Mensaje en Segundo Plano: ${message.messageId}');
-}
+}*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await PushNotifications.initializeApp();
+
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp(
     indexColor: 0,
@@ -39,26 +43,26 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //obtener token
-    FirebaseMessaging.instance.getToken().then((String? token) {
+   /* FirebaseMessaging.instance.getToken().then((String? token) {
       assert(token != null);
       print("FCM Token: $token");
-    });
+    });*/
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+   /* FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Mensaje en aplicacion abierta: ${message.messageId}');
       if (message.notification != null) {
         print(
             'Notification: ${message.notification!.title}, ${message.notification!.body}');
       }
-    });
+    });*/
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    /*FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Mensaje en aplicacion cerrada');
       if (message.notification != null) {
         print(
             'Notification: ${message.notification!.title}, ${message.notification!.body}');
       }
-    });
+    });*/
   }
 
   @override

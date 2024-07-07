@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:acounts_control/utils/dialogs_pack.dart';
 import 'package:acounts_control/utils/prueba.dart';
 import 'package:acounts_control/widgets/add_payment.dart';
 import 'package:acounts_control/widgets/loading_dots.dart';
 import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:expandable_menu/expandable_menu.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -15,6 +19,7 @@ import 'package:screenshot/screenshot.dart';
 import '../../data/models/view_model.dart';
 import '../../data/request/request.dart';
 import '../../data/request/service.dart';
+import '../../src/push_providers/push_notifications.dart';
 import '../../utils/add_user.dart';
 import '../../utils/constans.dart';
 import '../../utils/buttom_nav.dart';
@@ -38,6 +43,70 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final LocalAuthentication auth = LocalAuthentication();
+
+  //local notifications
+  late AndroidNotificationChannel channel;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  bool isFlutterLocalNotificationsInitialized = false;
+  final List<String> _notifications =
+      []; // Lista para almacenar las notificaciones
+
+  Future<void> setupFlutterNotifications() async {
+    if (isFlutterLocalNotificationsInitialized) {
+      return;
+    }
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.high,
+    );
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    /// Crear un canal de notificación
+    /// We use this channel in the `AndroidManifest.xml` file to override the
+    /// default FCM channel to enable heads up notifications.
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    /// Update the iOS foreground notification presentation options to allow
+    /// heads up notifications.
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    isFlutterLocalNotificationsInitialized = true;
+  }
+  void showFlutterNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null &&
+        android != null &&
+        (Platform.isAndroid || Platform.isIOS)) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            // TODO Personalizar para no utilizar el por defecto
+            icon: 'launch_background',
+          ),
+        ),
+      );
+    }
+  }
+
+  //--------------------------------------------------------------------
 
   final textController = BoardDateTimeTextController();
   bool _canCheckBiometrics = false;
@@ -174,7 +243,17 @@ class _HomeState extends State<Home> {
     super.initState();
     futureAccounts = homeService.cargarCuentas();
     futureProfiles = homeService.cargarPerfiles();
-    //formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    //notifications
+    setupFlutterNotifications().then((value) {
+      FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    });
+    PushNotifications.messagesStream.listen((data) {
+      setState(() {
+        _notifications.add(data); // Agregar la notificación a la lista
+      });
+
+      //navigatorKey.currentState?.pushNamed('addPay', arguments: data);
+    });
   }
 
   @override
