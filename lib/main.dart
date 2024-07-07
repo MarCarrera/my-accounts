@@ -5,42 +5,19 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'src/push_providers/push_notifications.dart';
 
-
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message: ${message.messageId}');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print('Mensaje en Segundo Plano: ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await PushNotifications.initializeApp();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //Suscrips
-  await FirebaseMessaging.instance.subscribeToTopic('bitala');
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Nuevo mensaje recibido');
-    print('Contenido: ${message.data}');
 
-    if (message.notification != null) {
-      print('Mensaje contiene notificacion: ${message.notification?.title}');
-      print('Mensaje contiene notificacion: ${message.notification?.body}');
-    }
-  });
-  //Notificaciones en segundo plano / background
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  //Notificaciones en primer plano / foreground
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Nuevo mensaje recibido');
-    print('Contenido: ${message.data}');
-
-    if (message.notification != null) {
-      print('Mensaje contiene notificación: ${message.notification?.title}');
-      print('Mensaje contiene notificación: ${message.notification?.body}');
-    }
-  });
   runApp(const MyApp(
     indexColor: 0,
   ));
@@ -57,6 +34,33 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late int indexColor;
   _MyAppState({required this.indexColor});
+
+  @override
+  void initState() {
+    super.initState();
+    //obtener token
+    FirebaseMessaging.instance.getToken().then((String? token) {
+      assert(token != null);
+      print("FCM Token: $token");
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Mensaje en aplicacion abierta: ${message.messageId}');
+      if (message.notification != null) {
+        print(
+            'Notification: ${message.notification!.title}, ${message.notification!.body}');
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Mensaje en aplicacion cerrada');
+      if (message.notification != null) {
+        print(
+            'Notification: ${message.notification!.title}, ${message.notification!.body}');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
