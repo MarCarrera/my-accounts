@@ -242,3 +242,70 @@ Future<dynamic> mostrarInfoUsuario(
     return "err_internet_conex";
   }
 }
+//NOTIFICACIONES =====================================
+Future<void> enviarNotificacion(
+    {required String deviceToken,
+    required String title,
+    required String body, required String fecha}) async {
+  var data = {
+    'opc': '19',
+    'token': deviceToken,
+    'title': title,
+    'body': body,
+    'fecha': fecha,
+  };
+
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(data),
+  );
+
+  if (response.statusCode == 200) {
+    print('Respuesta envio notificacion: ${response.body}');
+    print('Notificación enviada exitosamente');
+  } else {
+    print('Error al enviar la notificación: ${response.reasonPhrase}');
+  }
+}
+
+Future<dynamic> mostrarNotificaciones() async {
+  var data = {'opc': '20'};
+
+  try {
+    final response = await http.post(
+      url,
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      //print('Respuesta Api JSON: ${jsonResponse}');
+      return jsonResponse;
+    }
+  } catch (e) {
+    return "err_internet_conex";
+  }
+}
+
+Future<void> eliminarNotificacion({required String idNot}) async {
+  try {
+    final response = await http.post(
+      url,
+      body: {
+        'opc': '21',
+        'idNot': idNot,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('Notificacion eliminada exitosamente');
+    } else {
+      throw Exception('Error al eliminar la notificacion');
+    }
+  } catch (error) {
+    print('Error: $error');
+    throw Exception('Error al eliminar la notificacion');
+  }
+}

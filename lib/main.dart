@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'src/push_providers/push_notifications.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print('Mensaje en Segundo Plano: ${message.messageId}');
@@ -43,12 +42,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //obtener token
-   /* FirebaseMessaging.instance.getToken().then((String? token) {
+    /* FirebaseMessaging.instance.getToken().then((String? token) {
       assert(token != null);
       print("FCM Token: $token");
     });*/
 
-   /* FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    /* FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Mensaje en aplicacion abierta: ${message.messageId}');
       if (message.notification != null) {
         print(

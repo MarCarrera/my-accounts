@@ -5,18 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddPayment extends StatefulWidget {
-  const AddPayment({super.key, required this.idUser, required this.idAccount});
+  const AddPayment({super.key, required this.idUser, required this.idAccount, required this.token});
+  final String token;
   final String idUser;
   final String idAccount;
 
   @override
-  State<AddPayment> createState() => _PruebaState(idUser, idAccount);
+  State<AddPayment> createState() => _PruebaState(idUser, idAccount, token);
 }
 
 class _PruebaState extends State<AddPayment> {
-  _PruebaState(this.idUser, this.idAccount);
+  _PruebaState(this.idUser, this.idAccount, this.token);
+  final String token;
   final String idUser;
   final String idAccount;
 
@@ -24,21 +27,23 @@ class _PruebaState extends State<AddPayment> {
   Widget build(BuildContext context) {
     return MyHomePage(
       idUser: idUser,
-      idAccount: idAccount,
+      idAccount: idAccount, token: token,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.idUser, required this.idAccount});
+  const MyHomePage({super.key, required this.idUser, required this.idAccount, required this.token});
+  final String token;
   final String idUser;
   final String idAccount;
   @override
-  State<MyHomePage> createState() => _MyHomePageState(idUser, idAccount);
+  State<MyHomePage> createState() => _MyHomePageState(idUser, idAccount, token);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState(this.idUser, this.idAccount);
+  _MyHomePageState(this.idUser, this.idAccount, this.token);
+  final String token;
   final String idUser;
   final String idAccount;
 
@@ -134,19 +139,24 @@ class _MyHomePageState extends State<MyHomePage> {
                           idAccount: idAccount,
                           paymentDate: fechaPagoApi,
                           amount: pagoC.text);
+                      await enviarNotificacion(
+                        deviceToken: token,
+                        title: '¡Pago Agregado!',
+                        body:
+                            'Se ha agregado un nuevo pago de mensualidad.',
+                        fecha: 'Fecha de pago',
+                      );
                       Navigator.of(context).pop();
                       Dialogs.bottomMaterialDialog(
-                                        msg:
-                                            'Pago agregado exitosamente.',
-                                        title: '¡Agregado!',
-                                        color: Colors.white,
-                                        lottieBuilder: Lottie.asset(
-                                          'assets/js/cong_example.json',
-                                          fit: BoxFit.contain,
-                                        ),
-                                        context: context,
-                                        
-                                      );
+                        msg: 'Pago agregado exitosamente.',
+                        title: '¡Agregado!',
+                        color: Colors.white,
+                        lottieBuilder: Lottie.asset(
+                          'assets/js/cong_example.json',
+                          fit: BoxFit.contain,
+                        ),
+                        context: context,
+                      );
                     },
                     child: const Text('Guardar'),
                   ),

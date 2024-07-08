@@ -16,6 +16,7 @@ import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/view_model.dart';
 import '../../data/request/request.dart';
 import '../../data/request/service.dart';
@@ -65,9 +66,7 @@ class _HomeState extends State<Home> {
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    /// Crear un canal de notificación
-    /// We use this channel in the `AndroidManifest.xml` file to override the
-    /// default FCM channel to enable heads up notifications.
+    //canal de notificaciones
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
@@ -83,6 +82,7 @@ class _HomeState extends State<Home> {
     );
     isFlutterLocalNotificationsInitialized = true;
   }
+
   void showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
@@ -150,6 +150,11 @@ class _HomeState extends State<Home> {
     } else {
       return 'Buenas noches';
     }
+  }
+
+  static Future<String?> getTokenFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('UserToken');
   }
 
   Future<void> _reloadData() async {
@@ -858,12 +863,15 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: () {
+                                              onTap: () async {
+                                                String? token =
+                                                    await getTokenFromPreferences();
                                                 showModalBottomSheet(
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
                                                     return AddPayment(
+                                                      token: token.toString(),
                                                       idUser: profile.idUser
                                                           .toString(),
                                                       idAccount: profile
