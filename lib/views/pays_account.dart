@@ -9,6 +9,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/request/request.dart';
 import '../../data/models/view_model.dart';
 import '../../utils/constans.dart';
@@ -95,6 +96,10 @@ class _PaysAccountState extends State<PaysAccount>
     11: "Noviembre",
     12: "Diciembre",
   };
+  static Future<String?> getTokenFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('UserToken');
+  }
 
   Future<void> cargarPagos(String date1, String date2) async {
     //parametros = {"opcion": "1.1"};
@@ -135,8 +140,9 @@ class _PaysAccountState extends State<PaysAccount>
   Future<void> cargarTotalPago(String date1, String date2) async {
     //parametros = {"opcion": "1.1"};
     reload = true;
+    String? token = await getTokenFromPreferences();
     var respuesta = await mostrarTotalPagoPorMesCuenta(
-        date1: date1, date2: date2);
+        date1: date1, date2: date2, token: token.toString());
     reload = false;
     if (respuesta != "err_internet_conex") {
       setState(() {
@@ -291,14 +297,10 @@ class _PaysAccountState extends State<PaysAccount>
                           totalPago.clear();
 
                           cargarPagos(
-                            fechaInicial.toString(),
-                            fechaFinal.toString());
-                            cargarTotalPago(
                               fechaInicial.toString(), fechaFinal.toString());
-
+                          cargarTotalPago(
+                              fechaInicial.toString(), fechaFinal.toString());
                         }
-                        
-                        
 
                         setState(() {
                           this.month = month;

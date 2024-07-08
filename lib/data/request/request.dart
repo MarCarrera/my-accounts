@@ -104,11 +104,12 @@ Future<dynamic> mostrarPagosPorCuenta({required String idAccount}) async {
 }
 
 Future<dynamic> mostrarTotalPagoPorMesCuenta(
-    {required String date1, required String date2}) async {
+    {required String date1, required String date2, required String token}) async {
   var data = {
     'opc': '12',
     'date1': date1,
     'date2': date2,
+    'token' : token,
   };
 
   try {
