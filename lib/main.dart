@@ -16,18 +16,23 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //suscripcion al tema
+  await FirebaseMessaging.instance.subscribeToTopic('tema1');
+  //Para anular la suscripción, llama a unsubscribeFromTopic() con el nombre del tema.
   await PushNotifications.initializeApp();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp(
     indexColor: 0,
   ));
 }
+
 class MyApp extends StatefulWidget {
   final int indexColor;
   const MyApp({super.key, required this.indexColor});
   @override
   State<MyApp> createState() => _MyAppState(indexColor: indexColor);
 }
+
 class _MyAppState extends State<MyApp> {
   late int indexColor;
   _MyAppState({required this.indexColor});

@@ -245,12 +245,12 @@ Future<dynamic> mostrarInfoUsuario(
 }
 //NOTIFICACIONES =====================================
 Future<void> enviarNotificacion(
-    {required String deviceToken,
+    {required String topic,
     required String title,
     required String body, required String fecha}) async {
   var data = {
     'opc': '19',
-    'token': deviceToken,
+    'topic': topic,
     'title': title,
     'body': body,
     'fecha': fecha,

@@ -8,7 +8,11 @@ import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddPayment extends StatefulWidget {
-  const AddPayment({super.key, required this.idUser, required this.idAccount, required this.token});
+  const AddPayment(
+      {super.key,
+      required this.idUser,
+      required this.idAccount,
+      required this.token});
   final String token;
   final String idUser;
   final String idAccount;
@@ -27,13 +31,18 @@ class _PruebaState extends State<AddPayment> {
   Widget build(BuildContext context) {
     return MyHomePage(
       idUser: idUser,
-      idAccount: idAccount, token: token,
+      idAccount: idAccount,
+      token: token,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.idUser, required this.idAccount, required this.token});
+  const MyHomePage(
+      {super.key,
+      required this.idUser,
+      required this.idAccount,
+      required this.token});
   final String token;
   final String idUser;
   final String idAccount;
@@ -140,23 +149,24 @@ class _MyHomePageState extends State<MyHomePage> {
                           paymentDate: fechaPagoApi,
                           amount: pagoC.text);
                       await enviarNotificacion(
-                        deviceToken: token,
+                        topic: 'tema1',
                         title: '¡Pago Agregado!',
-                        body:
-                            'Se ha agregado un nuevo pago de mensualidad.',
+                        body: 'Se ha agregado un nuevo pago de mensualidad.',
                         fecha: 'Fecha de pago',
                       );
-                      Navigator.of(context).pop();
-                      Dialogs.bottomMaterialDialog(
-                        msg: 'Pago agregado exitosamente.',
-                        title: '¡Agregado!',
-                        color: Colors.white,
-                        lottieBuilder: Lottie.asset(
-                          'assets/js/cong_example.json',
-                          fit: BoxFit.contain,
-                        ),
-                        context: context,
-                      );
+                      if (mounted) {
+                        Navigator.of(context).pop();
+                        Dialogs.bottomMaterialDialog(
+                          msg: 'Pago agregado exitosamente.',
+                          title: '¡Agregado!',
+                          color: Colors.white,
+                          lottieBuilder: Lottie.asset(
+                            'assets/js/cong_example.json',
+                            fit: BoxFit.contain,
+                          ),
+                          context: context,
+                        );
+                      }
                     },
                     child: const Text('Guardar'),
                   ),
