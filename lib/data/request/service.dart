@@ -74,7 +74,6 @@ class HomeService {
       noData = true;
       print('Verifique su conexion a internet');
     }
-
     return profiles;
   }
 
