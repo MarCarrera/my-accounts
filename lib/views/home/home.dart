@@ -109,61 +109,61 @@ class _HomeState extends State<Home> {
 
   //----------------
 
-  int calcularDiasRestantes(String diaDePagoStr) {
+  /*int calcularDiasRestantes(String fechaPago) {
     // Convertir la cadena a entero
-  int diaDePago = int.parse(diaDePagoStr);
-  // Fecha actual
-  DateTime fechaActual = DateTime.now();
+    int diaDePago = int.parse(diaDePagoStr);
+    // Fecha actual
+    DateTime fechaActual = DateTime.now();
 
-  // Determinar el año y el mes actuales
-  int anioActual = fechaActual.year;
-  int mesActual = fechaActual.month;
+    // Determinar el año y el mes actuales
+    int anioActual = fechaActual.year;
+    int mesActual = fechaActual.month;
 
-  // Crear la fecha de pago para el mes actual
-  DateTime fechaPago = DateTime(anioActual, mesActual, diaDePago);
+    // Crear la fecha de pago para el mes actual
+    DateTime fechaPago = DateTime(anioActual, mesActual, diaDePago);
 
-  // Si la fecha de pago ya pasó en el mes actual, usar el mes siguiente
-  if (fechaPago.isBefore(fechaActual)) {
-    if (mesActual == 12) {
-      anioActual += 1;
-      mesActual = 1;
-    } else {
-      mesActual += 1;
+    // Si la fecha de pago ya pasó en el mes actual, usar el mes siguiente
+    if (fechaPago.isBefore(fechaActual)) {
+      if (mesActual == 12) {
+        anioActual += 1;
+        mesActual = 1;
+      } else {
+        mesActual += 1;
+      }
+      fechaPago = DateTime(anioActual, mesActual, diaDePago);
     }
-    fechaPago = DateTime(anioActual, mesActual, diaDePago);
-  }
+    // Calcular la diferencia en días
+    Duration diferencia = fechaPago.difference(fechaActual);
+    int diasRestantes = diferencia.inDays;
 
-  // Calcular la diferencia en días
-  Duration diferencia = fechaPago.difference(fechaActual);
-  int diasRestantes = diferencia.inDays;
-
-  return diasRestantes;
-}
+    return diasRestantes;
+  }*/
 
 // Función para programar el envío de notificación a una hora específica
-void programarEnvioNotificacion() {
-  // Hora específica para enviar la notificación (ejemplo: 8:00 AM)
-  TimeOfDay notificacionTime = TimeOfDay(hour: 21, minute: 20);
+  void programarEnvioNotificacion() {
+    // Hora específica para enviar la notificación (ejemplo: 8:00 AM)
+    TimeOfDay notificacionTime = TimeOfDay(hour: 21, minute: 20);
 
-  // Calcular la diferencia en segundos hasta la hora específica
-  DateTime now = DateTime.now();
-  DateTime scheduledDate = DateTime(now.year, now.month, now.day, notificacionTime.hour, notificacionTime.minute);
-  if (scheduledDate.isBefore(now) || scheduledDate.isAtSameMomentAs(now)) {
-    scheduledDate = scheduledDate.add(Duration(days: 1));
+    // Calcular la diferencia en segundos hasta la hora específica
+    DateTime now = DateTime.now();
+    DateTime scheduledDate = DateTime(now.year, now.month, now.day,
+        notificacionTime.hour, notificacionTime.minute);
+    if (scheduledDate.isBefore(now) || scheduledDate.isAtSameMomentAs(now)) {
+      scheduledDate = scheduledDate.add(Duration(days: 1));
+    }
+    int secondsUntilNotification = scheduledDate.difference(now).inSeconds;
+
+    // Programar la notificación utilizando un temporizador
+    Timer(Duration(seconds: secondsUntilNotification), () {
+      // Aquí puedes colocar la lógica para enviar la notificación
+      enviarNotificacion(
+        topic: 'tema1',
+        title: '¡Próxima Mensualidad!',
+        body: 'Se espera un nuevo pago hoy...',
+        fecha: 'Fecha de pago',
+      );
+    });
   }
-  int secondsUntilNotification = scheduledDate.difference(now).inSeconds;
-
-  // Programar la notificación utilizando un temporizador
-  Timer(Duration(seconds: secondsUntilNotification), () {
-    // Aquí puedes colocar la lógica para enviar la notificación
-    enviarNotificacion(
-      topic: 'tema1',
-      title: '¡Próxima Mensualidad!',
-      body: 'Se espera un nuevo pago hoy...',
-      fecha: 'Fecha de pago',
-    );
-  });
-}
 
   //--------------------------------------------------------------------
 
@@ -316,7 +316,6 @@ void programarEnvioNotificacion() {
         _notifications.add(data); // Agregar la notificación a la lista
       });
       //navigatorKey.currentState?.pushNamed('addPay', arguments: data);
-      
     });
   }
 
@@ -623,13 +622,12 @@ void programarEnvioNotificacion() {
                         itemBuilder: (context, index) {
                           final profile = profiles[index];
                           // Llamar a la función y obtener los días restantes
-                          int diasRestantes = calcularDiasRestantes(profile.payment);
-                          print('${profile.user}: $diasRestantes');
+                          //int diasRestantes =(profile.payment);print('${profile.user}: $diasRestantes');
 
-                          if(diasRestantes <= 2){
+                         /* if (diasRestantes <= 2) {
                             // Llama a la función para programar el envío de notificación
                             programarEnvioNotificacion();
-                          }
+                          }*/
 
                           //print('${profile.payment}: ');
 

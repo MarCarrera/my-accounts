@@ -23,8 +23,10 @@ class _ButtonNavState extends State<ButtonNav> {
   List Screen = [
     const Home(),
     const PaysAccount(),
-    AddPayment(idUser: '', idAccount: '', token: ''),
+    ProxPagosList(),
   ];
+
+
 
   @override
   Widget build(BuildContext context) {

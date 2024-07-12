@@ -77,6 +77,52 @@ class HomeService {
     return profiles;
   }
 
+  Future<List<ProxPagos>> cargarProxPagos() async {
+    List<ProxPagos> proxPagos = [];
+    bool noData = false;
+
+    var respuesta = await mostrarFechasProximasPago();
+
+    if (respuesta != "err_internet_conex") {
+      if (respuesta == 'empty') {
+        noData = true;
+        print('no hay datos');
+      } else {
+        noData = false;
+        proxPagos.clear();
+        if (respuesta.isNotEmpty) {
+          for (int i = 0; i < respuesta.length; i++) {
+            String? paymentDateStr = respuesta[i]['payment'];
+            String? idAccountStr = respuesta[i]['idAccount'];
+            String? userStr = respuesta[i]['user'];
+
+            if (paymentDateStr != null &&
+                idAccountStr != null &&
+                userStr != null) {
+              DateTime paymentDate = DateTime.parse(paymentDateStr);
+              DateTime currentDate = DateTime.now();
+
+              // Calcular la diferencia en días
+              int daysRemaining = paymentDate.difference(currentDate).inDays;
+              print('Dias restantes: $daysRemaining');
+
+              proxPagos.add(ProxPagos(
+                idAccount: int.parse(idAccountStr),
+                user: userStr,
+                payment: paymentDateStr,
+                diasRestantes: daysRemaining,
+              ));
+            }
+          }
+        }
+      }
+    } else {
+      noData = true;
+      print('Verifique su conexion a internet');
+    }
+    return proxPagos;
+  }
+
   Future<List<InfoUser>> obtenerInfoUser(String idUser) async {
     List<InfoUser> info = [];
     bool noData = false;

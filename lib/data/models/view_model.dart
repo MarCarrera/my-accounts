@@ -38,6 +38,15 @@ class Profile {
       required this.genre});
 }
 
+class ProxPagos {
+  final int idAccount;
+  final String user;
+  final String payment;
+  final int diasRestantes;
+
+  ProxPagos({required this.idAccount, required this.user, required this.payment, required this.diasRestantes});
+}
+
 class Pagos {
   final int idPayment;
   final int idUser;
@@ -81,5 +90,9 @@ class InfoUser {
   final String letter;
   final String pin;
 
-  InfoUser({required this.account, required this.password, required this.letter, required this.pin});
+  InfoUser(
+      {required this.account,
+      required this.password,
+      required this.letter,
+      required this.pin});
 }
