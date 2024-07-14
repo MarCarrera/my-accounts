@@ -42,9 +42,9 @@ class ProxPagos {
   final int idAccount;
   final String user;
   final String payment;
-  final int diasRestantes;
+ // final int diasRestantes;
 
-  ProxPagos({required this.idAccount, required this.user, required this.payment, required this.diasRestantes});
+  ProxPagos({required this.idAccount, required this.user, required this.payment});
 }
 
 class Pagos {

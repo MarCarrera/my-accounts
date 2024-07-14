@@ -16,7 +16,7 @@ class ProxPagosList extends StatefulWidget {
 class _ProxPagosListState extends State<ProxPagosList> {
   final HomeService homeService = HomeService();
   late Future<List<ProxPagos>> proxPagos;
-  
+
   @override
   void initState() {
     super.initState();
@@ -42,10 +42,30 @@ class _ProxPagosListState extends State<ProxPagosList> {
               itemCount: proxPagos.length,
               itemBuilder: (context, index) {
                 final pago = proxPagos[index];
-                return ListTile(
-                  title: Text('${pago.user}'),
-                  subtitle: Text('Fecha de pago: ${pago.payment}\nDías restantes: ${pago.diasRestantes}'),
-                  trailing: Text('${pago.idAccount}'),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blueGrey.shade100,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${pago.user}',
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black)),
+                          Text(
+                              'Fecha de pago: ${pago.payment}\nDías restantes:'),
+                          Text('Cuenta: ${pago.idAccount}'),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             ),

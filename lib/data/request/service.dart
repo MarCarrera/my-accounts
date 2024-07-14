@@ -88,11 +88,19 @@ class HomeService {
         noData = true;
         print('no hay datos');
       } else {
+        print(respuesta);
         noData = false;
         proxPagos.clear();
         if (respuesta.isNotEmpty) {
           for (int i = 0; i < respuesta.length; i++) {
-            String? paymentDateStr = respuesta[i]['payment'];
+            proxPagos.add(ProxPagos(
+                idAccount: respuesta[i]['idAccount'],
+                user: respuesta[i]['user'],
+                payment: respuesta[i]['payment'],
+                //diasRestantes: respuesta[i]['payment'],
+              ));
+              
+            /*String? paymentDateStr = respuesta[i]['payment'];
             String? idAccountStr = respuesta[i]['idAccount'];
             String? userStr = respuesta[i]['user'];
 
@@ -106,13 +114,8 @@ class HomeService {
               int daysRemaining = paymentDate.difference(currentDate).inDays;
               print('Dias restantes: $daysRemaining');
 
-              proxPagos.add(ProxPagos(
-                idAccount: int.parse(idAccountStr),
-                user: userStr,
-                payment: paymentDateStr,
-                diasRestantes: daysRemaining,
-              ));
-            }
+              
+            }*/
           }
         }
       }
