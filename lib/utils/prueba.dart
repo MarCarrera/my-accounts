@@ -36,7 +36,10 @@ class _ProxPagosListState extends State<ProxPagosList> {
           return _buildErrorWidget('No hay datos \npara mostrar');
         } else {
           final proxPagos = snapshot.data!;
-          return Padding(
+          return 
+          
+          
+          Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: ListView.builder(
               itemCount: proxPagos.length,

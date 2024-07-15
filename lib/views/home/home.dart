@@ -109,35 +109,18 @@ class _HomeState extends State<Home> {
 
   //----------------
 
-  /*int calcularDiasRestantes(String fechaPago) {
-    // Convertir la cadena a entero
-    int diaDePago = int.parse(diaDePagoStr);
+  int calcularDiasRestantes(String fecha) {
+     // Convertir la cadena de fecha a un objeto DateTime
+    DateTime fechaPago = DateTime.parse(fecha);
     // Fecha actual
-    DateTime fechaActual = DateTime.now();
-
-    // Determinar el año y el mes actuales
-    int anioActual = fechaActual.year;
-    int mesActual = fechaActual.month;
-
-    // Crear la fecha de pago para el mes actual
-    DateTime fechaPago = DateTime(anioActual, mesActual, diaDePago);
-
-    // Si la fecha de pago ya pasó en el mes actual, usar el mes siguiente
-    if (fechaPago.isBefore(fechaActual)) {
-      if (mesActual == 12) {
-        anioActual += 1;
-        mesActual = 1;
-      } else {
-        mesActual += 1;
-      }
-      fechaPago = DateTime(anioActual, mesActual, diaDePago);
-    }
-    // Calcular la diferencia en días
-    Duration diferencia = fechaPago.difference(fechaActual);
-    int diasRestantes = diferencia.inDays;
-
-    return diasRestantes;
-  }*/
+  DateTime fechaActual = DateTime.now();
+  
+  // Calcular la diferencia en días
+  Duration diferencia = fechaPago.difference(fechaActual);
+  int diasRestantes = diferencia.inDays;
+  
+  return diasRestantes;
+  }
 
 // Función para programar el envío de notificación a una hora específica
   void programarEnvioNotificacion() {
@@ -188,6 +171,7 @@ class _HomeState extends State<Home> {
   final HomeService homeService = HomeService();
   late Future<List<Profile>> futureProfiles;
   late Future<List<Account>> futureAccounts;
+  late Future<List<ProxPagos>> proxPagos;
 
   bool noData = false;
   bool noDataUser = false;
@@ -307,6 +291,7 @@ class _HomeState extends State<Home> {
     super.initState();
     futureAccounts = homeService.cargarCuentas();
     futureProfiles = homeService.cargarPerfiles();
+    proxPagos = homeService.cargarProxPagos();
     //notifications
     setupFlutterNotifications().then((value) {
       FirebaseMessaging.onMessage.listen(showFlutterNotification);
@@ -329,7 +314,10 @@ class _HomeState extends State<Home> {
             title1(),
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal, child: card()),
-            title(),
+            title('Próximos Pagos'),
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal, child: cardProxPagos()),
+            title('Usuarios'),
             //tab navegador
             buttomNav(),
             SizedBox(
@@ -439,14 +427,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Padding title() {
+  Padding title(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            'Usuarios',
+            title,
             style: GoogleFonts.fredoka(
                 fontSize: 34, fontWeight: FontWeight.w400, color: Colors.black),
           ),
@@ -624,7 +612,7 @@ class _HomeState extends State<Home> {
                           // Llamar a la función y obtener los días restantes
                           //int diasRestantes =(profile.payment);print('${profile.user}: $diasRestantes');
 
-                         /* if (diasRestantes <= 2) {
+                          /* if (diasRestantes <= 2) {
                             // Llama a la función para programar el envío de notificación
                             programarEnvioNotificacion();
                           }*/
@@ -1262,6 +1250,206 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ]);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }),
+      ),
+    );
+  }
+
+  Padding cardProxPagos() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Center(
+        child: FutureBuilder<List<ProxPagos>>(
+            future: proxPagos,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ProxPagos>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return LoadingDots();
+              } else if (snapshot.hasError) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 200,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: TColor.orangeLightColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Stack(children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Error al cargar datos',
+                                        style: GoogleFonts.fredoka(
+                                            fontSize: 26, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Circles(),
+                            Positioned(
+                              top: 30,
+                              left: 200,
+                              child: Container(
+                                width: 160,
+                                child: Image.asset('assets/icons/info.png'),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black, // Color del borde
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 200,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: TColor.orangeLightColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Stack(children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'No hay datos \npara mostrar',
+                                        style: GoogleFonts.fredoka(
+                                            fontSize: 26, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Circles(),
+                            Positioned(
+                              top: 30,
+                              left: 200,
+                              child: Container(
+                                width: 160,
+                                child: Image.asset('assets/icons/info.png'),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                final proxPagos = snapshot.data!;
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.13, // Ajusta la altura según tus necesidades
+                        width: MediaQuery.of(context)
+                            .size
+                            .width, // Asegura que el ancho esté bien definido
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: proxPagos.length,
+                          itemBuilder: (context, index) {
+                            final pago = proxPagos[index];
+                            final restantes =
+                                calcularDiasRestantes(pago.payment);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 14, horizontal: 10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(95, 183, 23, 246),
+                                        Color.fromARGB(255, 255, 255, 255),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${pago.user}',
+                                          style: GoogleFonts.fredoka(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black)),
+                                      Text(
+                                          'Fecha de pago: ${pago.payment}\nDías restantes: ${restantes}'),
+                                      Text('Cuenta: ${pago.idAccount}'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         ),
                       ),
