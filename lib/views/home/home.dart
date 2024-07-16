@@ -1459,7 +1459,12 @@ class _HomeState extends State<Home> {
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.black)),
-                                          Text(pago.idAccount == '1' ? 'Cuenta A' : pago.idAccount == '2' ? 'Cuenta B' : 'Cuenta C',
+                                          Text(
+                                              pago.idAccount == '1'
+                                                  ? 'Cuenta A'
+                                                  : pago.idAccount == '2'
+                                                      ? 'Cuenta B'
+                                                      : 'Cuenta C',
                                               style: GoogleFonts.fredoka(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w400,
