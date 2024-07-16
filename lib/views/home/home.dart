@@ -110,16 +110,16 @@ class _HomeState extends State<Home> {
   //----------------
 
   int calcularDiasRestantes(String fecha) {
-     // Convertir la cadena de fecha a un objeto DateTime
+    // Convertir la cadena de fecha a un objeto DateTime
     DateTime fechaPago = DateTime.parse(fecha);
     // Fecha actual
-  DateTime fechaActual = DateTime.now();
-  
-  // Calcular la diferencia en días
-  Duration diferencia = fechaPago.difference(fechaActual);
-  int diasRestantes = diferencia.inDays;
-  
-  return diasRestantes;
+    DateTime fechaActual = DateTime.now();
+
+    // Calcular la diferencia en días
+    Duration diferencia = fechaPago.difference(fechaActual);
+    int diasRestantes = diferencia.inDays;
+
+    return diasRestantes;
   }
 
 // Función para programar el envío de notificación a una hora específica
@@ -1421,30 +1421,56 @@ class _HomeState extends State<Home> {
                                   vertical: 14, horizontal: 10),
                               child: Container(
                                 decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
+                                    color: Color.fromARGB(53, 183, 23, 246),
+                                    /*gradient: const LinearGradient(
                                       colors: [
                                         Color.fromARGB(95, 183, 23, 246),
                                         Color.fromARGB(255, 255, 255, 255),
                                       ],
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
-                                    ),
+                                    ),*/
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Text('${pago.user}',
-                                          style: GoogleFonts.fredoka(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black)),
-                                      Text(
-                                          'Fecha de pago: ${pago.payment}\nDías restantes: ${restantes}'),
-                                      Text('Cuenta: ${pago.idAccount}'),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 9, left: 3),
+                                        child: Container(
+                                          height: 90,
+                                          width: 3,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${pago.user}',
+                                              style: GoogleFonts.fredoka(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black)),
+                                          Text(pago.idAccount == '1' ? 'Cuenta A' : pago.idAccount == '2' ? 'Cuenta B' : 'Cuenta C',
+                                              style: GoogleFonts.fredoka(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black)),
+                                          Text('Días restantes: ${restantes}',
+                                              style: GoogleFonts.fredoka(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black)),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
