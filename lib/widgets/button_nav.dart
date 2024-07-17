@@ -23,7 +23,6 @@ class _ButtonNavState extends State<ButtonNav> {
   List Screen = [
     const Home(),
     const PaysAccount(),
-    ProxPagosList(),
   ];
 
 
@@ -50,7 +49,7 @@ class _ButtonNavState extends State<ButtonNav> {
               items: [
                 CustomNavigationBarItem(icon: Icon(Icons.home)),
                 CustomNavigationBarItem(icon: Icon(Icons.note_alt)),
-                CustomNavigationBarItem(icon: Icon(Icons.terminal_sharp)),
+                
               ],
               currentIndex: indexColor,
               onTap: (index) {

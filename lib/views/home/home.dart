@@ -1264,7 +1264,7 @@ class _HomeState extends State<Home> {
 
   Padding cardProxPagos() {
     return Padding(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 0),
       child: Center(
         child: FutureBuilder<List<ProxPagos>>(
             future: proxPagos,
@@ -1275,154 +1275,11 @@ class _HomeState extends State<Home> {
               } else if (snapshot.hasError) {
                 return Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black, // Color del borde
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          height: 200,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            color: TColor.orangeLightColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Stack(children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Error al cargar datos',
-                                        style: GoogleFonts.fredoka(
-                                            fontSize: 26, color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Circles(),
-                            Positioned(
-                              top: 30,
-                              left: 200,
-                              child: Container(
-                                width: 160,
-                                child: Image.asset('assets/icons/info.png'),
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black, // Color del borde
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          height: 200,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            color: TColor.orangeLightColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Stack(children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'No hay datos \npara mostrar',
-                                        style: GoogleFonts.fredoka(
-                                            fontSize: 26, color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Circles(),
-                            Positioned(
-                              top: 30,
-                              left: 200,
-                              child: Container(
-                                width: 160,
-                                child: Image.asset('assets/icons/info.png'),
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                final proxPagos = snapshot.data!;
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height *
-                            0.13, // Ajusta la altura según tus necesidades
-                        width: MediaQuery.of(context)
-                            .size
-                            .width, // Asegura que el ancho esté bien definido
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: proxPagos.length,
-                          itemBuilder: (context, index) {
-                            final pago = proxPagos[index];
-                            final restantes =
-                                calcularDiasRestantes(pago.payment);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(53, 183, 23, 246),
-                                    /*gradient: const LinearGradient(
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(53, 183, 23, 246),
+                        /*gradient: const LinearGradient(
                                       colors: [
                                         Color.fromARGB(95, 183, 23, 246),
                                         Color.fromARGB(255, 255, 255, 255),
@@ -1430,57 +1287,169 @@ class _HomeState extends State<Home> {
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
                                     ),*/
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 9, left: 3),
-                                        child: Container(
-                                          height: 90,
-                                          width: 3,
-                                          color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 9, left: 3),
+                            child: Container(
+                              height: 90,
+                              width: 3,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Sin datos',
+                                  style: GoogleFonts.fredoka(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(53, 183, 23, 246),
+                        /*gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(95, 183, 23, 246),
+                                        Color.fromARGB(255, 255, 255, 255),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),*/
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 9, left: 3),
+                            child: Container(
+                              height: 90,
+                              width: 3,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Sin datos',
+                                  style: GoogleFonts.fredoka(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                final proxPagos = snapshot.data!;
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.13, // Ajusta la altura según tus necesidades
+                        width: MediaQuery.of(context).size.width +
+                            0, // Asegura que el ancho esté bien definido
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: proxPagos.length,
+                          itemBuilder: (context, index) {
+                            final pago = proxPagos[index];
+                            final restantes =
+                                calcularDiasRestantes(pago.payment);
+                            if (restantes >= -1) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 14, horizontal: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Color.fromARGB(53, 183, 23, 246),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 9, left: 3),
+                                          child: Container(
+                                            height: 90,
+                                            width: 3,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${pago.user}',
-                                              style: GoogleFonts.fredoka(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black)),
-                                          Text(
-                                              pago.idAccount == '1'
-                                                  ? 'Cuenta A'
-                                                  : pago.idAccount == '2'
-                                                      ? 'Cuenta B'
-                                                      : 'Cuenta C',
-                                              style: GoogleFonts.fredoka(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black)),
-                                          Text('Días restantes: ${restantes}',
-                                              style: GoogleFonts.fredoka(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black)),
-                                        ],
-                                      ),
-                                    ],
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text('${pago.user}',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black)),
+                                            Text(
+                                                pago.idAccount == 1
+                                                    ? 'Cuenta A'
+                                                    : pago.idAccount == 2
+                                                        ? 'Cuenta B'
+                                                        : 'Cuenta C',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black)),
+                                            Text(
+                                                restantes == 0
+                                                    ? 'Día de pago: Mañana'
+                                                    : restantes == -1
+                                                        ? 'Día de pago: Hoy'
+                                                        : 'Días restantes: ${restantes}',
+                                                style: GoogleFonts.fredoka(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
+                            } else {
+                              return Container(); // Retorna un Container vacío si restantes es menor a -1
+                            }
                           },
                         ),
                       ),
