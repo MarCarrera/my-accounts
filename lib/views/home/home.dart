@@ -117,7 +117,8 @@ class _HomeState extends State<Home> {
 
     // Calcular la diferencia en días
     Duration diferencia = fechaPago.difference(fechaActual);
-    int diasRestantes = diferencia.inDays;
+    int restantes = diferencia.inDays;
+    int diasRestantes = restantes;
 
     return diasRestantes;
   }
@@ -1383,7 +1384,10 @@ class _HomeState extends State<Home> {
                             final pago = proxPagos[index];
                             final restantes =
                                 calcularDiasRestantes(pago.payment);
-                            if (restantes >= -1) {
+                            DateTime fechaPago = DateTime.parse(pago.payment);
+                            // Fecha actual
+                            DateTime fechaActual = DateTime.now();
+                            if (restantes >= 0) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 14, horizontal: 10),
@@ -1431,10 +1435,10 @@ class _HomeState extends State<Home> {
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.black)),
                                             Text(
-                                                restantes == 0
-                                                    ? 'Día de pago: Mañana'
-                                                    : restantes == -1
-                                                        ? 'Día de pago: Hoy'
+                                                fechaPago == fechaActual
+                                                    ? 'Día de pago: Hoy'
+                                                    : restantes == 0
+                                                        ? 'Día de pago: Mañana'
                                                         : 'Días restantes: ${restantes}',
                                                 style: GoogleFonts.fredoka(
                                                     fontSize: 17,
